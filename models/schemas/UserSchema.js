@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcript = require('bcryptjs');
@@ -70,6 +71,8 @@ const UserSchema = new Schema({
   name: String,
   surname: String,
   patronymic: String,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
 });
 
 UserSchema.pre('save', async function (next) {
@@ -78,6 +81,13 @@ UserSchema.pre('save', async function (next) {
   this.password = await bcript.hash(this.password, 12);
   this.passwordConfirm = undefined;
 
+  next();
+});
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
@@ -102,6 +112,32 @@ UserSchema.methods.passwordChangedAfter = function (jwtTimestamp) {
   }
 
   return false;
+};
+
+UserSchema.methods.getResetToken = function () {
+  const token = crypto.randomBytes(32).toString('hex');
+
+  return token;
+};
+
+UserSchema.methods.setTokensInfo = function (token) {
+  if (!token) return;
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(token)
+    .digest('hex');
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return this;
+};
+
+UserSchema.methods.clearTokensInfo = function () {
+  this.passwordResetToken = undefined;
+  this.passwordResetExpires = undefined;
+
+  return this;
 };
 
 module.exports = UserSchema;

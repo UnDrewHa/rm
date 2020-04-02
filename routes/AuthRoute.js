@@ -5,6 +5,9 @@ const route = express.Router();
 
 route.post('/signup', AuthController.signup);
 route.post('/login', AuthController.login);
+route.post('/forgot', AuthController.forgot);
+route.post('/reset/:token', AuthController.reset);
+
 //TODO: удалить вообще
 route
   .route('/')

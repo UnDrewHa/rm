@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const UserModel = require('../models/UserModel');
 const {catchAsync} = require('../utils/errorUtils');
+const {sendEmail} = require('../service/EmailTransport');
 
 exports.signup = catchAsync(async function (req, res, next) {
   //TODO: Убрать прямую передачу body в методы create.
@@ -91,3 +93,72 @@ exports.restrictedTo = function (roles) {
     next();
   };
 };
+
+exports.forgot = catchAsync(async function (req, res, next) {
+  const {email} = req.body;
+
+  if (!email) {
+    return next(new Error('Введите корректный e-mail адрес'));
+  }
+
+  const user = await UserModel.findOne({email});
+  if (!user) {
+    return next(new Error('Пользователь с указанным e-mail адресом не найден'));
+  }
+
+  const resetToken = user.getResetToken();
+  await user.setTokensInfo(resetToken).save({validateBeforeSave: false});
+
+  try {
+    await sendEmail({
+      to: email,
+      subject: 'Password reset',
+      text: `Your reset token - ${resetToken}`,
+    });
+  } catch (e) {
+    await user.clearTokensInfo(resetToken).save({validateBeforeSave: false});
+
+    return next(new Error('Ошибка отправки сообщения с токеном'));
+  }
+
+  res.status(200).send(resetToken);
+
+  next();
+});
+
+exports.reset = catchAsync(async function (req, res, next) {
+  const passwordResetToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await UserModel.findOne({
+    passwordResetExpires: {$gt: Date.now()},
+    passwordResetToken,
+  });
+
+  if (!user) {
+    return next(
+      new Error('Вы ввели невалидную или протухшую ссылку для сброса пароля'),
+    );
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  user.passwordResetExpires = undefined;
+  user.passwordResetToken = undefined;
+
+  await user.save();
+
+  const token = user.getToken(user);
+
+  //TODO: сделать метод хелпер для формирования ответов
+  res.status(200).send({
+    status: 'success',
+    data: {
+      token,
+    },
+  });
+
+  next();
+});
