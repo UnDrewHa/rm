@@ -1,22 +1,26 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const bcript = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const {getFieldErrorMessage} = require('../../utils/errorUtils');
 
 const {Schema} = mongoose;
 
-module.exports = new Schema({
+const UserSchema = new Schema({
   login: {
     type: String,
     required: [true, getFieldErrorMessage('логин')],
     unique: true,
-    minlength: 3,
+    minlength: 2,
     maxlength: 20,
   },
   password: {
     type: String,
     required: [true, getFieldErrorMessage('пароль')],
     minlength: 8,
+    select: false,
   },
+  passwordChangedAt: Date,
   passwordConfirm: {
     type: String,
     required: [true, getFieldErrorMessage('повторный пароль')],
@@ -67,3 +71,37 @@ module.exports = new Schema({
   surname: String,
   patronymic: String,
 });
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+
+  this.password = await bcript.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+UserSchema.methods.checkPassword = function (enteredPassword, userPassword) {
+  return bcript.compare(enteredPassword, userPassword);
+};
+
+UserSchema.methods.getToken = function (user) {
+  return jwt.sign({id: user._id}, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+};
+
+UserSchema.methods.passwordChangedAfter = function (jwtTimestamp) {
+  if (this.passwordChangedAt && jwtTimestamp) {
+    const passwordTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10,
+    );
+
+    return jwtTimestamp < passwordTimestamp;
+  }
+
+  return false;
+};
+
+module.exports = UserSchema;
