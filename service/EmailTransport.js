@@ -1,6 +1,14 @@
 const nodemailer = require('nodemailer');
 
+/**
+ * Отправить E-mail сообщение.
+ *
+ * @param {object} data Данные для отправки (to, subject, text).
+ *
+ * @returns {Promise} Промис отправки сообщения.
+ */
 exports.sendEmail = ({to, subject, text}) => {
+  //TODO: вынести создание отсюда.
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -10,6 +18,7 @@ exports.sendEmail = ({to, subject, text}) => {
     },
   });
 
+  //TODO: сделать какую-нить фабрику писем, чтобы не передавать из кода текст.
   const mailOptions = {
     from: 'Test User <mail@blahblah.com>',
     to,
@@ -17,6 +26,5 @@ exports.sendEmail = ({to, subject, text}) => {
     text,
   };
 
-  //TODO: Уничтожать transporter???
   return transporter.sendMail(mailOptions);
 };

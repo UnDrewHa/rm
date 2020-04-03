@@ -73,6 +73,11 @@ const UserSchema = new Schema({
   patronymic: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
 UserSchema.pre('save', async function (next) {
@@ -91,35 +96,71 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
+UserSchema.pre(/^find/, async function (next) {
+  this.find({active: {$ne: false}});
+
+  next();
+});
+
+/**
+ * Проверка введенного пароля на соответствие паролю пользователя.
+ *
+ * @param {string} enteredPassword Введенный пароль.
+ * @param {string} userPassword Пароль пользователя.
+ *
+ * @returns {Promise<Boolean>} Промис с результатом проверки.
+ */
 UserSchema.methods.checkPassword = function (enteredPassword, userPassword) {
   return bcript.compare(enteredPassword, userPassword);
 };
 
+/**
+ * Получить JWT токен.
+ *
+ * @param {object} user Данные пользователя.
+ *
+ * @returns {string} JWT токен.
+ */
 UserSchema.methods.getToken = function (user) {
   return jwt.sign({id: user._id}, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-UserSchema.methods.passwordChangedAfter = function (jwtTimestamp) {
-  if (this.passwordChangedAt && jwtTimestamp) {
+/**
+ * Проверить, что смена пароля произошла после.
+ *
+ * @param {timestamp} timestamp Таймштамп для проверки.
+ */
+UserSchema.methods.passwordChangedAfter = function (timestamp) {
+  if (this.passwordChangedAt && timestamp) {
     const passwordTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
       10,
     );
 
-    return jwtTimestamp < passwordTimestamp;
+    return timestamp < passwordTimestamp;
   }
 
   return false;
 };
 
+/**
+ * Получить токен восстановления пароля.
+ */
 UserSchema.methods.getResetToken = function () {
   const token = crypto.randomBytes(32).toString('hex');
 
   return token;
 };
 
+/**
+ * Добавить данные по токену восстановления пароля пользователю.
+ *
+ * @param {string} token Токен для восстановления пароля.
+ *
+ * @returns {UserSchema} UserSchema object.
+ */
 UserSchema.methods.setTokensInfo = function (token) {
   if (!token) return;
 
@@ -133,6 +174,9 @@ UserSchema.methods.setTokensInfo = function (token) {
   return this;
 };
 
+/**
+ * Сбросить данные по токену восстановления пароля пользователю.
+ */
 UserSchema.methods.clearTokensInfo = function () {
   this.passwordResetToken = undefined;
   this.passwordResetExpires = undefined;

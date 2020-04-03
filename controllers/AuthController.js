@@ -1,53 +1,35 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const UserModel = require('../models/UserModel');
-const {catchAsync} = require('../utils/errorUtils');
+const {catchAsync, createAndSendToken} = require('../utils/controllersUtils');
 const {sendEmail} = require('../service/EmailTransport');
 
+/**
+ * Контроллер регистрации пользователя.
+ */
 exports.signup = catchAsync(async function (req, res, next) {
-  //TODO: Убрать прямую передачу body в методы create.
+  //TODO: Убрать прямую передачу body в методы create. Заменить на getFieldsFromReqBody
   const user = await UserModel.create(req.body);
 
-  const token = user.getToken(user);
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      token,
-    },
-  });
+  createAndSendToken(res, 201, user);
 
   next();
 });
 
+/**
+ * Контроллер входа пользователя в систему.
+ */
 exports.login = catchAsync(async function (req, res, next) {
-  const {login, password} = req.body;
+  const {user} = res.locals;
 
-  if (!login || !password) {
-    return next(new Error('Необходимо указать логин или пароль'));
-  }
-
-  const user = await UserModel.findOne({login}).select('+password');
-  const CORRECT_PASSWORD =
-    user && (await user.checkPassword(password, user.password));
-
-  if (!user || !CORRECT_PASSWORD) {
-    return next(new Error('Неверный логин или пароль'));
-  }
-
-  const token = user.getToken(user);
-
-  //TODO: сделать метод хелпер для формирования ответов
-  res.status(200).send({
-    status: 'success',
-    data: {
-      token,
-    },
-  });
+  createAndSendToken(res, 200, user);
 
   next();
 });
 
+/**
+ * Проверка пользователя на авторизацию для предоставления доступа к роуту.
+ */
 exports.protect = catchAsync(async function (req, res, next) {
   let token = null;
 
@@ -77,14 +59,19 @@ exports.protect = catchAsync(async function (req, res, next) {
     return next(new Error('Вам необходимо произвести вход'));
   }
 
-  req.user = user;
+  res.locals.user = user;
 
   next();
 });
 
+/**
+ * Проверка роли пользователя для предоставления доступа к роуту.
+ *
+ * @param {Array<string>} roles Список ролей.
+ */
 exports.restrictedTo = function (roles) {
   return function (req, res, next) {
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(res.locals.user.role)) {
       return next(
         new Error('Ваш уровень доступа не соответствует необходимому'),
       );
@@ -94,6 +81,9 @@ exports.restrictedTo = function (roles) {
   };
 };
 
+/**
+ * Контроллер забытого пароля.
+ */
 exports.forgot = catchAsync(async function (req, res, next) {
   const {email} = req.body;
 
@@ -126,6 +116,9 @@ exports.forgot = catchAsync(async function (req, res, next) {
   next();
 });
 
+/**
+ * Контроллер сброса пароля пользователя.
+ */
 exports.reset = catchAsync(async function (req, res, next) {
   const passwordResetToken = crypto
     .createHash('sha256')
@@ -150,15 +143,7 @@ exports.reset = catchAsync(async function (req, res, next) {
 
   await user.save();
 
-  const token = user.getToken(user);
-
-  //TODO: сделать метод хелпер для формирования ответов
-  res.status(200).send({
-    status: 'success',
-    data: {
-      token,
-    },
-  });
+  createAndSendToken(res, 200, user);
 
   next();
 });
