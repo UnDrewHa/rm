@@ -30,7 +30,7 @@ module.exports = new Schema({
   projector: Boolean,
   whiteboard: Boolean,
   flipchart: Boolean,
-  Building: {
+  building: {
     type: Schema.ObjectId,
     ref: 'Building',
     required: [true, getFieldErrorMessage('здание')],

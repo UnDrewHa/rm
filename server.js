@@ -13,6 +13,22 @@ mongoose.connect(CONNECTION_STRING, {
   useUnifiedTopology: true,
 });
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`App is running on PORT: ${process.env.PORT}`);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error(error);
+
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('unhandledRejection', (error) => {
+  console.error(error);
+
+  server.close(() => {
+    process.exit(1);
+  });
 });

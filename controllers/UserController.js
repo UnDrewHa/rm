@@ -102,7 +102,7 @@ exports.deleteMe = catchAsync(async function (req, res, next) {
 /**
  * Контроллер получения списка пользователей.
  */
-exports.getUsers = catchAsync(async function (req, res, next) {
+exports.getAll = catchAsync(async function (req, res, next) {
   const users = await UserModel.find();
 
   res.status(200).send({
