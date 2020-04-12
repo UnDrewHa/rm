@@ -4,6 +4,7 @@ const {
   getFieldsFromReqBody,
   createAndSendToken,
 } = require('../utils/controllersUtils');
+const {AppError} = require('../utils/errorUtils');
 
 /**
  * Middleware для проверки корректности введенного пароля перед изменением данных пользователя.
@@ -66,6 +67,7 @@ exports.updateMe = catchAsync(async function (req, res, next) {
       'name',
       'surname',
       'patronymic',
+      'active',
     ]),
     {
       runValidators: true,
@@ -113,4 +115,84 @@ exports.getAll = catchAsync(async function (req, res, next) {
   });
 
   next();
+});
+
+/**
+ * Контроллер удаления документов "Пользователь".
+ */
+exports.delete = catchAsync(async function (req, res) {
+  const {ids} = req.body;
+
+  await UserModel.updateMany(
+    {
+      _id: {$in: ids},
+    },
+    {active: false},
+    {
+      runValidators: true,
+    },
+  );
+
+  res.status(200).send({
+    status: 'success',
+  });
+});
+
+/**
+ * Контроллер обновление документа "Пользователь".
+ */
+exports.update = catchAsync(async function (req, res, next) {
+  const {_id} = req.body;
+
+  const user = await UserModel.findById(_id);
+  if (!user) {
+    return next(new AppError('Документ не найден', 404));
+  }
+
+  await user.update(
+    getFieldsFromReqBody(req.body, [
+      'email',
+      'phone',
+      'building',
+      'photo',
+      'name',
+      'surname',
+      'patronymic',
+    ]),
+    {
+      runValidators: true,
+    },
+  );
+
+  res.status(200).send({
+    status: 'success',
+  });
+});
+
+/**
+ * Контроллер создания документа "Пользователь".
+ */
+exports.create = catchAsync(async function (req, res) {
+  const newUserData = {
+    password: process.env.DEFAULT_PASSWORD,
+    passwordConfirm: process.env.DEFAULT_PASSWORD,
+    ...getFieldsFromReqBody(req.body, [
+      'login',
+      'email',
+      'phone',
+      'building',
+      'photo',
+      'name',
+      'surname',
+      'patronymic',
+    ]),
+  };
+  const room = await UserModel.create(newUserData);
+
+  res.status(201).send({
+    status: 'success',
+    data: {
+      room,
+    },
+  });
 });

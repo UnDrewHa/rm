@@ -5,7 +5,12 @@ const UserController = require('../controllers/UserController');
 
 const router = express.Router();
 
-router.route('/users').get(UserController.getAll);
+router
+  .route('/users')
+  .get(UserController.getAll)
+  .post(UserController.create)
+  .patch(UserController.update)
+  .delete(UserController.delete);
 
 router
   .route('/buildings')
