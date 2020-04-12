@@ -6,7 +6,7 @@
  *
  * @returns {object} Объект с данными из тела запроса.
  */
-exports.getFieldsFromReqBody = function (body = {}, keys = []) {
+exports.getFieldsFromObject = function (body = {}, keys = []) {
   const result = {};
 
   keys.forEach((key) => {

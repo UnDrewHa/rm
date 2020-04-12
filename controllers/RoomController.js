@@ -1,7 +1,6 @@
-const lodash = require('lodash');
 const RoomModel = require('../models/RoomModel');
 const EventModel = require('../models/EventModel');
-const {catchAsync, getFieldsFromReqBody} = require('../utils/controllersUtils');
+const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
 
 /**
@@ -9,7 +8,7 @@ const {AppError} = require('../utils/errorUtils');
  */
 exports.create = catchAsync(async function (req, res) {
   const room = await RoomModel.create(
-    getFieldsFromReqBody(req.body, [
+    getFieldsFromObject(req.body, [
       'name',
       'description',
       'seats',
@@ -34,27 +33,30 @@ exports.create = catchAsync(async function (req, res) {
  * Контроллер получения списка документов "Переговорная комната".
  */
 exports.getAll = catchAsync(async function (req, res) {
-  const {building, floors, date, dateFrom, dateTo} = req.body;
-  const rooms = await RoomModel.find({building, floor: {$in: floors}});
-  const ids = rooms.map((item) => item._id);
+  const {filter} = req.body;
+  const findFilter = filter
+    ? {building: filter.building, floor: {$in: filter.floors}}
+    : {};
+  const rooms = await RoomModel.find(findFilter);
 
-  if (ids.length === 0) {
+  if (!filter || rooms.length === 0) {
     return res.status(200).send({
       status: 'success',
       data: {
-        rooms: [],
+        rooms,
       },
     });
   }
 
+  const ids = rooms.map((item) => item._id);
   const events = await EventModel.find({
     room: {$in: ids},
-    date: date,
+    date: filter.date,
     $or: [
       {
-        $and: [{from: {$gte: dateFrom}}, {from: {$lt: dateTo}}],
+        $and: [{from: {$gte: filter.dateFrom}}, {from: {$lt: filter.dateTo}}],
       },
-      {from: {$lt: dateFrom}, to: {$gt: dateFrom}},
+      {from: {$lt: filter.dateFrom}, to: {$gt: filter.dateFrom}},
     ],
   });
 
@@ -119,7 +121,7 @@ exports.update = catchAsync(async function (req, res, next) {
   }
 
   await room.update(
-    getFieldsFromReqBody(req.body, [
+    getFieldsFromObject(req.body, [
       'name',
       'description',
       'seats',

@@ -1,5 +1,5 @@
 const BuildingModel = require('../models/BuildingModel');
-const {catchAsync, getFieldsFromReqBody} = require('../utils/controllersUtils');
+const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
 
 /**
@@ -7,7 +7,7 @@ const {AppError} = require('../utils/errorUtils');
  */
 exports.create = catchAsync(async function (req, res, next) {
   const building = await BuildingModel.create(
-    getFieldsFromReqBody(req.body, ['name', 'address', 'floors']),
+    getFieldsFromObject(req.body, ['name', 'address', 'floors']),
   );
 
   res.status(201).send({
@@ -59,7 +59,7 @@ exports.update = catchAsync(async function (req, res, next) {
   }
 
   await building.update(
-    getFieldsFromReqBody(req.body, ['address', 'name', 'floors']),
+    getFieldsFromObject(req.body, ['address', 'name', 'floors']),
     {
       runValidators: true,
     },

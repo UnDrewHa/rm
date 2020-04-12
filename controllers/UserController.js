@@ -1,7 +1,7 @@
 const UserModel = require('../models/UserModel');
 const {
   catchAsync,
-  getFieldsFromReqBody,
+  getFieldsFromObject,
   createAndSendToken,
 } = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
@@ -59,7 +59,7 @@ exports.updateMe = catchAsync(async function (req, res, next) {
 
   await user.update(
     //TODO: Перенести ключи в константы.
-    getFieldsFromReqBody(req.body, [
+    getFieldsFromObject(req.body, [
       'email',
       'phone',
       'building',
@@ -150,7 +150,7 @@ exports.update = catchAsync(async function (req, res, next) {
   }
 
   await user.update(
-    getFieldsFromReqBody(req.body, [
+    getFieldsFromObject(req.body, [
       'email',
       'phone',
       'building',
@@ -176,7 +176,7 @@ exports.create = catchAsync(async function (req, res) {
   const newUserData = {
     password: process.env.DEFAULT_PASSWORD,
     passwordConfirm: process.env.DEFAULT_PASSWORD,
-    ...getFieldsFromReqBody(req.body, [
+    ...getFieldsFromObject(req.body, [
       'login',
       'email',
       'phone',

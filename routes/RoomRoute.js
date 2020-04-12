@@ -3,6 +3,8 @@ const RoomController = require('../controllers/RoomController');
 
 const router = express.Router();
 
-router.post('/', RoomController.getAll).get('/:id', RoomController.getDetails);
+router
+  .post('/find', RoomController.getAll)
+  .get('/:id', RoomController.getDetails);
 
 module.exports = router;

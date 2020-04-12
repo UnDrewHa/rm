@@ -7,6 +7,7 @@ const AuthRoute = require('./routes/AuthRoute');
 const AdminRoute = require('./routes/AdminRoute');
 const UserRoute = require('./routes/UserRoute');
 const RoomRoute = require('./routes/RoomRoute');
+const EventRoute = require('./routes/EventRoute');
 const {AppError} = require('./utils/errorUtils');
 
 dotenv.config({
@@ -25,6 +26,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use('/auth', AuthRoute);
 app.use('/users', AuthController.protect, UserRoute);
 app.use('/rooms', AuthController.protect, RoomRoute);
+app.use('/events', AuthController.protect, EventRoute);
 app.use(
   '/admin',
   AuthController.protect,

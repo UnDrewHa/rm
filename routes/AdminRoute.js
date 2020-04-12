@@ -2,6 +2,7 @@ const express = require('express');
 const BuildingController = require('../controllers/BuildingController');
 const RoomController = require('../controllers/RoomController');
 const UserController = require('../controllers/UserController');
+const EventController = require('../controllers/EventController');
 
 const router = express.Router();
 
@@ -11,6 +12,16 @@ router
   .post(UserController.create)
   .patch(UserController.update)
   .delete(UserController.delete);
+
+router
+  .route('/events')
+  .post(EventController.create)
+  .patch(EventController.update)
+  .delete(EventController.delete);
+
+router
+  .get('/events/:id', EventController.getDetails)
+  .post('/events/find', EventController.getAll);
 
 router
   .route('/buildings')
