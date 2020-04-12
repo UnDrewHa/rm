@@ -1,11 +1,13 @@
+const lodash = require('lodash');
 const RoomModel = require('../models/RoomModel');
+const EventModel = require('../models/EventModel');
 const {catchAsync, getFieldsFromReqBody} = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
 
 /**
- * Контроллер создания документа "Здание".
+ * Контроллер создания документа "Переговорная комната".
  */
-exports.create = catchAsync(async function (req, res, next) {
+exports.create = catchAsync(async function (req, res) {
   const room = await RoomModel.create(
     getFieldsFromReqBody(req.body, [
       'name',
@@ -29,21 +31,50 @@ exports.create = catchAsync(async function (req, res, next) {
 });
 
 /**
- * Контроллер получения списка документов "Здание".
+ * Контроллер получения списка документов "Переговорная комната".
  */
-exports.getAll = catchAsync(async function (req, res, next) {
-  const rooms = await RoomModel.find({});
+exports.getAll = catchAsync(async function (req, res) {
+  const {building, floors, date, dateFrom, dateTo} = req.body;
+  const rooms = await RoomModel.find({building, floor: {$in: floors}});
+  const ids = rooms.map((item) => item._id);
+
+  if (ids.length === 0) {
+    return res.status(200).send({
+      status: 'success',
+      data: {
+        rooms: [],
+      },
+    });
+  }
+
+  const events = await EventModel.find({
+    room: {$in: ids},
+    date: date,
+    $or: [
+      {
+        $and: [{from: {$gte: dateFrom}}, {from: {$lt: dateTo}}],
+      },
+      {from: {$lt: dateFrom}, to: {$gt: dateFrom}},
+    ],
+  });
+
+  const notReservedRooms = rooms.filter(
+    (item) =>
+      !events.find((event) => {
+        return event.room.toString() === item._id.toString();
+      }),
+  );
 
   res.status(200).send({
     status: 'success',
     data: {
-      rooms,
+      rooms: notReservedRooms,
     },
   });
 });
 
 /**
- * Контроллер получения детальной информации документа "Здание".
+ * Контроллер получения детальной информации документа "Переговорная комната".
  */
 exports.getDetails = catchAsync(async function (req, res, next) {
   const {id} = req.params;
@@ -62,9 +93,9 @@ exports.getDetails = catchAsync(async function (req, res, next) {
 });
 
 /**
- * Контроллер удаления документов "Здание".
+ * Контроллер удаления документов "Переговорная комната".
  */
-exports.delete = catchAsync(async function (req, res, next) {
+exports.delete = catchAsync(async function (req, res) {
   const {ids} = req.body;
 
   await RoomModel.deleteMany({
@@ -77,7 +108,7 @@ exports.delete = catchAsync(async function (req, res, next) {
 });
 
 /**
- * Контроллер обновление документа "Здание".
+ * Контроллер обновление документа "Переговорная комната".
  */
 exports.update = catchAsync(async function (req, res, next) {
   const {_id} = req.body;

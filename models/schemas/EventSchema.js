@@ -9,13 +9,17 @@ module.exports = new Schema({
     required: [true, getFieldErrorMessage('название')],
     minlength: 5,
   },
-  dateTime: {
+  date: {
     type: Date,
     required: [true, getFieldErrorMessage('дата')],
   },
-  duration: {
-    type: Number,
-    required: [true, getFieldErrorMessage('продолжительность')],
+  from: {
+    type: Date,
+    required: [true, getFieldErrorMessage('время начала')],
+  },
+  to: {
+    type: Date,
+    required: [true, getFieldErrorMessage('время окончания')],
   },
   room: {
     type: Schema.ObjectId,
@@ -34,4 +38,8 @@ module.exports = new Schema({
     },
   ],
   description: String,
+  canceled: {
+    type: Boolean,
+    default: false,
+  },
 });
