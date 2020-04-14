@@ -1,17 +1,17 @@
 /**
  * Получить объект с данными из тела запроса.
  *
- * @param {object} body Тело запроса.
+ * @param {object} obj Тело запроса.
  * @param {String[]} [keys] Список ключей, которые нужно считать из тела запроса.
  *
  * @returns {object} Объект с данными из тела запроса.
  */
-exports.getFieldsFromObject = function (body = {}, keys = []) {
+exports.getFieldsFromObject = function (obj = {}, keys = []) {
   const result = {};
 
   keys.forEach((key) => {
-    if (key in body) {
-      result[key] = body[key];
+    if (key in obj) {
+      result[key] = obj[key];
     }
   });
 

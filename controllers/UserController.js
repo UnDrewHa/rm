@@ -9,18 +9,18 @@ const {AppError} = require('../utils/errorUtils');
 /**
  * Middleware для проверки корректности введенного пароля перед изменением данных пользователя.
  *
- * @param {string} fieldName Поле, которое получаем от пользователя помимо пароля.
+ * @param {string} key Поле, которое получаем от пользователя помимо пароля.
  */
-exports.createPasswordCheckMiddleware = function (fieldName) {
+exports.createPasswordCheckMiddleware = function (key) {
   return catchAsync(async function (req, res, next) {
-    const {[fieldName]: fieldValue, password} = req.body;
+    const {[key]: fieldValue, password} = req.body;
 
     if (!fieldValue || !password) {
       return next(new Error('Необходимо указать пароль для изменения данных'));
     }
 
     const user = await UserModel.findOne({
-      [fieldName]: req.body[fieldName],
+      [key]: req.body[key],
     }).select('+password');
     const CORRECT_PASSWORD =
       user && (await user.checkPassword(password, user.password));
@@ -38,7 +38,7 @@ exports.createPasswordCheckMiddleware = function (fieldName) {
 /**
  * Контроллер изменения пароля.
  */
-exports.changePassword = catchAsync(async function (req, res, next) {
+exports.changePassword = catchAsync(async function (req, res) {
   const {newPassword, newPasswordConfirm} = req.body;
   const {user} = res.locals;
 
@@ -47,14 +47,12 @@ exports.changePassword = catchAsync(async function (req, res, next) {
   user.save();
 
   createAndSendToken(res, 200, user);
-
-  next();
 });
 
 /**
  * Контроллер обновления данных пользователя.
  */
-exports.updateMe = catchAsync(async function (req, res, next) {
+exports.updateMe = catchAsync(async function (req, res) {
   const {user} = res.locals;
 
   await user.update(
@@ -77,14 +75,12 @@ exports.updateMe = catchAsync(async function (req, res, next) {
   res.status(200).send({
     status: 'success',
   });
-
-  next();
 });
 
 /**
  * Контроллер удаления пользователя.
  */
-exports.deleteMe = catchAsync(async function (req, res, next) {
+exports.deleteMe = catchAsync(async function (req, res) {
   const {user} = res.locals;
 
   await user.update(
@@ -97,14 +93,12 @@ exports.deleteMe = catchAsync(async function (req, res, next) {
   res.status(200).send({
     status: 'success',
   });
-
-  next();
 });
 
 /**
  * Контроллер получения списка пользователей.
  */
-exports.getAll = catchAsync(async function (req, res, next) {
+exports.getAll = catchAsync(async function (req, res) {
   const users = await UserModel.find();
 
   res.status(200).send({
@@ -113,8 +107,6 @@ exports.getAll = catchAsync(async function (req, res, next) {
       users,
     },
   });
-
-  next();
 });
 
 /**

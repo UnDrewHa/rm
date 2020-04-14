@@ -7,24 +7,20 @@ const {sendEmail} = require('../service/EmailTransport');
 /**
  * Контроллер регистрации пользователя.
  */
-exports.signup = catchAsync(async function (req, res, next) {
+exports.signup = catchAsync(async function (req, res) {
   //TODO: Убрать прямую передачу body в методы create. Заменить на getFieldsFromReqBody
   const user = await UserModel.create(req.body);
 
   createAndSendToken(res, 201, user);
-
-  next();
 });
 
 /**
  * Контроллер входа пользователя в систему.
  */
-exports.login = catchAsync(async function (req, res, next) {
+exports.login = catchAsync(async function (req, res) {
   const {user} = res.locals;
 
   createAndSendToken(res, 200, user);
-
-  next();
 });
 
 /**
@@ -144,6 +140,4 @@ exports.reset = catchAsync(async function (req, res, next) {
   await user.save();
 
   createAndSendToken(res, 200, user);
-
-  next();
 });

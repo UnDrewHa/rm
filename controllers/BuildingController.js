@@ -5,7 +5,7 @@ const {AppError} = require('../utils/errorUtils');
 /**
  * Контроллер создания документа "Здание".
  */
-exports.create = catchAsync(async function (req, res, next) {
+exports.create = catchAsync(async function (req, res) {
   const building = await BuildingModel.create(
     getFieldsFromObject(req.body, ['name', 'address', 'floors']),
   );
@@ -21,7 +21,7 @@ exports.create = catchAsync(async function (req, res, next) {
 /**
  * Контроллер получения списка документов "Здание".
  */
-exports.getAll = catchAsync(async function (req, res, next) {
+exports.getAll = catchAsync(async function (req, res) {
   const buildings = await BuildingModel.find({});
 
   res.status(200).send({
@@ -35,7 +35,7 @@ exports.getAll = catchAsync(async function (req, res, next) {
 /**
  * Контроллер удаления документов "Здание".
  */
-exports.delete = catchAsync(async function (req, res, next) {
+exports.delete = catchAsync(async function (req, res) {
   const {ids} = req.body;
 
   await BuildingModel.deleteMany({
