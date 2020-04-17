@@ -5,6 +5,7 @@ import {Provider} from 'react-redux';
 import {RouterData} from './router';
 import {store} from './store';
 import {i18nInit} from './translation';
+import {Backdrop, CircularProgress} from '@material-ui/core';
 
 class App extends React.Component<{}, {isLoading: boolean}> {
     constructor(props) {
@@ -23,7 +24,11 @@ class App extends React.Component<{}, {isLoading: boolean}> {
 
     render() {
         if (this.state.isLoading) {
-            return <div>Loading...</div>;
+            return (
+                <Backdrop open>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            );
         }
 
         return (

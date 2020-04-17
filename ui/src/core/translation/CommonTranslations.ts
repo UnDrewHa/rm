@@ -1,7 +1,7 @@
 export default {
     Common: {
         links: {
-            about: 'О компании',
+            login: 'Войти',
             home: 'Главная',
             contacts: 'Контакты',
         },

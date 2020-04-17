@@ -1,12 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {LoginPage} from 'src/modules/auth/pages/LoginPage';
 import {CounterActions} from '../../modules/counter/actions/Actions';
 import {HashRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import i18n from 'i18next';
-
-function About() {
-    return <div>About</div>;
-}
 
 function AllContacts() {
     return <div>AllContacts</div>;
@@ -43,7 +40,7 @@ function Links() {
                 <Link to="/">{i18n.t('links.home')}</Link>
             </li>
             <li>
-                <Link to="/about">{i18n.t('links.about')}</Link>
+                <Link to="/login">{i18n.t('links.login')}</Link>
             </li>
             <li>
                 <Link to="/contact">{i18n.t('links.contacts')}</Link>
@@ -57,8 +54,8 @@ export function RouterData() {
         <Router>
             <Links />
             <Switch>
-                <Route path="/about">
-                    <About />
+                <Route path="/login">
+                    <LoginPage />
                 </Route>
                 <Route path="/contact">
                     <AllContacts />
