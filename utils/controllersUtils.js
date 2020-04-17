@@ -7,15 +7,15 @@
  * @returns {object} Объект с данными из тела запроса.
  */
 exports.getFieldsFromObject = function (obj = {}, keys = []) {
-  const result = {};
+    const result = {};
 
-  keys.forEach((key) => {
-    if (key in obj) {
-      result[key] = obj[key];
-    }
-  });
+    keys.forEach((key) => {
+        if (key in obj) {
+            result[key] = obj[key];
+        }
+    });
 
-  return result;
+    return result;
 };
 
 /**
@@ -26,9 +26,9 @@ exports.getFieldsFromObject = function (obj = {}, keys = []) {
  * @returns {function} Функцию-обработчик с .catch.
  */
 exports.catchAsync = function (fn) {
-  return (req, res, next) => {
-    fn(req, res, next).catch(next);
-  };
+    return (req, res, next) => {
+        fn(req, res, next).catch(next);
+    };
 };
 
 /**
@@ -41,23 +41,22 @@ exports.catchAsync = function (fn) {
  *
  * @returns {void} void.
  */
-exports.createAndSendToken = function (res, statusCode, user, data = {}) {
-  const token = user.getToken(user);
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-    ),
-    httpOnly: true,
-  };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+//TODO: отвязаться от express.
+exports.createAndSendToken = function (res, statusCode, user, data = null) {
+    const token = user.getToken(user);
+    //TODO: вынести в функцию получения конфига.
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() +
+                process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+        ),
+        httpOnly: true,
+    };
+    if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  res.cookie('jwt', token, cookieOptions);
+    res.cookie('jwt', token, cookieOptions);
 
-  res.status(statusCode).json({
-    status: 'success',
-    data: {
-      ...data,
-      token,
-    },
-  });
+    res.status(statusCode).json({
+        data,
+    });
 };
