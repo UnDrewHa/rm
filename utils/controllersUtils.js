@@ -56,6 +56,8 @@ exports.createAndSendToken = function (res, statusCode, user, data = null) {
 
     res.cookie('jwt', token, cookieOptions);
 
+    data && (data.password = undefined); //TODO: разобраться что за хуйня
+
     res.status(statusCode).json({
         data,
     });

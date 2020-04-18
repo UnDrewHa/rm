@@ -1,6 +1,13 @@
 import {combineReducers} from 'redux';
-import {counterReducer} from '../../modules/counter/reducers';
+import {resetPasswordReducer} from 'src/modules/auth/reducers/resetPasswordReducer';
+import {userReducer} from 'src/modules/auth/reducers/userReducer';
+import {buildingsReducer} from 'src/modules/buildings/reducers';
 
+/**
+ * Корневой редюсер приложения.
+ */
 export const rootReducer = combineReducers({
-    counter: counterReducer,
+    user: userReducer,
+    buildings: buildingsReducer,
+    resetPassword: resetPasswordReducer,
 });

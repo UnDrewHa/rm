@@ -31,6 +31,9 @@ exports.createPasswordCheckMiddleware = function (key) {
             return next(new Error('Неверный логин или пароль'));
         }
 
+        //TODO Сделать нормально.
+        user.password = undefined;
+
         res.locals.user = user;
 
         next();

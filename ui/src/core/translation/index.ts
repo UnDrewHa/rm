@@ -1,5 +1,4 @@
 import i18n from 'i18next';
-import CounterTranslations from '../../modules/counter/CounterTranslations';
 import CommonTranslations from './CommonTranslations';
 import AuthTranslations from 'src/modules/auth/translations/ru/AuthTranslations';
 
@@ -10,7 +9,6 @@ export function i18nInit(): Promise<Function> {
         resources: {
             ru: {
                 ...CommonTranslations,
-                ...CounterTranslations,
                 ...AuthTranslations,
             },
         },

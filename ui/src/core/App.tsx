@@ -2,10 +2,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import React from 'react';
 import './styles/App.scss';
 import {Provider} from 'react-redux';
+import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
 import {RouterData} from './router';
 import {store} from './store';
 import {i18nInit} from './translation';
-import {Backdrop, CircularProgress} from '@material-ui/core';
 
 class App extends React.Component<{}, {isLoading: boolean}> {
     constructor(props) {
@@ -24,11 +24,7 @@ class App extends React.Component<{}, {isLoading: boolean}> {
 
     render() {
         if (this.state.isLoading) {
-            return (
-                <Backdrop open>
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-            );
+            return <LoadingOverlay open />;
         }
 
         return (

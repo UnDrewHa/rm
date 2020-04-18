@@ -1,4 +1,5 @@
 const express = require('express');
+const BuildingController = require('../controllers/BuildingController');
 const AuthController = require('../controllers/AuthController');
 const PermissionsController = require('../controllers/PermissionsController');
 const AuthRoute = require('./AuthRoute');
@@ -10,6 +11,7 @@ const EventRoute = require('./EventRoute');
 const router = express.Router();
 
 router.use('/auth', AuthRoute);
+router.get('/buildings', BuildingController.getAll);
 router.use('/users', AuthController.protect, UserRoute);
 router.use('/rooms', AuthController.protect, RoomRoute);
 router.use('/events', AuthController.protect, EventRoute);

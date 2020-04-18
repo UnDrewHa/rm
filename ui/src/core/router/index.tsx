@@ -1,37 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import {ForgotPage} from 'src/modules/auth/pages/ForgotPage';
 import {LoginPage} from 'src/modules/auth/pages/LoginPage';
-import {CounterActions} from '../../modules/counter/actions/Actions';
+import {ResetPasswordPage} from 'src/modules/auth/pages/ResetPasswordPage';
+import {SignupPage} from 'src/modules/auth/pages/SignupPage';
 import {HashRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import i18n from 'i18next';
 
-function AllContacts() {
-    return <div>AllContacts</div>;
+function Home() {
+    return <div>дом</div>;
 }
-
-function Home(props: any) {
-    const handleIncrement = () => {
-        props.actions.increment();
-    };
-
-    const handleDecrement = () => {
-        props.actions.decrement();
-    };
-
-    return (
-        <div>
-            {i18n.t('Counter:title', {number: props.counter})}
-            <br />
-            <button onClick={handleIncrement}>+</button>
-            <button onClick={handleDecrement}>-</button>
-        </div>
-    );
-}
-
-const Connected = connect(
-    (state: any) => ({counter: state.counter}),
-    (dispatch) => ({actions: new CounterActions(dispatch)}),
-)(Home);
 
 function Links() {
     return (
@@ -41,9 +18,6 @@ function Links() {
             </li>
             <li>
                 <Link to="/login">{i18n.t('links.login')}</Link>
-            </li>
-            <li>
-                <Link to="/contact">{i18n.t('links.contacts')}</Link>
             </li>
         </ul>
     );
@@ -57,11 +31,17 @@ export function RouterData() {
                 <Route path="/login">
                     <LoginPage />
                 </Route>
-                <Route path="/contact">
-                    <AllContacts />
+                <Route path="/signup">
+                    <SignupPage />
+                </Route>
+                <Route path="/forgot">
+                    <ForgotPage />
+                </Route>
+                <Route path="/reset/:token">
+                    <ResetPasswordPage />
                 </Route>
                 <Route path="/">
-                    <Connected />
+                    <Home />
                 </Route>
             </Switch>
         </Router>

@@ -11,7 +11,7 @@ exports.signup = catchAsync(async function (req, res) {
     //TODO: Убрать прямую передачу body в методы create. Заменить на getFieldsFromReqBody
     const user = await UserModel.create(req.body.data);
 
-    createAndSendToken(res, 201, user);
+    createAndSendToken(res, 201, user, user);
 });
 
 /**
@@ -20,7 +20,7 @@ exports.signup = catchAsync(async function (req, res) {
 exports.login = catchAsync(async function (req, res) {
     const {user} = res.locals;
 
-    createAndSendToken(res, 200, user);
+    createAndSendToken(res, 200, user, user);
 });
 
 /**
@@ -111,9 +111,7 @@ exports.forgot = catchAsync(async function (req, res, next) {
         return next(new Error('Ошибка отправки сообщения с токеном'));
     }
 
-    res.status(200).json({
-        data: resetToken,
-    });
+    res.status(200).send();
 });
 
 /**
