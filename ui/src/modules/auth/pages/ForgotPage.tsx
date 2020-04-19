@@ -1,3 +1,4 @@
+import {memoize} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {
@@ -33,6 +34,9 @@ interface IState {
     email: string;
 }
 
+/**
+ * Страница запроса отправки ссылки на страницу сброса пароля.
+ */
 class ForgotPage extends React.Component<TProps, IState> {
     state: IState = {
         email: '',
@@ -42,6 +46,9 @@ class ForgotPage extends React.Component<TProps, IState> {
         this.props.actions.clear();
     }
 
+    /**
+     * Обработчик отправки формы.
+     */
     handleSubmit = (e) => {
         const {email} = this.state;
         e.preventDefault();
@@ -51,9 +58,14 @@ class ForgotPage extends React.Component<TProps, IState> {
         });
     };
 
-    handleEmailChange = (event) => {
-        this.setState({email: event.target.value});
-    };
+    /**
+     * Создать обработчик поля в state.
+     */
+    createFieldChangeHandler = memoize((field: keyof IState) => (event) => {
+        this.setState<never>({
+            [field]: event.target.value,
+        });
+    });
 
     render() {
         const {email} = this.state;
@@ -89,7 +101,7 @@ class ForgotPage extends React.Component<TProps, IState> {
                     <Typography component="h1" variant="h5">
                         {i18n.t('Auth:forgot.title')}
                     </Typography>
-                    <form onSubmit={this.handleSubmit} noValidate>
+                    <form onSubmit={this.handleSubmit}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -101,7 +113,7 @@ class ForgotPage extends React.Component<TProps, IState> {
                             type="email"
                             autoComplete="email"
                             value={email}
-                            onChange={this.handleEmailChange}
+                            onChange={this.createFieldChangeHandler('email')}
                             autoFocus
                         />
                         <Button
@@ -144,6 +156,9 @@ const mapDispatchToProps = (dispatch): IDispatchProps => ({
     actions: new AuthActions(new AuthService(), dispatch),
 });
 
+/**
+ * Страница запроса отправки ссылки на страницу сброса пароля.
+ */
 const connected = connect(mapStateToProps, mapDispatchToProps)(ForgotPage);
 
 export {connected as ForgotPage};

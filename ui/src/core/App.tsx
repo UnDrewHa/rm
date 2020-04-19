@@ -3,9 +3,11 @@ import React from 'react';
 import './styles/App.scss';
 import {Provider} from 'react-redux';
 import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
+import {Notifier} from 'src/core/components/Notifier';
 import {RouterData} from './router';
 import {store} from './store';
 import {i18nInit} from './translation';
+import {SnackbarProvider} from 'notistack';
 
 class App extends React.Component<{}, {isLoading: boolean}> {
     constructor(props) {
@@ -29,8 +31,11 @@ class App extends React.Component<{}, {isLoading: boolean}> {
 
         return (
             <Provider store={store}>
-                <CssBaseline />
-                <RouterData />
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <CssBaseline />
+                    <RouterData />
+                </SnackbarProvider>
             </Provider>
         );
     }

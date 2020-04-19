@@ -1,4 +1,6 @@
 import React from 'react';
+import {RedirectListener} from 'src/core/components/RedirectListener';
+import {ROUTER} from 'src/core/router/consts';
 import {ForgotPage} from 'src/modules/auth/pages/ForgotPage';
 import {LoginPage} from 'src/modules/auth/pages/LoginPage';
 import {ResetPasswordPage} from 'src/modules/auth/pages/ResetPasswordPage';
@@ -14,10 +16,10 @@ function Links() {
     return (
         <ul>
             <li>
-                <Link to="/">{i18n.t('links.home')}</Link>
+                <Link to={ROUTER.MAIN}>{i18n.t('links.home')}</Link>
             </li>
             <li>
-                <Link to="/login">{i18n.t('links.login')}</Link>
+                <Link to={ROUTER.LOGIN}>{i18n.t('links.login')}</Link>
             </li>
         </ul>
     );
@@ -26,21 +28,22 @@ function Links() {
 export function RouterData() {
     return (
         <Router>
+            <RedirectListener />
             <Links />
             <Switch>
-                <Route path="/login">
+                <Route path={ROUTER.LOGIN}>
                     <LoginPage />
                 </Route>
-                <Route path="/signup">
+                <Route path={ROUTER.SIGNUP}>
                     <SignupPage />
                 </Route>
-                <Route path="/forgot">
+                <Route path={ROUTER.FORGOT}>
                     <ForgotPage />
                 </Route>
-                <Route path="/reset/:token">
+                <Route path={ROUTER.RESET}>
                     <ResetPasswordPage />
                 </Route>
-                <Route path="/">
+                <Route path={ROUTER.MAIN}>
                     <Home />
                 </Route>
             </Switch>

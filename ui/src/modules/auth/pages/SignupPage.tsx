@@ -1,10 +1,10 @@
+import {memoize} from 'lodash-es';
 import {
     Avatar,
     Button,
     Container,
     Grid,
     Link,
-    Snackbar,
     TextField,
     Typography,
     LinearProgress,
@@ -16,8 +16,11 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link as RouteLink, Redirect} from 'react-router-dom';
 import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
+import {EEventNames} from 'src/core/EventEmitter/enums';
+import {EventEmiter} from 'src/core/EventEmitter/EventEmitter';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData} from 'src/core/reducer/model';
+import {ROUTER} from 'src/core/router/consts';
 import {TAppStore} from 'src/core/store/model';
 import {AuthActions} from 'src/modules/auth/actions/AuthActions';
 import {IUserModel} from 'src/modules/auth/models';
@@ -46,8 +49,6 @@ interface IState {
     building: IBuildingModel;
 }
 
-type IStateKeys = keyof IState;
-
 class SignupPage extends React.Component<TProps, IState> {
     constructor(props) {
         super(props);
@@ -63,6 +64,25 @@ class SignupPage extends React.Component<TProps, IState> {
         props.buildingsActions.getAll();
     }
 
+    componentDidUpdate(prevProps) {
+        const {userData} = this.props;
+
+        if (
+            userData.status !== prevProps.userData.status &&
+            userData.status === EStatusCodes.FAIL
+        ) {
+            EventEmiter.emit(EEventNames.SHOW_NOTIFICATION, {
+                message: userData.error.message,
+                options: {
+                    variant: 'error',
+                },
+            });
+        }
+    }
+
+    /**
+     * Обработчик отправки формы.
+     */
     handleSubmit = (e) => {
         const {login, password, passwordConfirm, email, building} = this.state;
         e.preventDefault();
@@ -76,13 +96,22 @@ class SignupPage extends React.Component<TProps, IState> {
         });
     };
 
-    createFieldChangeHandler = (field: IStateKeys) => (event) => {
+    /**
+     * Создать обработчик поля в state.
+     */
+    createFieldChangeHandler = memoize((field: keyof IState) => (event) => {
         this.setState<never>({
             [field]: event.target.value,
         });
-    };
+    });
 
-    handleBuildingSelect = (_, building: IBuildingModel) => {
+    /**
+     * Обработчик выбора здания.
+     *
+     * @param event Объект события.
+     * @param {IBuildingModel} building Выбранное здание.
+     */
+    handleBuildingSelect = (event, building: IBuildingModel) => {
         this.setState({
             building,
         });
@@ -91,7 +120,6 @@ class SignupPage extends React.Component<TProps, IState> {
     render() {
         const {login, password, passwordConfirm, email, building} = this.state;
         const {userData, buildingsData} = this.props;
-        const popupVisible = userData.status === EStatusCodes.FAIL;
         const buildingsIsLoading =
             buildingsData.status === EStatusCodes.PENDING;
         const isPending = userData.status === EStatusCodes.PENDING;
@@ -101,125 +129,113 @@ class SignupPage extends React.Component<TProps, IState> {
         }
 
         if (userData.status === EStatusCodes.SUCCESS) {
-            return <Redirect to="/" />;
+            return <Redirect to={ROUTER.MAIN} />;
         }
 
         return (
-            <React.Fragment>
-                <Container component="main" maxWidth="xs">
-                    <Avatar>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        {i18n.t('Auth:signup.title')}
-                    </Typography>
-                    <form onSubmit={this.handleSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="login"
-                            label={i18n.t('Auth:signup.loginPlaceholder')}
-                            name="login"
-                            autoComplete="login"
-                            value={login}
-                            onChange={this.createFieldChangeHandler('login')}
-                            autoFocus
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label={i18n.t('Auth:signup.passwordPlaceholder')}
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            value={password}
-                            onChange={this.createFieldChangeHandler('password')}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="passwordConfirm"
-                            label={i18n.t(
-                                'Auth:signup.passwordConfirmPlaceholder',
-                            )}
-                            type="password"
-                            id="passwordConfirm"
-                            autoComplete="passwordConfirm"
-                            value={passwordConfirm}
-                            onChange={this.createFieldChangeHandler(
-                                'passwordConfirm',
-                            )}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="email"
-                            label={i18n.t('Auth:signup.emailPlaceholder')}
-                            type="email"
-                            id="email"
-                            autoComplete="email"
-                            value={email}
-                            onChange={this.createFieldChangeHandler('email')}
-                        />
-                        <Autocomplete
-                            id="building"
-                            options={buildingsData.data}
-                            getOptionLabel={(item) => item.address}
-                            onChange={this.handleBuildingSelect}
-                            value={building}
-                            disabled={buildingsIsLoading}
-                            disabledItemsFocusable={buildingsIsLoading}
-                            renderInput={(params) => {
-                                return (
-                                    <TextField
-                                        {...params}
-                                        label={i18n.t(
-                                            'Auth:signup.buildingPlaceholder',
-                                        )}
-                                        variant="outlined"
-                                    />
-                                );
-                            }}
-                        />
-                        {buildingsIsLoading && <LinearProgress />}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={buildingsIsLoading || isPending}
-                        >
-                            {i18n.t('Auth:signup.signupButton')}
-                        </Button>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <RouteLink to="/login">
-                                    <Link component="span">
-                                        {i18n.t('Auth:signup.loginText')}
-                                    </Link>
-                                </RouteLink>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </Container>
-                {popupVisible && ( //TODO: сделать общий интерфейс для показа попапов.
-                    <Snackbar
-                        open
-                        message={userData.error.message}
-                        autoHideDuration={3000}
-                        anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+            <Container component="main" maxWidth="xs">
+                <Avatar>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    {i18n.t('Auth:signup.title')}
+                </Typography>
+                <form onSubmit={this.handleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="login"
+                        label={i18n.t('Auth:signup.loginPlaceholder')}
+                        name="login"
+                        autoComplete="login"
+                        value={login}
+                        onChange={this.createFieldChangeHandler('login')}
+                        autoFocus
                     />
-                )}
-            </React.Fragment>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label={i18n.t('Auth:signup.passwordPlaceholder')}
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={this.createFieldChangeHandler('password')}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="passwordConfirm"
+                        label={i18n.t('Auth:signup.passwordConfirmPlaceholder')}
+                        type="password"
+                        id="passwordConfirm"
+                        autoComplete="passwordConfirm"
+                        value={passwordConfirm}
+                        onChange={this.createFieldChangeHandler(
+                            'passwordConfirm',
+                        )}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="email"
+                        label={i18n.t('Auth:signup.emailPlaceholder')}
+                        type="email"
+                        id="email"
+                        autoComplete="email"
+                        value={email}
+                        onChange={this.createFieldChangeHandler('email')}
+                    />
+                    <Autocomplete
+                        id="building"
+                        options={buildingsData.data}
+                        getOptionLabel={(item) => item.address}
+                        onChange={this.handleBuildingSelect}
+                        value={building}
+                        disabled={buildingsIsLoading}
+                        disabledItemsFocusable={buildingsIsLoading}
+                        renderInput={(params) => {
+                            return (
+                                <TextField
+                                    {...params}
+                                    label={i18n.t(
+                                        'Auth:signup.buildingPlaceholder',
+                                    )}
+                                    variant="outlined"
+                                />
+                            );
+                        }}
+                    />
+                    {buildingsIsLoading && <LinearProgress />}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        disabled={buildingsIsLoading || isPending}
+                    >
+                        {i18n.t('Auth:signup.signupButton')}
+                    </Button>
+                    <Grid container justify="flex-end">
+                        <Grid item>
+                            <RouteLink to="/login">
+                                <Link component="span">
+                                    {i18n.t('Auth:signup.loginText')}
+                                </Link>
+                            </RouteLink>
+                        </Grid>
+                    </Grid>
+                </form>
+            </Container>
         );
     }
 }
@@ -234,6 +250,9 @@ const mapDispatchToProps = (dispatch): IDispatchProps => ({
     buildingsActions: new BuildingsActions(new BuildingsService(), dispatch),
 });
 
+/**
+ * Страница регистрации.
+ */
 const connected = connect(mapStateToProps, mapDispatchToProps)(SignupPage);
 
 export {connected as SignupPage};

@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const UserModel = require('../models/UserModel');
 const {catchAsync, createAndSendToken} = require('../utils/controllersUtils');
 const {sendEmail} = require('../service/EmailTransport');
+const {AppError} = require('../utils/errorUtils');
 
 /**
  * Контроллер регистрации пользователя.
@@ -37,7 +38,9 @@ exports.protect = catchAsync(async function (req, res, next) {
     }
 
     if (!token) {
-        return next(new Error('Вам необходимо авторизоваться в приложении'));
+        return next(
+            new AppError('Вам необходимо авторизоваться в приложении', 401),
+        );
     }
 
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
@@ -45,14 +48,14 @@ exports.protect = catchAsync(async function (req, res, next) {
     const user = await UserModel.findById(decodedData.id);
     if (!user) {
         return next(
-            new Error(
+            new AppError(
                 'Такого пользователя больше не существует. Вам необходимо пройти регистрацию заново',
             ),
         );
     }
 
     if (user.passwordChangedAfter(decodedData.iat)) {
-        return next(new Error('Вам необходимо произвести вход'));
+        return next(new AppError('Вам необходимо произвести вход', 401));
     }
 
     res.locals.user = user;
@@ -69,7 +72,10 @@ exports.restrictedTo = function (roles) {
     return function (req, res, next) {
         if (!roles.includes(res.locals.user.role)) {
             return next(
-                new Error('Ваш уровень доступа не соответствует необходимому'),
+                new AppError(
+                    'Ваш уровень доступа не соответствует необходимому',
+                    403,
+                ),
             );
         }
 
@@ -84,13 +90,13 @@ exports.forgot = catchAsync(async function (req, res, next) {
     const {email} = req.body.data;
 
     if (!email) {
-        return next(new Error('Введите корректный e-mail адрес'));
+        return next(new AppError('Введите корректный e-mail адрес'));
     }
 
     const user = await UserModel.findOne({email});
     if (!user) {
         return next(
-            new Error('Пользователь с указанным e-mail адресом не найден'),
+            new AppError('Пользователь с указанным e-mail адресом не найден'),
         );
     }
 
@@ -108,7 +114,7 @@ exports.forgot = catchAsync(async function (req, res, next) {
             .clearTokensInfo(resetToken)
             .save({validateBeforeSave: false});
 
-        return next(new Error('Ошибка отправки сообщения с токеном'));
+        return next(new AppError('Ошибка отправки сообщения с токеном'));
     }
 
     res.status(200).send();
@@ -130,7 +136,7 @@ exports.reset = catchAsync(async function (req, res, next) {
 
     if (!user) {
         return next(
-            new Error(
+            new AppError(
                 'Вы ввели невалидную или протухшую ссылку для сброса пароля',
             ),
         );
