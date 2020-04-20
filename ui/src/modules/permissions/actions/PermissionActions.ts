@@ -22,7 +22,11 @@ export class PermissionActions {
      * Загрузить данные доступов.
      */
     getAll = () => {
-        dispatchAsync(this.dispatch, GET_PERMISSIONS, this.service.getAll());
+        return dispatchAsync(
+            this.dispatch,
+            GET_PERMISSIONS,
+            this.service.getAll(),
+        );
     };
 
     /**

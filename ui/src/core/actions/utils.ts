@@ -5,6 +5,7 @@ import {BEGIN, SUCCESS, FAIL} from 'src/core/actions/actionTypes';
  * Обертка для асинхронных экшенов.
  * Добавляет BEGIN, SUCCESS, FAIL к экшену.
  *
+ * @param {Dispatch} dispatch.
  * @param {string} actionType Тип экшена.
  * @param promise Промис получения данных.
  */

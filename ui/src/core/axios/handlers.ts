@@ -14,7 +14,7 @@ export const handleUnauthorized = (error) => {
         },
     });
 
-    EventEmiter.emit(EEventNames.REDIRECT, ROUTER.LOGIN);
+    EventEmiter.emit(EEventNames.REDIRECT, ROUTER.AUTH.LOGIN.FULL_PATH);
 
     return;
 };

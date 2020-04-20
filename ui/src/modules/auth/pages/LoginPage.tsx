@@ -93,7 +93,7 @@ class LoginPage extends React.Component<TProps, IState> {
         }
 
         if (userData.status === EStatusCodes.SUCCESS) {
-            return <Redirect to={ROUTER.MAIN} />;
+            return <Redirect to={ROUTER.MAIN.FULL_PATH} />;
         }
 
         return (

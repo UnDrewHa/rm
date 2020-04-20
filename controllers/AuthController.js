@@ -28,14 +28,7 @@ exports.login = catchAsync(async function (req, res) {
  * Проверка пользователя на авторизацию для предоставления доступа к роуту.
  */
 exports.protect = catchAsync(async function (req, res, next) {
-    let token = null;
-
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer')
-    ) {
-        token = req.headers.authorization.replace('Bearer ', '');
-    }
+    const {token} = req.cookies || {};
 
     if (!token) {
         return next(

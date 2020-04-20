@@ -54,7 +54,7 @@ exports.createAndSendToken = function (res, statusCode, user, data = null) {
     };
     if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-    res.cookie('jwt', token, cookieOptions);
+    res.cookie('token', token, cookieOptions);
 
     data && (data.password = undefined); //TODO: разобраться что за хуйня
 

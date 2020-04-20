@@ -102,7 +102,7 @@ class ResetPasswordPage extends React.Component<TProps, IState> {
         }
 
         if (resetPasswordData.status === EStatusCodes.SUCCESS) {
-            return <Redirect to={ROUTER.LOGIN} />;
+            return <Redirect to={ROUTER.AUTH.LOGIN.FULL_PATH} />;
         }
 
         return (

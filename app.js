@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const ErrorController = require('./controllers/ErrorController');
 const RouterMap = require('./routes');
 const {AppError} = require('./utils/errorUtils');
@@ -18,6 +19,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
+app.use(cookieParser());
 
 app.use(
     cors({
@@ -30,6 +32,7 @@ app.use(
             }
         },
         optionsSuccessStatus: 200,
+        credentials: true,
     }),
 );
 
