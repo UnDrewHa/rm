@@ -97,6 +97,17 @@ exports.deleteMe = catchAsync(async function (req, res) {
 });
 
 /**
+ * Контроллер удаления пользователя.
+ */
+exports.getUserInfo = catchAsync(async function (req, res) {
+    const {user} = res.locals;
+
+    res.status(200).json({
+        data: user,
+    });
+});
+
+/**
  * Контроллер получения списка пользователей.
  */
 exports.getAll = catchAsync(async function (req, res) {

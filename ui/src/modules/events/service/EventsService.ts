@@ -31,7 +31,7 @@ export class EventsService {
      * @param {string} id Идентификатор.
      */
     getById(id: string) {
-        return axios.get(this.baseUrl + '/find/' + id);
+        return axios.get(this.baseUrl + '/' + id);
     }
 
     /**

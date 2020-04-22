@@ -1,4 +1,5 @@
 export const GET_USERS = 'GET_USERS';
+export const GET_USER_INFO = 'GET_USER_INFO';
 export const CREATE_USER = 'CREATE_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 export const DELETE_USERS = 'DELETE_USERS';

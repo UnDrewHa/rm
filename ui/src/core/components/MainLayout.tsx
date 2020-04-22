@@ -5,6 +5,7 @@ import {ROUTER} from 'src/core/router/consts';
 import {Route, Switch} from 'react-router-dom';
 import {IAsyncData} from 'src/core/reducer/model';
 import {TAppStore} from 'src/core/store/model';
+import {EventDetailsPage} from 'src/modules/events/pages/EventDetailsPage';
 import {PermissionActions} from 'src/modules/permissions/actions/PermissionActions';
 import {TPermissionsList} from 'src/modules/permissions/models';
 import {PermissionService} from 'src/modules/permissions/service/PermissionService';
@@ -18,13 +19,18 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import {RoomSchedulePage} from 'src/modules/rooms/pages/RoomSchedulePage';
 import {RoomsList} from 'src/modules/rooms/pages/RoomsList';
+import {UsersActions} from 'src/modules/users/actions/UsersActions';
+import {IUserModel} from 'src/modules/users/models';
+import {UsersService} from 'src/modules/users/service/UsersService';
 
 interface IStateProps {
     permissions: IAsyncData<TPermissionsList>;
+    userInfo: IAsyncData<IUserModel>;
 }
 
 interface IDispatchProps {
     permissionActions: PermissionActions;
+    userActions: UsersActions;
 }
 
 type TProps = IStateProps & IDispatchProps;
@@ -34,14 +40,19 @@ interface IState {
 }
 
 class MainLayout extends React.Component<TProps, IState> {
-    constructor(props) {
+    constructor(props: TProps) {
         super(props);
+
+        const {permissionActions, userActions, userInfo} = props;
 
         this.state = {
             isLoading: true,
         };
 
-        props.permissionActions.getAll().then(() => {
+        let promises = [permissionActions.getAll()];
+        !userInfo.data && promises.push(userActions.getUserInfo());
+
+        Promise.all(promises).then(() => {
             this.setState({
                 isLoading: false,
             });
@@ -70,6 +81,9 @@ class MainLayout extends React.Component<TProps, IState> {
                     </Toolbar>
                 </AppBar>
                 <Switch>
+                    <Route path={ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH}>
+                        <EventDetailsPage />
+                    </Route>
                     <Route path={ROUTER.MAIN.ROOMS.DETAILS.FULL_PATH}>
                         <RoomSchedulePage />
                     </Route>
@@ -84,10 +98,12 @@ class MainLayout extends React.Component<TProps, IState> {
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     permissions: state.permissions,
+    userInfo: state.user,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
     permissionActions: new PermissionActions(new PermissionService(), dispatch),
+    userActions: new UsersActions(new UsersService(), dispatch),
 });
 
 /**

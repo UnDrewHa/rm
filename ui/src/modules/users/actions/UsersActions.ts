@@ -7,6 +7,7 @@ import {
     CREATE_USER,
     DELETE_ME,
     DELETE_USERS,
+    GET_USER_INFO,
     GET_USERS,
     UPDATE_ME,
     UPDATE_USER,
@@ -28,6 +29,17 @@ export class UsersActions {
      */
     getAll() {
         return dispatchAsync(this.dispatch, GET_USERS, this.service.getAll());
+    }
+
+    /**
+     * Получить данные пользователя.
+     */
+    getUserInfo() {
+        return dispatchAsync(
+            this.dispatch,
+            GET_USER_INFO,
+            this.service.getUserInfo(),
+        );
     }
 
     /**

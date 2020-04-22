@@ -1,7 +1,6 @@
-import {BEGIN, FAIL, SUCCESS} from 'src/core/actions/actionTypes';
-import {handleActions} from 'redux-actions';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'src/core/reducer/model';
+import {createAsyncDataReducer} from 'src/core/reducer/utils';
 import {
     CLEAR_PERMISSIONS,
     GET_PERMISSIONS,
@@ -14,30 +13,20 @@ export const getInitialState = (): IAsyncData<TPermissionsList> => ({
     error: null,
 });
 
-export const permissionsReducer = handleActions(
-    {
-        [GET_PERMISSIONS + BEGIN]: () => ({
-            status: EStatusCodes.PENDING,
-            data: null,
-            error: null,
-        }),
-        [GET_PERMISSIONS + SUCCESS]: (
-            _,
-            action: IReduxAction<TPermissionsList>,
-        ) => ({
-            status: EStatusCodes.SUCCESS,
-            data: action.payload.data,
-            error: null,
-        }),
-        [GET_PERMISSIONS + FAIL]: (
-            prevState: IAsyncData<TPermissionsList>,
-            action: IReduxAction<TPermissionsList>,
-        ) => ({
-            ...prevState,
-            status: EStatusCodes.FAIL,
-            error: action.payload.error,
-        }),
-        [CLEAR_PERMISSIONS]: () => getInitialState(),
-    },
-    getInitialState(),
-);
+export const permissionsReducer = (
+    state: IAsyncData<TPermissionsList> = getInitialState(),
+    action: IReduxAction<TPermissionsList>,
+) => {
+    if (action.originalType === GET_PERMISSIONS) {
+        return createAsyncDataReducer<TPermissionsList, TPermissionsList>(
+            GET_PERMISSIONS,
+            state,
+        )(state, action);
+    }
+
+    if (action.type === CLEAR_PERMISSIONS) {
+        return getInitialState();
+    }
+
+    return state;
+};

@@ -12,8 +12,8 @@ axios.interceptors.response.use(
     (error) => {
         const {status} = error?.response || {};
 
-        if (error.message === 'Network Error') return handleNetworkError(error);
-        if (status === 401) return handleUnauthorized(error);
+        if (error.message === 'Network Error') handleNetworkError(error);
+        if (status === 401) handleUnauthorized(error);
 
         return Promise.reject(error);
     },

@@ -25,6 +25,7 @@ import {TAppStore} from 'src/core/store/model';
 import {EventsActions} from 'src/modules/events/actions/EventsActions';
 import {IEventModel} from 'src/modules/events/models';
 import {EventsService} from 'src/modules/events/service/EventsService';
+import {calculateTimeString} from 'src/modules/events/utils';
 import {RoomCard} from 'src/modules/rooms/components/RoomCard';
 import {Link} from 'react-router-dom';
 
@@ -80,13 +81,6 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                 });
             },
         );
-    };
-
-    calculateTimeString = (event: IEventModel) => {
-        const from = moment(event.from).format('HH:mm');
-        const to = moment(event.to).format('HH:mm');
-
-        return `${from} - ${to}`;
     };
 
     render() {
@@ -159,7 +153,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                                                 </Link>
                                             </TableCell>
                                             <TableCell>
-                                                {this.calculateTimeString(row)}
+                                                {calculateTimeString(row)}
                                             </TableCell>
                                             <TableCell>{row.title}</TableCell>
                                         </TableRow>

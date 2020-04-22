@@ -1,7 +1,6 @@
-import {handleActions, combineActions} from 'redux-actions';
-import {BEGIN, FAIL, SUCCESS} from 'src/core/actions/actionTypes';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'src/core/reducer/model';
+import {createAsyncDataReducer} from 'src/core/reducer/utils';
 import {
     CLEAR_AUTH_DATA,
     LOGIN,
@@ -15,32 +14,22 @@ export const getInitialState = (): IAsyncData<IUserModel> => ({
     error: null,
 });
 
-export const userReducer = handleActions(
-    {
-        [combineActions(LOGIN + BEGIN, SIGNUP + BEGIN)]: (): IAsyncData<
-            IUserModel
-        > => ({
-            status: EStatusCodes.PENDING,
-            data: null,
-            error: null,
-        }),
-        [combineActions(LOGIN + SUCCESS, SIGNUP + SUCCESS)]: (
-            _,
-            action: IReduxAction<IUserModel>,
-        ): IAsyncData<IUserModel> => ({
-            status: EStatusCodes.SUCCESS,
-            data: action.payload.data,
-            error: null,
-        }),
-        [combineActions(LOGIN + FAIL, SIGNUP + FAIL)]: (
-            state: IAsyncData<IUserModel>,
-            action: IReduxAction<IUserModel>,
-        ): IAsyncData<IUserModel> => ({
-            ...state,
-            status: EStatusCodes.FAIL,
-            error: action.payload.error,
-        }),
-        [CLEAR_AUTH_DATA]: () => getInitialState(),
-    },
-    getInitialState(),
-);
+const asyncActions = [LOGIN, SIGNUP];
+
+export const userReducer = (
+    state: IAsyncData<IUserModel> = getInitialState(),
+    action: IReduxAction<IUserModel>,
+) => {
+    if (asyncActions.includes(action.originalType)) {
+        return createAsyncDataReducer(action.originalType, state)(
+            state,
+            action,
+        );
+    }
+
+    if (action.type === CLEAR_AUTH_DATA) {
+        return getInitialState();
+    }
+
+    return state;
+};

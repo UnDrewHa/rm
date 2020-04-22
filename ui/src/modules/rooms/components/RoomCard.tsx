@@ -4,6 +4,7 @@ import i18n from 'i18next';
 import {find} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
+import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData} from 'src/core/reducer/model';
 import {TAppStore} from 'src/core/store/model';
@@ -47,11 +48,15 @@ class RoomCard extends React.Component<TProps, IState> {
     }
 
     render() {
-        const roomData = this.state.roomData || this.props.details.data;
-        const isLoading = this.props.details.status === EStatusCodes.PENDING;
+        const {details} = this.props;
+        const roomData = this.state.roomData || details.data;
+        const isLoading =
+            details.status !== EStatusCodes.SUCCESS &&
+            details.status !== EStatusCodes.FAIL &&
+            !roomData;
 
         if (isLoading) {
-            return 'Loading...';
+            return <LoadingOverlay open />;
         }
 
         if (!roomData) return null;

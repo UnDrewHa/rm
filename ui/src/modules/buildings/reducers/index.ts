@@ -1,7 +1,6 @@
-import {handleActions} from 'redux-actions';
-import {BEGIN, FAIL, SUCCESS} from 'src/core/actions/actionTypes';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'src/core/reducer/model';
+import {createAsyncDataReducer} from 'src/core/reducer/utils';
 import {
     CLEAR_BUILDINGS_DATA,
     GET_BUILDINGS,
@@ -14,30 +13,20 @@ export const getInitialState = (): IAsyncData<IBuildingModel[]> => ({
     error: null,
 });
 
-export const buildingsReducer = handleActions(
-    {
-        [GET_BUILDINGS + BEGIN]: (): IAsyncData<IBuildingModel[]> => ({
-            status: EStatusCodes.PENDING,
-            data: null,
-            error: null,
-        }),
-        [GET_BUILDINGS + SUCCESS]: (
-            _,
-            action: IReduxAction<IBuildingModel[]>,
-        ): IAsyncData<IBuildingModel[]> => ({
-            status: EStatusCodes.SUCCESS,
-            data: action.payload.data,
-            error: null,
-        }),
-        [GET_BUILDINGS + FAIL]: (
-            state: IAsyncData<IBuildingModel[]>,
-            action: IReduxAction<IBuildingModel[]>,
-        ): IAsyncData<IBuildingModel[]> => ({
-            ...state,
-            status: EStatusCodes.FAIL,
-            error: action.payload.error,
-        }),
-        [CLEAR_BUILDINGS_DATA]: () => getInitialState(),
-    },
-    getInitialState(),
-);
+export const buildingsReducer = (
+    state: IAsyncData<IBuildingModel[]> = getInitialState(),
+    action: IReduxAction<IBuildingModel[]>,
+) => {
+    if (action.originalType === GET_BUILDINGS) {
+        return createAsyncDataReducer<IBuildingModel[], IBuildingModel[]>(
+            GET_BUILDINGS,
+            state,
+        )(state, action);
+    }
+
+    if (action.type === CLEAR_BUILDINGS_DATA) {
+        return getInitialState();
+    }
+
+    return state;
+};
