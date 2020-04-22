@@ -7,7 +7,7 @@ import {
     LOGIN,
     SIGNUP,
 } from 'src/modules/auth/actions/actionTypes';
-import {IUserModel} from 'src/modules/auth/models';
+import {IUserModel} from 'src/modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel> => ({
     status: EStatusCodes.IDLE,

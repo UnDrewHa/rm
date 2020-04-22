@@ -15,6 +15,7 @@ import i18n from 'i18next';
 import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData} from 'src/core/reducer/model';
+import {ROUTER} from 'src/core/router/consts';
 import {TAppStore} from 'src/core/store/model';
 import {AuthActions} from 'src/modules/auth/actions/AuthActions';
 import {AuthService} from 'src/modules/auth/service/AuthService';
@@ -127,14 +128,14 @@ class ForgotPage extends React.Component<TProps, IState> {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <RouteLink to="/login">
+                                <RouteLink to={ROUTER.AUTH.LOGIN.FULL_PATH}>
                                     <Link component="span">
                                         {i18n.t('Auth:forgot.loginText')}
                                     </Link>
                                 </RouteLink>
                             </Grid>
                             <Grid item>
-                                <RouteLink to="/signup">
+                                <RouteLink to={ROUTER.AUTH.SIGNUP.FULL_PATH}>
                                     <Link component="span">
                                         {i18n.t('Auth:forgot.signupText')}
                                     </Link>

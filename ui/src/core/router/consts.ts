@@ -2,6 +2,22 @@ export const ROUTER = {
     MAIN: {
         FULL_PATH: '/',
         PATH: '/',
+        ROOMS: {
+            DETAILS: {
+                FULL_PATH: '/rooms/:id',
+                PATH: '/rooms/',
+            },
+        },
+        EVENTS: {
+            DETAILS: {
+                FULL_PATH: '/events/:id',
+                PATH: '/events/',
+            },
+            CREATE: {
+                FULL_PATH: '/events/create',
+                PATH: '/events/create',
+            },
+        },
     },
     AUTH: {
         FULL_PATH: '/auth',

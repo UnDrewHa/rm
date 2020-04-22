@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import {handleUnauthorized} from 'src/core/axios/handlers';
+import {handleNetworkError, handleUnauthorized} from 'src/core/axios/handlers';
 
 const axios = Axios.create({
     baseURL: 'http://localhost:5000',
@@ -12,7 +12,8 @@ axios.interceptors.response.use(
     (error) => {
         const {status} = error?.response || {};
 
-        if (status === 401) handleUnauthorized(error);
+        if (error.message === 'Network Error') return handleNetworkError(error);
+        if (status === 401) return handleUnauthorized(error);
 
         return Promise.reject(error);
     },

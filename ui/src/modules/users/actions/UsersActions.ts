@@ -1,0 +1,110 @@
+import {Dispatch} from 'redux';
+import {dispatchAsync} from 'src/core/actions/utils';
+import {IDeleteMultipleItems} from 'src/core/models';
+import {ISignupData} from 'src/modules/auth/models';
+import {
+    CHANGE_OWN_PASSWORD,
+    CREATE_USER,
+    DELETE_ME,
+    DELETE_USERS,
+    GET_USERS,
+    UPDATE_ME,
+    UPDATE_USER,
+} from 'src/modules/users/actions/actionTypes';
+import {ICheckPasswordData, IUpdateUser} from 'src/modules/users/models';
+import {UsersService} from 'src/modules/users/service/UsersService';
+
+/**
+ * Сервис модуля Users.
+ */
+export class UsersActions {
+    constructor(private service: UsersService, private dispatch: Dispatch) {
+        this.service = service;
+        this.dispatch = dispatch;
+    }
+
+    /**
+     * Найти бронирования переговорных комнат.
+     */
+    getAll() {
+        return dispatchAsync(this.dispatch, GET_USERS, this.service.getAll());
+    }
+
+    /**
+     * Создать бронирование.
+     *
+     * @param {ISignupData} data Данные для создания.
+     */
+    create(data: ISignupData) {
+        return dispatchAsync(
+            this.dispatch,
+            CREATE_USER,
+            this.service.create(data),
+        );
+    }
+
+    /**
+     * Обновить бронирование.
+     *
+     * @param {IUpdateUser} data Данные для обновления.
+     */
+    update(data: IUpdateUser) {
+        return dispatchAsync(
+            this.dispatch,
+            UPDATE_USER,
+            this.service.update(data),
+        );
+    }
+
+    /**
+     * Удалить бронирования переговорных комнат.
+     *
+     * @param {IDeleteMultipleItems} data Данные для удаления.
+     */
+    delete(data: IDeleteMultipleItems) {
+        return dispatchAsync(
+            this.dispatch,
+            DELETE_USERS,
+            this.service.delete(data),
+        );
+    }
+
+    /**
+     * Обновить пароль пользователя.
+     *
+     * @param {ICheckPasswordData} data Данные для обновления.
+     */
+    changePassword(data: ICheckPasswordData) {
+        return dispatchAsync(
+            this.dispatch,
+            CHANGE_OWN_PASSWORD,
+            this.service.changePassword(data),
+        );
+    }
+
+    /**
+     * Обновить пользователя.
+     *
+     * @param {IUpdateUser} data Данные для обновления.
+     */
+    updateMe(data: IUpdateUser) {
+        return dispatchAsync(
+            this.dispatch,
+            UPDATE_ME,
+            this.service.updateMe(data),
+        );
+    }
+
+    /**
+     * Удалить пользователя.
+     *
+     * @param {ICheckPasswordData} data Данные для удаления.
+     */
+    deleteMe(data: ICheckPasswordData) {
+        return dispatchAsync(
+            this.dispatch,
+            DELETE_ME,
+            this.service.deleteMe(data),
+        );
+    }
+}

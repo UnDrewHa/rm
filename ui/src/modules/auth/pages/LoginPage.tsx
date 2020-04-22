@@ -20,9 +20,9 @@ import {IAsyncData} from 'src/core/reducer/model';
 import {ROUTER} from 'src/core/router/consts';
 import {TAppStore} from 'src/core/store/model';
 import {AuthActions} from 'src/modules/auth/actions/AuthActions';
-import {IUserModel} from 'src/modules/auth/models';
 import {AuthService} from 'src/modules/auth/service/AuthService';
 import {Redirect, Link as RouteLink} from 'react-router-dom';
+import {IUserModel} from 'src/modules/users/models';
 
 interface IStateProps {
     userData: IAsyncData<IUserModel>;
@@ -142,14 +142,14 @@ class LoginPage extends React.Component<TProps, IState> {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <RouteLink to="/forgot">
+                            <RouteLink to={ROUTER.AUTH.FORGOT.FULL_PATH}>
                                 <Link component="span">
                                     {i18n.t('Auth:login.forgot')}
                                 </Link>
                             </RouteLink>
                         </Grid>
                         <Grid item>
-                            <RouteLink to="/signup">
+                            <RouteLink to={ROUTER.AUTH.SIGNUP.FULL_PATH}>
                                 <Link component="span">
                                     {i18n.t('Auth:login.signup')}
                                 </Link>

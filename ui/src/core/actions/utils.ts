@@ -16,12 +16,14 @@ export function dispatchAsync<T extends any>(
 ): Promise<T> {
     dispatch({
         type: actionType + BEGIN,
+        originalType: actionType,
     });
 
     return promise
         .then((res) => {
             dispatch({
                 type: actionType + SUCCESS,
+                originalType: actionType,
                 payload: res.data,
             });
 
@@ -30,9 +32,10 @@ export function dispatchAsync<T extends any>(
         .catch((err) => {
             dispatch({
                 type: actionType + FAIL,
-                payload: err.response.data, //TODO: настроить axios
+                originalType: actionType,
+                payload: err?.response?.data || err, //TODO: настроить axios
             });
 
-            throw err.response.data;
+            throw err?.response?.data || err;
         });
 }

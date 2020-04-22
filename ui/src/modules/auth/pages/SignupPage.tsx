@@ -7,10 +7,8 @@ import {
     Link,
     TextField,
     Typography,
-    LinearProgress,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import {Autocomplete} from '@material-ui/lab';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -23,11 +21,10 @@ import {IAsyncData} from 'src/core/reducer/model';
 import {ROUTER} from 'src/core/router/consts';
 import {TAppStore} from 'src/core/store/model';
 import {AuthActions} from 'src/modules/auth/actions/AuthActions';
-import {IUserModel} from 'src/modules/auth/models';
 import {AuthService} from 'src/modules/auth/service/AuthService';
-import {BuildingsActions} from 'src/modules/buildings/actions/BuildingsActions';
+import {BuildingsAutocomplete} from 'src/modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'src/modules/buildings/models';
-import {BuildingsService} from 'src/modules/buildings/service/BuildingsService';
+import {IUserModel} from 'src/modules/users/models';
 
 interface IStateProps {
     userData: IAsyncData<IUserModel>;
@@ -36,7 +33,6 @@ interface IStateProps {
 
 interface IDispatchProps {
     actions: AuthActions;
-    buildingsActions: BuildingsActions;
 }
 
 type TProps = IStateProps & IDispatchProps;
@@ -60,8 +56,6 @@ class SignupPage extends React.Component<TProps, IState> {
             email: '',
             building: null,
         };
-
-        props.buildingsActions.getAll();
     }
 
     componentDidUpdate(prevProps) {
@@ -108,17 +102,16 @@ class SignupPage extends React.Component<TProps, IState> {
     /**
      * Обработчик выбора здания.
      *
-     * @param event Объект события.
      * @param {IBuildingModel} building Выбранное здание.
      */
-    handleBuildingSelect = (event, building: IBuildingModel) => {
+    handleBuildingSelect = (building: IBuildingModel) => {
         this.setState({
             building,
         });
     };
 
     render() {
-        const {login, password, passwordConfirm, email, building} = this.state;
+        const {login, password, passwordConfirm, email} = this.state;
         const {userData, buildingsData} = this.props;
         const buildingsIsLoading =
             buildingsData.status === EStatusCodes.PENDING;
@@ -195,27 +188,9 @@ class SignupPage extends React.Component<TProps, IState> {
                         value={email}
                         onChange={this.createFieldChangeHandler('email')}
                     />
-                    <Autocomplete
-                        id="building"
-                        options={buildingsData.data}
-                        getOptionLabel={(item) => item.address}
-                        onChange={this.handleBuildingSelect}
-                        value={building}
-                        disabled={buildingsIsLoading}
-                        disabledItemsFocusable={buildingsIsLoading}
-                        renderInput={(params) => {
-                            return (
-                                <TextField
-                                    {...params}
-                                    label={i18n.t(
-                                        'Auth:signup.buildingPlaceholder',
-                                    )}
-                                    variant="outlined"
-                                />
-                            );
-                        }}
+                    <BuildingsAutocomplete
+                        onSelect={this.handleBuildingSelect}
                     />
-                    {buildingsIsLoading && <LinearProgress />}
                     <Button
                         type="submit"
                         fullWidth
@@ -227,7 +202,7 @@ class SignupPage extends React.Component<TProps, IState> {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <RouteLink to="/login">
+                            <RouteLink to={ROUTER.AUTH.LOGIN.FULL_PATH}>
                                 <Link component="span">
                                     {i18n.t('Auth:signup.loginText')}
                                 </Link>
@@ -247,7 +222,6 @@ const mapStateToProps = (state: TAppStore): IStateProps => ({
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
     actions: new AuthActions(new AuthService(), dispatch),
-    buildingsActions: new BuildingsActions(new BuildingsService(), dispatch),
 });
 
 /**

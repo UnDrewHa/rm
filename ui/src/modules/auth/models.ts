@@ -1,6 +1,4 @@
 import {IAsyncData} from 'src/core/reducer/model';
-import {ERoles} from 'src/modules/auth/enums';
-import {IBuildingModel} from 'src/modules/buildings/models';
 
 /**
  * Данные для входа.
@@ -34,30 +32,6 @@ export interface IForgotPasswordData {
 export interface IResetPasswordData {
     password: string;
     passwordConfirm: string;
-}
-
-/**
- * Интерфейс пользователя.
- */
-export interface IUserModel {
-    login: string;
-    email: string;
-    building: string;
-    role?: ERoles;
-    active?: boolean;
-    passwordChangedAt?: string;
-    phone?: string;
-    favouriteRooms?: string[];
-    photo?: string;
-    name?: string;
-    surname?: string;
-    patronymic?: string;
-    passwordResetToken?: string;
-    passwordResetExpires?: string;
-}
-
-export interface IMappedUserStore {
-    user: IAsyncData<IUserModel>;
 }
 
 export interface IMappedResetPasswordStore {

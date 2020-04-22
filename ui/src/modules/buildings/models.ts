@@ -7,8 +7,10 @@ export interface IBuildingModel {
     _id: string;
     name?: string;
     address: string;
-    floors?: number;
+    floors: number;
 }
+
+export interface IBuildingCreateModel extends Omit<IBuildingModel, '_id'> {}
 
 export interface IMappedBuildingsStore {
     buildings: IAsyncData<IBuildingModel[]>;

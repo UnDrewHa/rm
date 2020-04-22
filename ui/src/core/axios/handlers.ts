@@ -18,3 +18,14 @@ export const handleUnauthorized = (error) => {
 
     return;
 };
+
+export const handleNetworkError = ({message}) => {
+    EventEmiter.emit(EEventNames.SHOW_NOTIFICATION, {
+        message,
+        options: {
+            variant: 'error',
+        },
+    });
+
+    return;
+};

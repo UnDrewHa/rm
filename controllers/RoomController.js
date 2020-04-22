@@ -1,3 +1,4 @@
+const {isEmpty} = require('lodash');
 const RoomModel = require('../models/RoomModel');
 const EventModel = require('../models/EventModel');
 const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
@@ -26,17 +27,34 @@ exports.create = catchAsync(async function (req, res) {
     });
 });
 
+const getRoomsFilter = (filter) => {
+    let result = {
+        ...getFieldsFromObject(filter, [
+            'tv',
+            'projector',
+            'whiteboard',
+            'flipchart',
+            'building',
+        ]),
+        seats: {$gte: filter.seats || 1},
+    };
+
+    if (!isEmpty(filter.floors)) {
+        result.floor = {$in: filter.floors};
+    }
+
+    return result;
+};
+
 /**
  * Контроллер получения списка документов "Переговорная комната".
  */
 exports.getAll = catchAsync(async function (req, res) {
     const {filter} = req.body.data;
-    const findFilter = filter
-        ? {building: filter.building, floor: {$in: filter.floors}}
-        : {};
+    const findFilter = filter ? getRoomsFilter(filter) : {};
     const rooms = await RoomModel.find(findFilter);
 
-    if (!filter || rooms.length === 0) {
+    if (!filter || rooms.length === 0 || !filter.notReserved) {
         return res.status(200).send({
             data: rooms,
         });

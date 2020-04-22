@@ -33,6 +33,7 @@ export interface IErrorData {
  */
 export interface IReduxAction<T> {
     type: string;
+    originalType: string;
     payload: {
         data: T;
         error: IErrorData;
