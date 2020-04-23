@@ -17,6 +17,10 @@ export const ROUTER = {
                 FULL_PATH: '/events/create',
                 PATH: '/events/create',
             },
+            USER_EVENTS: {
+                FULL_PATH: '/user-events',
+                PATH: '/user-events',
+            },
         },
     },
     AUTH: {

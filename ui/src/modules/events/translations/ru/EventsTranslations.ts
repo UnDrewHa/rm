@@ -5,5 +5,11 @@ export default {
             time: 'Время проведения',
             name: 'Название',
         },
+        userEvents: {
+            title: 'Мои бронирования',
+            ACTIVE: 'Активные',
+            COMPLETED: 'Завершенные',
+            CANCELED: 'Отмененные',
+        },
     },
 };

@@ -6,6 +6,7 @@ import {Route, Switch} from 'react-router-dom';
 import {IAsyncData} from 'src/core/reducer/model';
 import {TAppStore} from 'src/core/store/model';
 import {EventDetailsPage} from 'src/modules/events/pages/EventDetailsPage';
+import {UserEventsPage} from 'src/modules/events/pages/UserEventsPage';
 import {PermissionActions} from 'src/modules/permissions/actions/PermissionActions';
 import {TPermissionsList} from 'src/modules/permissions/models';
 import {PermissionService} from 'src/modules/permissions/service/PermissionService';
@@ -81,6 +82,9 @@ class MainLayout extends React.Component<TProps, IState> {
                     </Toolbar>
                 </AppBar>
                 <Switch>
+                    <Route path={ROUTER.MAIN.EVENTS.USER_EVENTS.FULL_PATH}>
+                        <UserEventsPage />
+                    </Route>
                     <Route path={ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH}>
                         <EventDetailsPage />
                     </Route>

@@ -1,12 +1,15 @@
 import {IAsyncData} from 'src/core/reducer/model';
 
 export interface IGetAllEventsData {
-    filter: {
-        date: string;
-        room: string;
-        owner?: string;
-        canceled?: boolean;
-    };
+    filter: IUserEventsFilter;
+}
+
+export interface IUserEventsFilter {
+    owner?: string;
+    canceled?: boolean;
+    to?: any;
+    date?: string;
+    room?: string;
 }
 
 export interface IEventModel {

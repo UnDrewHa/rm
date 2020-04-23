@@ -31,7 +31,13 @@ exports.create = catchAsync(async function (req, res) {
 exports.getAll = catchAsync(async function (req, res) {
     const {filter} = req.body.data;
     const findFilter = filter
-        ? getFieldsFromObject(filter, ['room', 'date', 'owner', 'canceled'])
+        ? getFieldsFromObject(filter, [
+              'room',
+              'date',
+              'owner',
+              'canceled',
+              'to',
+          ])
         : {};
     const events = await EventModel.find(findFilter);
 

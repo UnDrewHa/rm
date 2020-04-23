@@ -6,6 +6,7 @@ import {
     LOGIN,
     SIGNUP,
 } from 'src/modules/auth/actions/actionTypes';
+import {GET_USER_INFO} from 'src/modules/users/actions/actionTypes';
 import {IUserModel} from 'src/modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel> => ({
@@ -14,7 +15,7 @@ export const getInitialState = (): IAsyncData<IUserModel> => ({
     error: null,
 });
 
-const asyncActions = [LOGIN, SIGNUP];
+const asyncActions = [LOGIN, SIGNUP, GET_USER_INFO];
 
 export const userReducer = (
     state: IAsyncData<IUserModel> = getInitialState(),
