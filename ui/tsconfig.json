@@ -21,8 +21,17 @@
     "noErrorTruncation": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "isolatedModules": true
+  },
+  "rules": {
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "lowercase-first",
+        "named-imports-order": "lowercase-first"
+      }
+    ]
   },
   "include": [
     "src"

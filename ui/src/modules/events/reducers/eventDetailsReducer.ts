@@ -1,8 +1,11 @@
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'src/core/reducer/model';
-import {createAsyncDataReducer} from 'src/core/reducer/utils';
-import {GET_EVENT_BY_ID} from 'src/modules/events/actions/actionTypes';
-import {IEventModel} from 'src/modules/events/models';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'Core/reducer/model';
+import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {
+    CREATE_EVENT,
+    GET_EVENT_BY_ID,
+} from 'Modules/events/actions/actionTypes';
+import {IEventModel} from 'Modules/events/models';
 
 const getInitialState = (): IAsyncData<IEventModel> => ({
     status: EStatusCodes.IDLE,
@@ -10,15 +13,17 @@ const getInitialState = (): IAsyncData<IEventModel> => ({
     error: null,
 });
 
+const asyncActions = [CREATE_EVENT, GET_EVENT_BY_ID];
+
 export const eventDetailsReducer = (
     state: IAsyncData<IEventModel> = getInitialState(),
     action: IReduxAction<IEventModel>,
 ): IAsyncData<IEventModel> => {
     const {originalType} = action;
 
-    if (originalType === GET_EVENT_BY_ID) {
+    if (asyncActions.includes(originalType)) {
         return createAsyncDataReducer<IEventModel, IEventModel>(
-            GET_EVENT_BY_ID,
+            originalType,
             state,
         )(state, action);
     }

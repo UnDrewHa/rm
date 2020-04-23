@@ -1,19 +1,19 @@
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/core/actions/utils';
-import {IDeleteMultipleItems} from 'src/core/models';
+import {dispatchAsync} from 'Core/actions/utils';
+import {IDeleteMultipleItems} from 'Core/models';
 import {
     CREATE_ROOM,
     DELETE_ROOMS,
     FIND_ROOMS,
     GET_ROOM_BY_ID,
     UPDATE_ROOM,
-} from 'src/modules/rooms/actions/actionTypes';
+} from 'Modules/rooms/actions/actionTypes';
 import {
     IGetAllRoomsData,
     IRoomCreateModel,
     IRoomModel,
-} from 'src/modules/rooms/models';
-import {RoomsService} from 'src/modules/rooms/service/RoomsService';
+} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
 
 /**
  * Сервис модуля Events.

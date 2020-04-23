@@ -1,41 +1,41 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import MomentUtils from '@date-io/moment';
 import {
-    Grid,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Checkbox,
-    ListItemText,
-    Input,
-    Typography,
-    Slider,
     Button,
     Card,
-    FormControlLabel,
-    CardMedia,
-    CardContent,
     CardActions,
+    CardContent,
+    CardMedia,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    Grid,
+    Input,
+    InputLabel,
+    ListItemText,
+    MenuItem,
+    Select,
+    Slider,
+    Typography,
 } from '@material-ui/core';
-import {EEventNames} from 'src/core/EventEmitter/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {ROUTER} from 'src/core/router/consts';
-import {TAppStore} from 'src/core/store/model';
-import {BuildingsAutocomplete} from 'src/modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'src/modules/buildings/models';
-import i18n from 'i18next';
 import {
-    MuiPickersUtilsProvider,
-    KeyboardTimePicker,
     KeyboardDatePicker,
+    KeyboardTimePicker,
+    MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
+import i18n from 'i18next';
 import moment, {Moment} from 'moment';
-import {RoomsActions} from 'src/modules/rooms/actions/RoomsActions';
-import {IRoomModel} from 'src/modules/rooms/models';
-import {RoomsService} from 'src/modules/rooms/service/RoomsService';
-import {EventEmiter} from 'src/core/EventEmitter/EventEmitter';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
+import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
+import {TAppStore} from 'Core/store/model';
+import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
+import {IRoomModel} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
+import {changeOnlyDate} from 'Modules/rooms/utils';
 
 interface IState {
     building: IBuildingModel;
@@ -59,22 +59,6 @@ interface IDispatchProps {
 }
 
 type TProps = IStateProps & IDispatchProps;
-
-/**
- * Обновить в объекте time только день, месяц и год, оставив время.
- *
- * @param {Moment} time Объект, который меняем.
- * @param {Moment} date Объект, у которого берем значения.
- */
-const changeOnlyDate = (time: Moment, date: Moment) => {
-    let newTime = moment(time);
-
-    newTime.set('year', date.get('year'));
-    newTime.set('month', date.get('month'));
-    newTime.set('date', date.get('date'));
-
-    return newTime;
-};
 
 class RoomsList extends React.Component<TProps, IState> {
     constructor(props) {
@@ -168,16 +152,6 @@ class RoomsList extends React.Component<TProps, IState> {
         };
 
         this.props.roomsActions.find({filter});
-    };
-
-    handleShowSchedule = (e) => {
-        e.preventDefault();
-        EventEmiter.emit(EEventNames.REDIRECT, {
-            to: ROUTER.MAIN.ROOMS.DETAILS.FULL_PATH,
-            params: {
-                id: e.currentTarget.dataset.id,
-            },
-        });
     };
 
     getFloorList(): string[] {
@@ -390,28 +364,35 @@ class RoomsList extends React.Component<TProps, IState> {
                                         </Grid>
                                         <Grid item sm={12} lg={2}>
                                             <CardActions>
-                                                <Button
-                                                    fullWidth
-                                                    variant="contained"
-                                                    color="primary"
+                                                <Link
+                                                    to={{
+                                                        pathname:
+                                                            ROUTER.MAIN.EVENTS
+                                                                .CREATE
+                                                                .FULL_PATH,
+                                                        state: {
+                                                            date,
+                                                            timeFrom,
+                                                            timeTo,
+                                                        },
+                                                        search: `?room=${room._id}`,
+                                                    }}
                                                 >
                                                     {i18n.t(
                                                         'Rooms:common.reserve',
                                                     )}
-                                                </Button>
-                                                <Button
-                                                    fullWidth
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={
-                                                        this.handleShowSchedule
+                                                </Link>
+                                                <Link
+                                                    to={
+                                                        ROUTER.MAIN.ROOMS
+                                                            .DETAILS.PATH +
+                                                        room._id
                                                     }
-                                                    data-id={room._id}
                                                 >
                                                     {i18n.t(
                                                         'Rooms:common.schedule',
                                                     )}
-                                                </Button>
+                                                </Link>
                                             </CardActions>
                                         </Grid>
                                     </Grid>

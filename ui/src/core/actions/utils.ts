@@ -1,5 +1,5 @@
 import {Dispatch} from 'redux';
-import {BEGIN, SUCCESS, FAIL} from 'src/core/actions/actionTypes';
+import {BEGIN, FAIL, SUCCESS} from 'Core/actions/actionTypes';
 
 /**
  * Обертка для асинхронных экшенов.

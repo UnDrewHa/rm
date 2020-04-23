@@ -6,15 +6,15 @@ import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {TAppStore} from 'src/core/store/model';
-import {EventsActions} from 'src/modules/events/actions/EventsActions';
-import {EventsTable} from 'src/modules/events/components/EventsTable';
-import {IEventModel} from 'src/modules/events/models';
-import {EventsService} from 'src/modules/events/service/EventsService';
-import {RoomCard} from 'src/modules/rooms/components/RoomCard';
+import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {EventsActions} from 'Modules/events/actions/EventsActions';
+import {EventsTable} from 'Modules/events/components/EventsTable';
+import {IEventModel} from 'Modules/events/models';
+import {EventsService} from 'Modules/events/service/EventsService';
+import {RoomCard} from 'Modules/rooms/components/RoomCard';
 
 interface IState {
     date: Moment;

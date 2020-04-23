@@ -1,5 +1,5 @@
-import {IEventModel} from 'src/modules/events/models';
 import moment from 'moment';
+import {IEventModel} from 'Modules/events/models';
 
 export const calculateTimeString = (event: IEventModel) => {
     const from = moment(event.from).format('HH:mm');

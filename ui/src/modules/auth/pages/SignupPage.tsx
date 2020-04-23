@@ -1,4 +1,3 @@
-import {memoize} from 'lodash-es';
 import {
     Avatar,
     Button,
@@ -10,21 +9,21 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import i18n from 'i18next';
+import {memoize} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link as RouteLink, Redirect} from 'react-router-dom';
-import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
-import {EEventNames} from 'src/core/EventEmitter/enums';
-import {EventEmiter} from 'src/core/EventEmitter/EventEmitter';
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {ROUTER} from 'src/core/router/consts';
-import {TAppStore} from 'src/core/store/model';
-import {AuthActions} from 'src/modules/auth/actions/AuthActions';
-import {AuthService} from 'src/modules/auth/service/AuthService';
-import {BuildingsAutocomplete} from 'src/modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'src/modules/buildings/models';
-import {IUserModel} from 'src/modules/users/models';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
+import {TAppStore} from 'Core/store/model';
+import {AuthActions} from 'Modules/auth/actions/AuthActions';
+import {AuthService} from 'Modules/auth/service/AuthService';
+import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {IUserModel} from 'Modules/users/models';
 
 interface IStateProps {
     userData: IAsyncData<IUserModel>;
@@ -65,12 +64,7 @@ class SignupPage extends React.Component<TProps, IState> {
             userData.status !== prevProps.userData.status &&
             userData.status === EStatusCodes.FAIL
         ) {
-            EventEmiter.emit(EEventNames.SHOW_NOTIFICATION, {
-                message: userData.error.message,
-                options: {
-                    variant: 'error',
-                },
-            });
+            InterfaceAction.notify(userData.error.message, 'error');
         }
     }
 

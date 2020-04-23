@@ -1,15 +1,15 @@
-import {isFunction} from 'lodash-es';
-import {TextField, LinearProgress} from '@material-ui/core';
+import {LinearProgress, TextField} from '@material-ui/core';
 import {Autocomplete} from '@material-ui/lab';
 import i18n from 'i18next';
+import {isFunction} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {TAppStore} from 'src/core/store/model';
-import {BuildingsActions} from 'src/modules/buildings/actions/BuildingsActions';
-import {IBuildingModel} from 'src/modules/buildings/models';
-import {BuildingsService} from 'src/modules/buildings/service/BuildingsService';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
 
 interface IOwnProps {
     onSelect: (building: IBuildingModel) => void;

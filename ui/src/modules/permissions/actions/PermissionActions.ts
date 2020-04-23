@@ -1,10 +1,10 @@
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/core/actions/utils';
+import {dispatchAsync} from 'Core/actions/utils';
 import {
     CLEAR_PERMISSIONS,
     GET_PERMISSIONS,
-} from 'src/modules/permissions/actions/actionTypes';
-import {PermissionService} from 'src/modules/permissions/service/PermissionService';
+} from 'Modules/permissions/actions/actionTypes';
+import {PermissionService} from 'Modules/permissions/service/PermissionService';
 
 /**
  * Действия модуля Permissions.

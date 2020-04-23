@@ -1,5 +1,9 @@
 export default {
     Common: {
+        words: {
+            title: 'Заголовок',
+            description: 'Описание',
+        },
         links: {
             login: 'Войти',
             home: 'Главная',
@@ -9,6 +13,7 @@ export default {
             401: 'Вам необходимо авторизоваться',
         },
         actions: {
+            create: 'Создать',
             find: 'Найти',
         },
     },

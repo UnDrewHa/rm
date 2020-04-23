@@ -1,4 +1,4 @@
-import {IAsyncData} from 'src/core/reducer/model';
+import {IAsyncData} from 'Core/reducer/model';
 
 export interface IGetAllEventsData {
     filter: IUserEventsFilter;
@@ -20,9 +20,9 @@ export interface IEventModel {
     to: string;
     room: string;
     owner: string;
-    members: string[];
+    members?: string[];
     description: string;
-    canceled: boolean;
+    canceled?: boolean;
 }
 
 export interface IEventCreateModel extends Omit<IEventModel, '_id'> {}

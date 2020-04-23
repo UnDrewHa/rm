@@ -1,12 +1,16 @@
 import {isEmpty} from 'lodash-es';
+import queryString from 'query-string';
 import React from 'react';
 import {useHistory} from 'react-router';
-import {EEventNames} from 'src/core/EventEmitter/enums';
-import {EventEmiter} from 'src/core/EventEmitter/EventEmitter';
+import {EEventNames} from 'Core/EventEmitter/enums';
+import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
 
-interface IRedirectOptions {
+export interface IRedirectOptions {
     to: string;
-    params: {
+    params?: {
+        [param: string]: any;
+    };
+    search?: {
         [param: string]: any;
     };
 }
@@ -18,14 +22,17 @@ export const RedirectListener = () => {
             history.push(options);
         } else {
             const {params} = options;
-            let to = options.to;
+            let pathname = options.to;
             if (!isEmpty(params)) {
                 Object.keys(params).forEach((key) => {
-                    to = to.replace(':' + key, params[key]);
+                    pathname = pathname.replace(':' + key, params[key]);
                 });
             }
 
-            history.push(to);
+            history.push({
+                pathname,
+                search: queryString.stringify(options.search || {}),
+            });
         }
     };
 

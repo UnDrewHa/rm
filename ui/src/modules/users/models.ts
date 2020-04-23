@@ -1,5 +1,5 @@
-import {IAsyncData} from 'src/core/reducer/model';
-import {ERoles} from 'src/modules/auth/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {ERoles} from 'Modules/auth/enums';
 
 /**
  * Данные для изменения пароля.

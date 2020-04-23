@@ -1,7 +1,7 @@
-import React from 'react';
-import {EEventNames} from 'src/core/EventEmitter/enums';
-import {EventEmiter} from 'src/core/EventEmitter/EventEmitter';
 import {withSnackbar, ProviderContext} from 'notistack';
+import React from 'react';
+import {EEventNames} from 'Core/EventEmitter/enums';
+import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
 
 type TProps = ProviderContext;
 

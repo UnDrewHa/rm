@@ -1,19 +1,19 @@
-import {isEmpty} from 'lodash-es';
 import {
-    TableContainer,
     Paper,
     Table,
-    TableHead,
-    TableRow,
     TableBody,
     TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
 } from '@material-ui/core';
 import i18n from 'i18next';
+import {isEmpty} from 'lodash-es';
 import React from 'react';
-import {ROUTER} from 'src/core/router/consts';
-import {IEventModel} from 'src/modules/events/models';
-import {calculateTimeString} from 'src/modules/events/utils';
 import {Link} from 'react-router-dom';
+import {ROUTER} from 'Core/router/consts';
+import {IEventModel} from 'Modules/events/models';
+import {calculateTimeString} from 'Modules/events/utils';
 
 interface IOwnProps {
     events: IEventModel[];

@@ -1,16 +1,16 @@
 import {Card, CardContent, CardMedia, Typography} from '@material-ui/core';
-import {CheckBoxOutlineBlank, CheckBoxOutlined} from '@material-ui/icons';
+import {CheckBoxOutlined, CheckBoxOutlineBlank} from '@material-ui/icons';
 import i18n from 'i18next';
 import {find} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
-import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {TAppStore} from 'src/core/store/model';
-import {RoomsActions} from 'src/modules/rooms/actions/RoomsActions';
-import {IRoomModel} from 'src/modules/rooms/models';
-import {RoomsService} from 'src/modules/rooms/service/RoomsService';
+import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
+import {IRoomModel} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
 
 interface IOwnProps {
     id: string;

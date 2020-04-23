@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import {handleNetworkError, handleUnauthorized} from 'src/core/axios/handlers';
+import {handleNetworkError, handleUnauthorized} from 'Core/axios/handlers';
 
 const axios = Axios.create({
     baseURL: 'http://localhost:5000',

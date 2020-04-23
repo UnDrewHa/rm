@@ -1,11 +1,11 @@
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/core/actions/utils';
+import {dispatchAsync} from 'Core/actions/utils';
 import {
     CLEAR_AUTH_DATA,
-    RESET_PASSWORD,
     LOGIN,
+    RESET_PASSWORD,
     SIGNUP,
-} from 'src/modules/auth/actions/actionTypes';
+} from 'Modules/auth/actions/actionTypes';
 import {
     IForgotPasswordData,
     ILoginData,

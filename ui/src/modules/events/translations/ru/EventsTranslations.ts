@@ -11,5 +11,8 @@ export default {
             COMPLETED: 'Завершенные',
             CANCELED: 'Отмененные',
         },
+        create: {
+            success: 'Бронирование успешно завершено',
+        },
     },
 };

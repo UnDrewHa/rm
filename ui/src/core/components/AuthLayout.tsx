@@ -1,10 +1,10 @@
 import React from 'react';
-import {ROUTER} from 'src/core/router/consts';
-import {ForgotPage} from 'src/modules/auth/pages/ForgotPage';
-import {LoginPage} from 'src/modules/auth/pages/LoginPage';
-import {ResetPasswordPage} from 'src/modules/auth/pages/ResetPasswordPage';
-import {SignupPage} from 'src/modules/auth/pages/SignupPage';
 import {Route, Switch} from 'react-router-dom';
+import {ROUTER} from 'Core/router/consts';
+import {ForgotPage} from 'Modules/auth/pages/ForgotPage';
+import {LoginPage} from 'Modules/auth/pages/LoginPage';
+import {ResetPasswordPage} from 'Modules/auth/pages/ResetPasswordPage';
+import {SignupPage} from 'Modules/auth/pages/SignupPage';
 
 export class AuthLayout extends React.Component {
     render() {

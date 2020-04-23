@@ -1,9 +1,6 @@
-import {axios} from 'src/core/axios';
-import {IDeleteMultipleItems} from 'src/core/models';
-import {
-    IBuildingCreateModel,
-    IBuildingModel,
-} from 'src/modules/buildings/models';
+import {axios} from 'Core/axios';
+import {IDeleteMultipleItems} from 'Core/models';
+import {IBuildingCreateModel, IBuildingModel} from 'Modules/buildings/models';
 
 /**
  * Сервис модуля Buildings.

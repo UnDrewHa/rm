@@ -1,7 +1,7 @@
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/core/actions/utils';
-import {IDeleteMultipleItems} from 'src/core/models';
-import {ISignupData} from 'src/modules/auth/models';
+import {dispatchAsync} from 'Core/actions/utils';
+import {IDeleteMultipleItems} from 'Core/models';
+import {ISignupData} from 'Modules/auth/models';
 import {
     CHANGE_OWN_PASSWORD,
     CREATE_USER,
@@ -11,9 +11,9 @@ import {
     GET_USERS,
     UPDATE_ME,
     UPDATE_USER,
-} from 'src/modules/users/actions/actionTypes';
-import {ICheckPasswordData, IUpdateUser} from 'src/modules/users/models';
-import {UsersService} from 'src/modules/users/service/UsersService';
+} from 'Modules/users/actions/actionTypes';
+import {ICheckPasswordData, IUpdateUser} from 'Modules/users/models';
+import {UsersService} from 'Modules/users/service/UsersService';
 
 /**
  * Сервис модуля Users.

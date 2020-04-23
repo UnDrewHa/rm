@@ -1,13 +1,13 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
+import {SnackbarProvider} from 'notistack';
 import React from 'react';
-import './styles/App.scss';
 import {Provider} from 'react-redux';
-import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
-import {Notifier} from 'src/core/components/Notifier';
+import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {Notifier} from 'Core/components/Notifier';
 import {RouterData} from './router';
 import {store} from './store';
+import './styles/App.scss';
 import {i18nInit} from './translation';
-import {SnackbarProvider} from 'notistack';
 
 class App extends React.Component<{}, {isLoading: boolean}> {
     constructor(props) {

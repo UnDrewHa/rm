@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
-import {roomDetailsReducer} from 'src/modules/rooms/reducers/roomDetailsReducer';
-import {roomsListReducer} from 'src/modules/rooms/reducers/roomsListReducer';
+import {roomsListReducer} from 'Modules/rooms/reducers/roomsListReducer';
+import {roomDetailsReducer} from 'Modules/rooms/reducers/roomDetailsReducer';
 
 export const roomsRootReducer = combineReducers({
     list: roomsListReducer,

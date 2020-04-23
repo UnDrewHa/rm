@@ -1,25 +1,25 @@
-import {memoize} from 'lodash-es';
-import React from 'react';
-import {connect} from 'react-redux';
 import {
     Avatar,
-    Container,
-    Typography,
-    TextField,
     Button,
+    Container,
     Grid,
     Link,
+    TextField,
+    Typography,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import i18n from 'i18next';
-import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {ROUTER} from 'src/core/router/consts';
-import {TAppStore} from 'src/core/store/model';
-import {AuthActions} from 'src/modules/auth/actions/AuthActions';
-import {AuthService} from 'src/modules/auth/service/AuthService';
+import {memoize} from 'lodash-es';
+import React from 'react';
+import {connect} from 'react-redux';
 import {Link as RouteLink} from 'react-router-dom';
+import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
+import {TAppStore} from 'Core/store/model';
+import {AuthActions} from 'Modules/auth/actions/AuthActions';
+import {AuthService} from 'Modules/auth/service/AuthService';
 
 interface IStateProps {
     resetPasswordData: IAsyncData<null>;

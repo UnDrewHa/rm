@@ -1,4 +1,3 @@
-import {memoize} from 'lodash-es';
 import {
     Avatar,
     Button,
@@ -8,18 +7,18 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import i18n from 'i18next';
+import {memoize} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
-import {Redirect, withRouter} from 'react-router-dom';
-import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
-import {EEventNames} from 'src/core/EventEmitter/enums';
-import {EventEmiter} from 'src/core/EventEmitter/EventEmitter';
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData} from 'src/core/reducer/model';
-import {ROUTER} from 'src/core/router/consts';
-import {TAppStore} from 'src/core/store/model';
-import {AuthActions} from 'src/modules/auth/actions/AuthActions';
-import {AuthService} from 'src/modules/auth/service/AuthService';
+import {withRouter, Redirect} from 'react-router-dom';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
+import {TAppStore} from 'Core/store/model';
+import {AuthActions} from 'Modules/auth/actions/AuthActions';
+import {AuthService} from 'Modules/auth/service/AuthService';
 
 interface IProps {
     match: any;
@@ -59,12 +58,7 @@ class ResetPasswordPage extends React.Component<TProps, IState> {
             resetPasswordData.status !== prevProps.resetPasswordData.status &&
             resetPasswordData.status === EStatusCodes.FAIL
         ) {
-            EventEmiter.emit(EEventNames.SHOW_NOTIFICATION, {
-                message: resetPasswordData.error.message,
-                options: {
-                    variant: 'error',
-                },
-            });
+            InterfaceAction.notify(resetPasswordData.error.message, 'error');
         }
     }
 

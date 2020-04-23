@@ -1,10 +1,10 @@
-import {axios} from 'src/core/axios';
-import {IDeleteMultipleItems} from 'src/core/models';
+import {axios} from 'Core/axios';
+import {IDeleteMultipleItems} from 'Core/models';
 import {
     IGetAllRoomsData,
     IRoomCreateModel,
     IRoomModel,
-} from 'src/modules/rooms/models';
+} from 'Modules/rooms/models';
 
 /**
  * Сервис модуля Rooms.

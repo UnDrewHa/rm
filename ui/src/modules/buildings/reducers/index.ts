@@ -1,11 +1,11 @@
-import {EStatusCodes} from 'src/core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'src/core/reducer/model';
-import {createAsyncDataReducer} from 'src/core/reducer/utils';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'Core/reducer/model';
+import {createAsyncDataReducer} from 'Core/reducer/utils';
 import {
     CLEAR_BUILDINGS_DATA,
     GET_BUILDINGS,
-} from 'src/modules/buildings/actions/actionTypes';
-import {IBuildingModel} from 'src/modules/buildings/models';
+} from 'Modules/buildings/actions/actionTypes';
+import {IBuildingModel} from 'Modules/buildings/models';
 
 export const getInitialState = (): IAsyncData<IBuildingModel[]> => ({
     status: EStatusCodes.IDLE,

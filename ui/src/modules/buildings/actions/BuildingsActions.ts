@@ -1,10 +1,10 @@
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/core/actions/utils';
+import {dispatchAsync} from 'Core/actions/utils';
 import {
-    GET_BUILDINGS,
     CLEAR_BUILDINGS_DATA,
-} from 'src/modules/buildings/actions/actionTypes';
-import {BuildingsService} from 'src/modules/buildings/service/BuildingsService';
+    GET_BUILDINGS,
+} from 'Modules/buildings/actions/actionTypes';
+import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
 
 /**
  * Действия модуля Buildings.
