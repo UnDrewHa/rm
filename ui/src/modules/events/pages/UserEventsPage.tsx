@@ -1,29 +1,15 @@
-import {isEmpty} from 'lodash-es';
-import {
-    Container,
-    Typography,
-    Paper,
-    Tabs,
-    Tab,
-    Table,
-    TableHead,
-    TableRow,
-    TableBody,
-    TableCell,
-    TableContainer,
-} from '@material-ui/core';
+import {Container, Typography, Paper, Tabs, Tab} from '@material-ui/core';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData} from 'src/core/reducer/model';
-import {ROUTER} from 'src/core/router/consts';
 import {TAppStore} from 'src/core/store/model';
 import {EventsActions} from 'src/modules/events/actions/EventsActions';
+import {EventsTable} from 'src/modules/events/components/EventsTable';
 import {IEventModel, IUserEventsFilter} from 'src/modules/events/models';
 import {EventsService} from 'src/modules/events/service/EventsService';
-import {calculateTimeString} from 'src/modules/events/utils';
 import {IUserModel} from 'src/modules/users/models';
 import i18n from 'i18next';
 import moment from 'moment';
@@ -144,49 +130,7 @@ class UserEventsPage extends React.Component<TProps, IState> {
                             value={ETabNames.CANCELED}
                         />
                     </Tabs>
-                    {!isEmpty(events.data) && (
-                        <TableContainer component={Paper}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            {i18n.t('Events:common.id')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {i18n.t('Events:common.time')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {i18n.t('Events:common.name')}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {events.data.map((row) => (
-                                        <TableRow key={row._id}>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                            >
-                                                <Link
-                                                    to={
-                                                        ROUTER.MAIN.EVENTS
-                                                            .DETAILS.PATH +
-                                                        row._id
-                                                    }
-                                                >
-                                                    {row._id}
-                                                </Link>
-                                            </TableCell>
-                                            <TableCell>
-                                                {calculateTimeString(row)}
-                                            </TableCell>
-                                            <TableCell>{row.title}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
+                    <EventsTable events={events.data} />
                 </Paper>
             </Container>
         );

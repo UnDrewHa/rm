@@ -1,16 +1,5 @@
-import {isEmpty} from 'lodash-es';
 import MomentUtils from '@date-io/moment';
-import {
-    Button,
-    Grid,
-    TableContainer,
-    Paper,
-    Table,
-    TableHead,
-    TableRow,
-    TableBody,
-    TableCell,
-} from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import i18n from 'i18next';
 import moment, {Moment} from 'moment';
@@ -20,14 +9,12 @@ import {withRouter} from 'react-router-dom';
 import {LoadingOverlay} from 'src/core/components/LoadingOverlay';
 import {EStatusCodes} from 'src/core/reducer/enums';
 import {IAsyncData} from 'src/core/reducer/model';
-import {ROUTER} from 'src/core/router/consts';
 import {TAppStore} from 'src/core/store/model';
 import {EventsActions} from 'src/modules/events/actions/EventsActions';
+import {EventsTable} from 'src/modules/events/components/EventsTable';
 import {IEventModel} from 'src/modules/events/models';
 import {EventsService} from 'src/modules/events/service/EventsService';
-import {calculateTimeString} from 'src/modules/events/utils';
 import {RoomCard} from 'src/modules/rooms/components/RoomCard';
-import {Link} from 'react-router-dom';
 
 interface IState {
     date: Moment;
@@ -119,49 +106,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                     <RoomCard id={id} />
                 </Grid>
                 <Grid item sm={12} md={9} lg={9}>
-                    {!isEmpty(events.data) && (
-                        <TableContainer component={Paper}>
-                            <Table size="small">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>
-                                            {i18n.t('Events:common.id')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {i18n.t('Events:common.time')}
-                                        </TableCell>
-                                        <TableCell>
-                                            {i18n.t('Events:common.name')}
-                                        </TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {events.data.map((row) => (
-                                        <TableRow key={row._id}>
-                                            <TableCell
-                                                component="th"
-                                                scope="row"
-                                            >
-                                                <Link
-                                                    to={
-                                                        ROUTER.MAIN.EVENTS
-                                                            .DETAILS.PATH +
-                                                        row._id
-                                                    }
-                                                >
-                                                    {row._id}
-                                                </Link>
-                                            </TableCell>
-                                            <TableCell>
-                                                {calculateTimeString(row)}
-                                            </TableCell>
-                                            <TableCell>{row.title}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
+                    <EventsTable events={events.data} />
                 </Grid>
             </Grid>
         );
