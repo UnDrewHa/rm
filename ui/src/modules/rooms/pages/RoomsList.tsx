@@ -198,6 +198,7 @@ class RoomsList extends React.Component<TProps, IState> {
                     <form onSubmit={this.handleSubmit}>
                         <BuildingsAutocomplete
                             onSelect={this.handleBuildingSelect}
+                            userBuildingSelected
                         />
                         <FormControl variant="outlined">
                             <InputLabel id="floor">

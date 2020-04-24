@@ -27,31 +27,12 @@ exports.create = catchAsync(async function (req, res) {
     });
 });
 
-const getRoomsFilter = (filter) => {
-    let result = {
-        ...getFieldsFromObject(filter, [
-            'tv',
-            'projector',
-            'whiteboard',
-            'flipchart',
-            'building',
-        ]),
-        seats: {$gte: filter.seats || 1},
-    };
-
-    if (!isEmpty(filter.floors)) {
-        result.floor = {$in: filter.floors};
-    }
-
-    return result;
-};
-
 /**
  * Контроллер получения списка документов "Переговорная комната".
  */
 exports.getAll = catchAsync(async function (req, res) {
     const {filter} = req.body.data;
-    const findFilter = filter ? getRoomsFilter(filter) : {};
+    const findFilter = filter ? RoomModel.getRoomsFilter(filter) : {};
     const rooms = await RoomModel.find(findFilter);
 
     if (!filter || rooms.length === 0 || !filter.notReserved) {
@@ -61,26 +42,16 @@ exports.getAll = catchAsync(async function (req, res) {
     }
 
     const ids = rooms.map((item) => item._id);
-    const events = await EventModel.find({
-        room: {$in: ids},
-        date: filter.date,
-        $or: [
-            {
-                $and: [
-                    {from: {$gte: filter.dateFrom}},
-                    {from: {$lt: filter.dateTo}},
-                ],
-            },
-            {from: {$lt: filter.dateFrom}, to: {$gt: filter.dateFrom}},
-        ],
-    });
-
-    const notReservedRooms = rooms.filter(
-        (item) =>
-            !events.find((event) => {
-                return event.room.toString() === item._id.toString();
-            }),
+    const events = await EventModel.find(
+        EventModel.getReservedEventsFilter({
+            ids,
+            date: filter.date,
+            dateFrom: filter.dateFrom,
+            dateTo: filter.dateTo,
+        }),
     );
+
+    const notReservedRooms = RoomModel.getNotReservedRooms(rooms, events);
 
     res.status(200).json({
         data: notReservedRooms,

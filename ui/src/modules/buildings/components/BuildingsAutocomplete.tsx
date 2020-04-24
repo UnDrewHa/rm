@@ -1,6 +1,7 @@
 import {LinearProgress, TextField} from '@material-ui/core';
 import {Autocomplete} from '@material-ui/lab';
 import i18n from 'i18next';
+import {find} from 'lodash-es';
 import {isFunction} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -10,13 +11,16 @@ import {TAppStore} from 'Core/store/model';
 import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
+import {IUserModel} from 'Modules/users/models';
 
 interface IOwnProps {
     onSelect: (building: IBuildingModel) => void;
+    userBuildingSelected?: boolean;
 }
 
 interface IStateProps {
     buildingsData: IAsyncData<IBuildingModel[]>;
+    userInfo: IAsyncData<IUserModel>;
 }
 
 interface IDispatchProps {
@@ -64,9 +68,15 @@ class BuildingsAutocomplete extends React.Component<TProps, IState> {
 
     render() {
         const {building} = this.state;
-        const {buildingsData} = this.props;
+        const {buildingsData, userInfo, userBuildingSelected} = this.props;
         const buildingsIsLoading =
             buildingsData.status === EStatusCodes.PENDING;
+        const userBuilding = userBuildingSelected //TODO: перенести на уровень выше
+            ? find(
+                  buildingsData.data,
+                  (item) => item._id === userInfo?.data?.building,
+              ) || null
+            : null;
 
         return (
             <div>
@@ -75,7 +85,7 @@ class BuildingsAutocomplete extends React.Component<TProps, IState> {
                     options={buildingsData.data}
                     getOptionLabel={(item) => item.address}
                     onChange={this.handleBuildingSelect}
-                    value={building} //TODO: Добавить выбор здания, в котором работает чувак.
+                    value={building || userBuilding}
                     disabled={buildingsIsLoading}
                     disabledItemsFocusable={buildingsIsLoading}
                     disableClearable
@@ -99,6 +109,7 @@ class BuildingsAutocomplete extends React.Component<TProps, IState> {
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     buildingsData: state.buildings,
+    userInfo: state.user,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

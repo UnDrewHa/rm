@@ -1,3 +1,4 @@
+const {isEmpty} = require('lodash');
 const EventModel = require('../models/EventModel');
 const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
@@ -5,23 +6,37 @@ const {AppError} = require('../utils/errorUtils');
 /**
  * Контроллер создания документа "Встреча".
  */
-exports.create = catchAsync(async function (req, res) {
-    const room = await EventModel.create(
-        getFieldsFromObject(req.body.data, [
-            'room',
-            'date',
-            'canceled',
-            'from',
-            'to',
-            'title',
-            'description',
-            'owner',
-            'members',
-        ]),
+exports.create = catchAsync(async function (req, res, next) {
+    const newEventData = getFieldsFromObject(req.body.data, [
+        'room',
+        'date',
+        'canceled',
+        'from',
+        'to',
+        'title',
+        'description',
+        'owner',
+        'members',
+    ]);
+    const reservedEvents = await EventModel.find(
+        EventModel.getReservedEventsFilter({
+            ids: [newEventData.room],
+            date: newEventData.date,
+            dateFrom: newEventData.from,
+            dateTo: newEventData.to,
+        }),
     );
 
+    if (!isEmpty(reservedEvents)) {
+        return next(
+            new AppError('Переговорка забронирована на выбранное время'),
+        );
+    }
+
+    const event = await EventModel.create(newEventData);
+
     res.status(201).send({
-        data: room,
+        data: event,
     });
 });
 
@@ -30,16 +45,16 @@ exports.create = catchAsync(async function (req, res) {
  */
 exports.getAll = catchAsync(async function (req, res) {
     const {filter} = req.body.data;
-    const findFilter = filter
-        ? getFieldsFromObject(filter, [
-              'room',
-              'date',
-              'owner',
-              'canceled',
-              'to',
-          ])
-        : {};
-    const events = await EventModel.find(findFilter);
+    const events = await EventModel.find(
+        getFieldsFromObject(filter, [
+            'room',
+            'date',
+            'owner',
+            'canceled',
+            'to',
+            'from',
+        ]),
+    );
 
     res.status(200).send({
         data: events,

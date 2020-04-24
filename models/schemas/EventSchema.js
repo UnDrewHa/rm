@@ -3,7 +3,7 @@ const {getFieldErrorMessage} = require('../../utils/errorUtils');
 
 const {Schema} = mongoose;
 
-module.exports = new Schema({
+const EventSchema = new Schema({
     title: {
         type: String,
         required: [true, getFieldErrorMessage('название')],
@@ -43,3 +43,22 @@ module.exports = new Schema({
         default: false,
     },
 });
+
+EventSchema.pre(/^find/, function () {
+    this.sort('from');
+});
+
+EventSchema.statics.getReservedEventsFilter = (filter) => {
+    const {ids, date, dateFrom, dateTo} = filter;
+
+    return {
+        room: {$in: ids},
+        date: date,
+        $or: [
+            {from: {$gte: dateFrom, $lt: dateTo}},
+            {from: {$lt: dateFrom}, to: {$gt: dateFrom}},
+        ],
+    };
+};
+
+module.exports = EventSchema;
