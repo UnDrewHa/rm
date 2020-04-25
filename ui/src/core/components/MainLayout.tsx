@@ -6,6 +6,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import {ProfilePage} from 'Modules/users/pages/ProfilePage';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Route, Switch} from 'react-router-dom';
@@ -83,6 +84,9 @@ class MainLayout extends React.Component<TProps, IState> {
                     </Toolbar>
                 </AppBar>
                 <Switch>
+                    <Route path={ROUTER.MAIN.PROFILE.FULL_PATH}>
+                        <ProfilePage />
+                    </Route>
                     <Route path={ROUTER.MAIN.EVENTS.USER_EVENTS.FULL_PATH}>
                         <UserEventsPage />
                     </Route>

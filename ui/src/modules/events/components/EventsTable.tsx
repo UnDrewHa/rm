@@ -10,41 +10,33 @@ import {
 import i18n from 'i18next';
 import {isEmpty} from 'lodash-es';
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {ROUTER} from 'Core/router/consts';
+import {ITableConfig} from 'Core/components/models';
 import {IEventModel} from 'Modules/events/models';
-import {calculateTimeString} from 'Modules/events/utils';
 
 interface IOwnProps {
     events: IEventModel[];
+    config: ITableConfig;
 }
 
-export const EventsTable = ({events}: IOwnProps) => {
+export const EventsTable = ({events, config}: IOwnProps) => {
     return !isEmpty(events) ? (
         <TableContainer component={Paper}>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>{i18n.t('Events:common.id')}</TableCell>
-                        <TableCell>{i18n.t('Events:common.time')}</TableCell>
-                        <TableCell>{i18n.t('Events:common.name')}</TableCell>
+                        {config.keys.map((key) => (
+                            <TableCell key={key}>
+                                {i18n.t('Events:table.header.' + key)}
+                            </TableCell>
+                        ))}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {events.map((event) => (
-                        <TableRow key={event._id}>
-                            <TableCell component="th" scope="row">
-                                <Link
-                                    to={
-                                        ROUTER.MAIN.EVENTS.DETAILS.PATH +
-                                        event._id
-                                    }
-                                >
-                                    {event._id}
-                                </Link>
-                            </TableCell>
-                            <TableCell>{calculateTimeString(event)}</TableCell>
-                            <TableCell>{event.title}</TableCell>
+                    {config.getItems(events).map((event, index) => (
+                        <TableRow key={index}>
+                            {config.keys.map((key, index) => (
+                                <TableCell key={index}>{event[key]}</TableCell>
+                            ))}
                         </TableRow>
                     ))}
                 </TableBody>

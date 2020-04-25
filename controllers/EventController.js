@@ -88,22 +88,36 @@ exports.update = catchAsync(async function (req, res, next) {
         return next(new AppError('Документ не найден', 404));
     }
 
-    await event.update(
-        getFieldsFromObject(req.body.data, [
-            'room',
-            'date',
-            'canceled',
-            'from',
-            'to',
-            'title',
-            'description',
-            'owner',
-            'members',
-        ]),
-        {
-            runValidators: true,
-        },
-    );
+    const eventData = getFieldsFromObject(req.body.data, [
+        'room',
+        'date',
+        'canceled',
+        'from',
+        'to',
+        'title',
+        'description',
+        'owner',
+        'members',
+    ]);
+    const reservedEvents = await EventModel.find({
+        _id: {$ne: _id},
+        ...EventModel.getReservedEventsFilter({
+            ids: [eventData.room],
+            date: eventData.date,
+            dateFrom: eventData.from,
+            dateTo: eventData.to,
+        }),
+    });
+
+    if (!isEmpty(reservedEvents)) {
+        return next(
+            new AppError('Переговорка забронирована на выбранное время'),
+        );
+    }
+
+    await event.update(eventData, {
+        runValidators: true,
+    });
 
     res.status(200).send();
 });
@@ -114,9 +128,12 @@ exports.update = catchAsync(async function (req, res, next) {
 exports.delete = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
 
-    await EventModel.deleteMany({
-        _id: {$in: ids},
-    });
+    await EventModel.updateMany(
+        {
+            _id: {$in: ids},
+        },
+        {canceled: true},
+    );
 
     res.status(200).send();
 });

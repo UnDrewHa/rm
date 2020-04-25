@@ -22,6 +22,10 @@ export const ROUTER = {
                 PATH: '/user-events',
             },
         },
+        PROFILE: {
+            FULL_PATH: '/profile',
+            PATH: '/profile',
+        },
     },
     AUTH: {
         FULL_PATH: '/auth',

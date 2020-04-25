@@ -1,3 +1,5 @@
 export interface IDeleteMultipleItems {
-    ids: string[];
+    data: {
+        ids: string[];
+    };
 }

@@ -14,7 +14,10 @@ export default {
         },
         actions: {
             create: 'Создать',
+            delete: 'Удалить',
+            edit: 'Редактировать',
             find: 'Найти',
+            save: 'Сохранить',
         },
     },
 };

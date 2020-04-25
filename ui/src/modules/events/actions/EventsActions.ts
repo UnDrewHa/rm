@@ -1,6 +1,5 @@
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
-import {IDeleteMultipleItems} from 'Core/models';
 import {
     CREATE_EVENT,
     DELETE_EVENTS,
@@ -29,63 +28,63 @@ export class EventsActions {
      *
      * @param {IGetAllEventsData} data Данные для поиска.
      */
-    find(data: IGetAllEventsData) {
+    find = (data: IGetAllEventsData) => {
         return dispatchAsync(
             this.dispatch,
             FIND_EVENTS,
             this.service.find(data),
         );
-    }
+    };
 
     /**
      * Получить детальную информацию.
      *
      * @param {string} id Идентификатор.
      */
-    getById(id: string) {
+    getById = (id: string) => {
         return dispatchAsync(
             this.dispatch,
             GET_EVENT_BY_ID,
             this.service.getById(id),
         );
-    }
+    };
 
     /**
      * Создать бронирование.
      *
      * @param {IEventCreateModel} data Данные для создания.
      */
-    create(data: IEventCreateModel) {
+    create = (data: IEventCreateModel) => {
         return dispatchAsync(
             this.dispatch,
             CREATE_EVENT,
             this.service.create(data),
         );
-    }
+    };
 
     /**
      * Обновить бронирование.
      *
      * @param {IEventModel} data Данные для обновления.
      */
-    update(data: IEventModel) {
+    update = (data: IEventModel) => {
         return dispatchAsync(
             this.dispatch,
             UPDATE_EVENT,
             this.service.update(data),
         );
-    }
+    };
 
     /**
      * Удалить бронирования переговорных комнат.
      *
-     * @param {IDeleteMultipleItems} data Данные для удаления.
+     * @param {string[]} ids Данные для удаления.
      */
-    delete(data: IDeleteMultipleItems) {
+    delete = (ids: string[]) => {
         return dispatchAsync(
             this.dispatch,
             DELETE_EVENTS,
-            this.service.delete(data),
+            this.service.delete({data: {ids}}),
         );
-    }
+    };
 }

@@ -18,6 +18,7 @@ import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
+import {basicTableConfig} from 'Modules/events/components/utils';
 import {EventsTable} from 'Modules/events/components/EventsTable';
 import {IEventModel} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
@@ -26,10 +27,11 @@ import {changeOnlyDate} from 'Modules/rooms/utils';
 import {IUserModel} from 'Modules/users/models';
 
 interface IState {
+    id: string;
     title: string;
     date: Moment;
-    timeFrom: Moment;
-    timeTo: Moment;
+    from: Moment;
+    to: Moment;
     room: string;
     owner: string;
     description: string;
@@ -61,10 +63,11 @@ class EventEditPage extends React.Component<TProps, IState> {
         const roomId = (parsed.room as string) || '';
 
         this.state = {
+            id: location?.state?.id || '',
             title: location?.state?.title || '',
             date: location?.state?.date || moment(),
-            timeFrom: location?.state?.timeFrom || moment(),
-            timeTo: location?.state?.timeTo || moment(),
+            from: location?.state?.from || moment(),
+            to: location?.state?.to || moment(),
             room: roomId,
             owner: userInfo.data._id,
             description: location?.state?.description || '',
@@ -73,7 +76,7 @@ class EventEditPage extends React.Component<TProps, IState> {
         eventsActions.find({
             filter: {
                 room: roomId,
-                date: this.state.date.format('DD-MM-YYYY'),
+                date: this.state.date.format('YYYY-MM-DD'),
             },
         });
     }
@@ -85,6 +88,7 @@ class EventEditPage extends React.Component<TProps, IState> {
             details.status === EStatusCodes.SUCCESS &&
             prev.details.data !== details.data
         ) {
+            //TODO: Убрать в экшены.
             InterfaceAction.notify(i18n.t('Events:create.success'), 'success');
             InterfaceAction.redirect({
                 to: ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH,
@@ -108,14 +112,14 @@ class EventEditPage extends React.Component<TProps, IState> {
         this.setState<never>(
             (prev) => ({
                 date,
-                timeFrom: changeOnlyDate(prev.timeFrom, date),
-                timeTo: changeOnlyDate(prev.timeTo, date), //TODO во всем местах сделать установку даты еще и во время отправки формы.
+                from: changeOnlyDate(prev.from, date),
+                to: changeOnlyDate(prev.to, date), //TODO во всем местах сделать установку даты еще и во время отправки формы.
             }),
             () => {
                 this.props.eventsActions.find({
                     filter: {
                         room: this.state.room,
-                        date: this.state.date.format('DD-MM-YYYY'),
+                        date: this.state.date.format('YYYY-MM-DD'),
                     },
                 });
             },
@@ -131,21 +135,24 @@ class EventEditPage extends React.Component<TProps, IState> {
     handleSubmit = (e) => {
         e.preventDefault();
         const {
+            id,
             date,
-            timeFrom,
-            timeTo,
+            from,
+            to,
             title,
             description,
             owner,
             room,
         } = this.state;
         const {eventsActions} = this.props;
+        const method = id ? eventsActions.update : eventsActions.create;
 
-        eventsActions.create({
+        method({
+            _id: id,
             title,
-            from: timeFrom.utc().format(),
-            to: timeTo.utc().format(),
-            date: date.utc().format('DD-MM-YYYY'),
+            from: from.utc().format(),
+            to: to.utc().format(),
+            date: date.format('YYYY-MM-DD'),
             room,
             owner,
             description,
@@ -153,7 +160,7 @@ class EventEditPage extends React.Component<TProps, IState> {
     };
 
     render() {
-        const {date, timeFrom, timeTo, title, description} = this.state;
+        const {date, from, to, title, description} = this.state;
         const {events, details} = this.props;
         const submitDisabled = details.status === EStatusCodes.PENDING;
 
@@ -184,16 +191,16 @@ class EventEditPage extends React.Component<TProps, IState> {
                             <KeyboardTimePicker
                                 margin="normal"
                                 id="time-picker"
-                                label={i18n.t('Rooms:common.timeFrom')}
-                                value={timeFrom}
-                                onChange={this.handleTimeChange('timeFrom')}
+                                label={i18n.t('Rooms:common.from')}
+                                value={from}
+                                onChange={this.handleTimeChange('from')}
                             />
                             <KeyboardTimePicker
                                 margin="normal"
                                 id="time-picker"
-                                label={i18n.t('Rooms:common.timeTo')}
-                                value={timeTo}
-                                onChange={this.handleTimeChange('timeTo')}
+                                label={i18n.t('Rooms:common.to')}
+                                value={to}
+                                onChange={this.handleTimeChange('to')}
                             />
                         </MuiPickersUtilsProvider>
                         <TextField
@@ -234,7 +241,10 @@ class EventEditPage extends React.Component<TProps, IState> {
                     </form>
                 </Grid>
                 <Grid item sm={12} md={5} lg={5}>
-                    <EventsTable events={events.data} />
+                    <EventsTable
+                        events={events.data}
+                        config={basicTableConfig}
+                    />
                 </Grid>
             </Grid>
         );

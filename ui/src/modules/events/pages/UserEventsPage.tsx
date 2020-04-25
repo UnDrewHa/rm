@@ -1,17 +1,27 @@
-import {Container, Paper, Tab, Tabs, Typography} from '@material-ui/core';
+import {
+    Container,
+    Link as Links,
+    Paper,
+    Tab,
+    Tabs,
+    Typography,
+} from '@material-ui/core';
 import i18n from 'i18next';
 import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
+import {ITableConfig} from 'Core/components/models';
 import {LoadingOverlay} from 'Core/components/LoadingOverlay';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
 import {EventsTable} from 'Modules/events/components/EventsTable';
 import {IEventModel, IUserEventsFilter} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
+import {calculateTimeString} from 'Modules/events/utils';
 import {IUserModel} from 'Modules/users/models';
 
 enum ETabNames {
@@ -53,7 +63,51 @@ class UserEventsPage extends React.Component<TProps, IState> {
                 userInfo.data,
             ),
         });
+
+        this.tableConfig = {
+            keys: ['id', 'time', 'name', 'actions'],
+            getItems: function (items: IEventModel[]) {
+                return items.map((item) => ({
+                    id: (
+                        <Link to={ROUTER.MAIN.EVENTS.DETAILS.PATH + item._id}>
+                            {item._id}
+                        </Link>
+                    ),
+                    time: calculateTimeString(item),
+                    name: item.title,
+                    actions: (
+                        <div>
+                            <Link
+                                to={{
+                                    pathname:
+                                        ROUTER.MAIN.EVENTS.CREATE.FULL_PATH,
+                                    state: {
+                                        id: item._id,
+                                        title: item.title,
+                                        date: moment(item.date),
+                                        from: moment(item.from),
+                                        to: moment(item.to),
+                                        description: item.description,
+                                    },
+                                    search: `?room=${item.room}`,
+                                }}
+                            >
+                                {i18n.t('actions.edit')}
+                            </Link>
+                            <br />
+                            <Links
+                                onClick={() => eventsActions.delete([item._id])}
+                            >
+                                {i18n.t('actions.delete')}
+                            </Links>
+                        </div>
+                    ),
+                }));
+            },
+        };
     }
+
+    tableConfig: ITableConfig;
 
     handleTabChange = (_, currentTab: ETabNames) => {
         this.setState(
@@ -130,7 +184,10 @@ class UserEventsPage extends React.Component<TProps, IState> {
                             value={ETabNames.CANCELED}
                         />
                     </Tabs>
-                    <EventsTable events={events.data} />
+                    <EventsTable
+                        events={events.data}
+                        config={this.tableConfig}
+                    />
                 </Paper>
             </Container>
         );

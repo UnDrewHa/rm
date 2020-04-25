@@ -4,9 +4,10 @@ const EventController = require('../controllers/EventController');
 const router = express.Router();
 
 router
-  .post('/', EventController.create)
-  .patch('/', EventController.update)
-  .post('/find', EventController.getAll)
-  .get('/:id', EventController.getDetails);
+    .post('/', EventController.create)
+    .patch('/', EventController.update)
+    .delete('/', EventController.delete)
+    .post('/find', EventController.getAll)
+    .get('/:id', EventController.getDetails);
 
 module.exports = router;

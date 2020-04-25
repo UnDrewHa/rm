@@ -49,7 +49,7 @@ exports.changePassword = catchAsync(async function (req, res) {
 
     user.password = newPassword;
     user.passwordConfirm = newPasswordConfirm;
-    user.save();
+    await user.save();
 
     createAndSendToken(res, 200, user);
 });
@@ -59,23 +59,36 @@ exports.changePassword = catchAsync(async function (req, res) {
  */
 exports.updateMe = catchAsync(async function (req, res) {
     const {user} = res.locals;
+    const userData = getFieldsFromObject(req.body.data, [
+        'email',
+        'phone',
+        'building',
+        'photo',
+        'name',
+        'surname',
+        'patronymic',
+        'active',
+        'newPassword',
+    ]);
 
-    await user.update(
-        //TODO: Перенести ключи в константы.
-        getFieldsFromObject(req.body.data, [
-            'email',
-            'phone',
-            'building',
-            'photo',
-            'name',
-            'surname',
-            'patronymic',
-            'active',
-        ]),
-        {
-            runValidators: true,
-        },
-    );
+    user.email = userData.email || user.email;
+    user.phone = userData.phone || user.phone;
+    user.building = userData.building || user.building;
+    user.photo = userData.photo || user.photo;
+    user.name = userData.name || user.name;
+    user.surname = userData.surname || user.surname;
+    user.patronymic = userData.patronymic || user.patronymic;
+    user.active = userData.active || user.active;
+
+    if (userData.newPassword) {
+        user.password = userData.newPassword;
+        user.passwordConfirm = userData.newPassword;
+    }
+    await user.save();
+
+    if (userData.newPassword) {
+        createAndSendToken(res, 200, user);
+    }
 
     res.status(200).send();
 });

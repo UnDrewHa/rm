@@ -28,7 +28,9 @@ export interface IUserModel {
     patronymic?: string;
 }
 
-export interface IUpdateUser extends IUserModel, ICheckPasswordData {}
+export interface IUpdateUser extends IUserModel, ICheckPasswordData {
+    newPassword?: string;
+}
 
 export interface IMappedUserStore {
     user: IAsyncData<IUserModel>;

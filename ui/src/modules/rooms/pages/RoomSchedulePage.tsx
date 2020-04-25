@@ -2,6 +2,7 @@ import MomentUtils from '@date-io/moment';
 import {Button, Grid} from '@material-ui/core';
 import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import i18n from 'i18next';
+import {basicTableConfig} from 'Modules/events/components/utils';
 import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -48,7 +49,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
         eventsActions.find({
             filter: {
                 room: match.params.id,
-                date: date.utc().format('DD-MM-YYYY'),
+                date: date.utc().format('YYYY-MM-DD'),
             },
         });
     }
@@ -63,7 +64,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                 eventsActions.find({
                     filter: {
                         room: match.params.id,
-                        date: this.state.date.utc().format('DD-MM-YYYY'),
+                        date: this.state.date.utc().format('YYYY-MM-DD'),
                     },
                 });
             },
@@ -106,7 +107,10 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                     <RoomCard id={id} />
                 </Grid>
                 <Grid item sm={12} md={9} lg={9}>
-                    <EventsTable events={events.data} />
+                    <EventsTable
+                        events={events.data}
+                        config={basicTableConfig}
+                    />
                 </Grid>
             </Grid>
         );

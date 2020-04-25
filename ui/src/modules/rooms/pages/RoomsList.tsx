@@ -41,8 +41,8 @@ interface IState {
     building: IBuildingModel;
     floors: string[];
     date: Moment;
-    timeFrom: Moment;
-    timeTo: Moment;
+    from: Moment;
+    to: Moment;
     seats: number;
     tv: boolean;
     projector: boolean;
@@ -68,8 +68,8 @@ class RoomsList extends React.Component<TProps, IState> {
             building: null,
             floors: [],
             date: moment(new Date()),
-            timeFrom: moment(new Date()),
-            timeTo: moment(new Date()),
+            from: moment(new Date()),
+            to: moment(new Date()),
             seats: 2,
             tv: false,
             projector: false,
@@ -98,8 +98,8 @@ class RoomsList extends React.Component<TProps, IState> {
     handleDateChange = (date) => {
         this.setState<never>((prev) => ({
             date,
-            timeFrom: changeOnlyDate(prev.timeFrom, date),
-            timeTo: changeOnlyDate(prev.timeTo, date),
+            from: changeOnlyDate(prev.from, date),
+            to: changeOnlyDate(prev.to, date),
         }));
     };
 
@@ -128,8 +128,8 @@ class RoomsList extends React.Component<TProps, IState> {
             floors,
             building,
             date,
-            timeFrom,
-            timeTo,
+            from,
+            to,
             seats,
             tv,
             projector,
@@ -138,9 +138,9 @@ class RoomsList extends React.Component<TProps, IState> {
         } = this.state;
 
         let filter = {
-            dateFrom: moment(timeFrom).utc().format(),
-            dateTo: moment(timeTo).utc().format(),
-            date: moment(date).utc().format('DD-MM-YYYY'), //TODO: форматирование в константы
+            dateFrom: moment(from).utc().format(),
+            dateTo: moment(to).utc().format(),
+            date: moment(date).utc().format('YYYY-MM-DD'), //TODO: форматирование в константы
             building: building._id,
             seats,
             ...{floors: floors.map((item) => parseInt(item, 10))},
@@ -175,8 +175,8 @@ class RoomsList extends React.Component<TProps, IState> {
             floors,
             building,
             date,
-            timeFrom,
-            timeTo,
+            from,
+            to,
             seats,
             tv,
             projector,
@@ -244,16 +244,16 @@ class RoomsList extends React.Component<TProps, IState> {
                             <KeyboardTimePicker
                                 margin="normal"
                                 id="time-picker"
-                                label={i18n.t('Rooms:common.timeFrom')}
-                                value={timeFrom}
-                                onChange={this.handleTimeChange('timeFrom')}
+                                label={i18n.t('Rooms:common.from')}
+                                value={from}
+                                onChange={this.handleTimeChange('from')}
                             />
                             <KeyboardTimePicker
                                 margin="normal"
                                 id="time-picker"
-                                label={i18n.t('Rooms:common.timeTo')}
-                                value={timeTo}
-                                onChange={this.handleTimeChange('timeTo')}
+                                label={i18n.t('Rooms:common.to')}
+                                value={to}
+                                onChange={this.handleTimeChange('to')}
                             />
                         </MuiPickersUtilsProvider>
                         <Typography id="discrete-slider" gutterBottom>
@@ -373,8 +373,8 @@ class RoomsList extends React.Component<TProps, IState> {
                                                                 .FULL_PATH,
                                                         state: {
                                                             date,
-                                                            timeFrom,
-                                                            timeTo,
+                                                            from,
+                                                            to,
                                                         },
                                                         search: `?room=${room._id}`,
                                                     }}
