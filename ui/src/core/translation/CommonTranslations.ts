@@ -19,5 +19,8 @@ export default {
             find: 'Найти',
             save: 'Сохранить',
         },
+        forms: {
+            requiredText: 'Поле обязательно для заполнения',
+        },
     },
 };

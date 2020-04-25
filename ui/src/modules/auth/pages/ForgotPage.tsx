@@ -1,19 +1,9 @@
-import {
-    Avatar,
-    Button,
-    Container,
-    Grid,
-    Link,
-    TextField,
-    Typography,
-} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {UserOutlined} from '@ant-design/icons';
+import {Avatar, Button, Col, Form, Input, Row, Typography} from 'antd';
 import i18n from 'i18next';
-import {memoize} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link as RouteLink} from 'react-router-dom';
-import {LoadingOverlay} from 'Core/components/LoadingOverlay';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
@@ -31,18 +21,14 @@ interface IDispatchProps {
 
 type TProps = IStateProps & IDispatchProps;
 
-interface IState {
-    email: string;
-}
+const initialValues = {
+    email: '',
+};
 
 /**
  * Страница запроса отправки ссылки на страницу сброса пароля.
  */
-class ForgotPage extends React.Component<TProps, IState> {
-    state: IState = {
-        email: '',
-    };
-
+class ForgotPage extends React.Component<TProps> {
     componentWillUnmount() {
         this.props.actions.clear();
     }
@@ -50,100 +36,80 @@ class ForgotPage extends React.Component<TProps, IState> {
     /**
      * Обработчик отправки формы.
      */
-    handleSubmit = (e) => {
-        const {email} = this.state;
-        e.preventDefault();
-
-        this.props.actions.forgot({
-            email,
-        });
+    handleFinish = (values) => {
+        this.props.actions.forgot(values);
     };
 
-    /**
-     * Создать обработчик поля в state.
-     */
-    createFieldChangeHandler = memoize((field: keyof IState) => (event) => {
-        this.setState<never>({
-            [field]: event.target.value,
-        });
-    });
-
     render() {
-        const {email} = this.state;
         const {resetPasswordData} = this.props;
         const isPending = resetPasswordData.status === EStatusCodes.PENDING;
 
-        if (isPending) {
-            return <LoadingOverlay open />;
-        }
-
         if (resetPasswordData.status === EStatusCodes.SUCCESS) {
             return (
-                <Container component="main" maxWidth="xs">
-                    <Avatar>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
+                <React.Fragment>
+                    <Avatar size="large" icon={<UserOutlined />} />
+                    <Typography.Title level={3}>
                         {i18n.t('Auth:forgot.title')}
-                    </Typography>
-                    <Typography component="p">
+                    </Typography.Title>
+                    <Typography.Text>
                         {i18n.t('Auth:forgot.text')}
-                    </Typography>
-                </Container>
+                    </Typography.Text>
+                </React.Fragment>
             );
         }
 
         return (
             <React.Fragment>
-                <Container component="main" maxWidth="xs">
-                    <Avatar>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        {i18n.t('Auth:forgot.title')}
-                    </Typography>
-                    <form onSubmit={this.handleSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label={i18n.t('Auth:forgot.emailPlaceholder')}
-                            name="email"
+                <Avatar size="large" icon={<UserOutlined />} />
+                <Typography.Title level={3}>
+                    {i18n.t('Auth:forgot.title')}
+                </Typography.Title>
+                <Form
+                    className="auth-form"
+                    initialValues={initialValues}
+                    onFinish={this.handleFinish}
+                >
+                    <Form.Item
+                        name="email"
+                        rules={[
+                            {
+                                required: true,
+                                message: i18n.t('forms.requiredText'),
+                            },
+                        ]}
+                    >
+                        <Input
+                            prefix={
+                                <UserOutlined className="site-form-item-icon" />
+                            }
+                            placeholder={i18n.t('Auth:forgot.emailPlaceholder')}
                             type="email"
-                            autoComplete="email"
-                            value={email}
-                            onChange={this.createFieldChangeHandler('email')}
-                            autoFocus
                         />
+                    </Form.Item>
+                    <Form.Item className="links-block">
+                        <Row>
+                            <Col span={12}>
+                                <RouteLink to={ROUTER.AUTH.LOGIN.FULL_PATH}>
+                                    {i18n.t('Auth:forgot.loginText')}
+                                </RouteLink>
+                            </Col>
+                            <Col span={12} className="ta-right">
+                                <RouteLink to={ROUTER.AUTH.SIGNUP.FULL_PATH}>
+                                    {i18n.t('Auth:forgot.signupText')}
+                                </RouteLink>
+                            </Col>
+                        </Row>
+                    </Form.Item>
+                    <Form.Item>
                         <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            disabled={isPending}
+                            type="primary"
+                            htmlType="submit"
+                            loading={isPending}
                         >
                             {i18n.t('Auth:forgot.forgotButton')}
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <RouteLink to={ROUTER.AUTH.LOGIN.FULL_PATH}>
-                                    <Link component="span">
-                                        {i18n.t('Auth:forgot.loginText')}
-                                    </Link>
-                                </RouteLink>
-                            </Grid>
-                            <Grid item>
-                                <RouteLink to={ROUTER.AUTH.SIGNUP.FULL_PATH}>
-                                    <Link component="span">
-                                        {i18n.t('Auth:forgot.signupText')}
-                                    </Link>
-                                </RouteLink>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </Container>
+                    </Form.Item>
+                </Form>
             </React.Fragment>
         );
     }

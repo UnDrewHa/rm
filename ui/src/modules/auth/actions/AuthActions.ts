@@ -1,5 +1,8 @@
+import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {ROUTER} from 'Core/router/consts';
 import {
     CLEAR_AUTH_DATA,
     LOGIN,
@@ -29,7 +32,16 @@ export class AuthActions {
      * @param {ILoginData} data Данные для входа.
      */
     login = (data: ILoginData) => {
-        dispatchAsync(this.dispatch, LOGIN, this.service.login(data));
+        dispatchAsync(this.dispatch, LOGIN, this.service.login(data))
+            .then((_) => {
+                InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message || i18n.t('Auth:login.loginError'),
+                    'error',
+                );
+            });
     };
 
     /**
@@ -38,7 +50,20 @@ export class AuthActions {
      * @param {ISignupData} data Данные для регистрации.
      */
     signUp = (data: ISignupData) => {
-        dispatchAsync(this.dispatch, SIGNUP, this.service.signup(data));
+        dispatchAsync(this.dispatch, SIGNUP, this.service.signup(data))
+            .then((_) => {
+                InterfaceAction.notify(
+                    i18n.t('Auth:signup.signupSuccess'),
+                    'success',
+                );
+                InterfaceAction.redirect(ROUTER.AUTH.LOGIN.FULL_PATH);
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message || i18n.t('Auth:signup.signupError'),
+                    'error',
+                );
+            });
     };
 
     /**
@@ -47,7 +72,19 @@ export class AuthActions {
      * @param {IForgotPasswordData} data Данные для восстановления.
      */
     forgot = (data: IForgotPasswordData) => {
-        dispatchAsync(this.dispatch, RESET_PASSWORD, this.service.forgot(data));
+        dispatchAsync(this.dispatch, RESET_PASSWORD, this.service.forgot(data))
+            .then((_) => {
+                InterfaceAction.notify(
+                    i18n.t('Auth:forgot.forgotSuccess'),
+                    'success',
+                );
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message || i18n.t('Auth:forgot.forgotError'),
+                    'error',
+                );
+            });
     };
 
     /**
@@ -61,7 +98,20 @@ export class AuthActions {
             this.dispatch,
             RESET_PASSWORD,
             this.service.reset(token, data),
-        );
+        )
+            .then((_) => {
+                InterfaceAction.notify(
+                    i18n.t('Auth:reset.resetSuccess'),
+                    'success',
+                );
+                InterfaceAction.redirect(ROUTER.AUTH.LOGIN.FULL_PATH);
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message || i18n.t('Auth:reset.resetError'),
+                    'error',
+                );
+            });
     };
 
     /**

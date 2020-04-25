@@ -1,18 +1,9 @@
-import {
-    Avatar,
-    Button,
-    Container,
-    TextField,
-    Typography,
-} from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {LockOutlined, UserOutlined} from '@ant-design/icons';
+import {Avatar, Button, Col, Form, Input, Row, Typography} from 'antd';
 import i18n from 'i18next';
-import {memoize} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter, Redirect} from 'react-router-dom';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {withRouter, Link} from 'react-router-dom';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
@@ -34,119 +25,101 @@ interface IDispatchProps {
 
 type TProps = IProps & IStateProps & IDispatchProps;
 
-interface IState {
-    password: string;
-    passwordConfirm: string;
-}
+const initialValues = {
+    password: '',
+    passwordConfirm: '',
+};
 
-class ResetPasswordPage extends React.Component<TProps, IState> {
+class ResetPasswordPage extends React.Component<TProps> {
     constructor(props) {
         super(props);
 
         this.props.actions.clear();
-
-        this.state = {
-            password: '',
-            passwordConfirm: '',
-        };
-    }
-
-    componentDidUpdate(prevProps) {
-        const {resetPasswordData} = this.props;
-
-        if (
-            resetPasswordData.status !== prevProps.resetPasswordData.status &&
-            resetPasswordData.status === EStatusCodes.FAIL
-        ) {
-            InterfaceAction.notify(resetPasswordData.error.message, 'error');
-        }
     }
 
     /**
      * Обработчик отправки формы.
      */
-    handleSubmit = (e) => {
-        e.preventDefault();
-
-        const {password, passwordConfirm} = this.state;
+    handleFinish = (values) => {
         const {match} = this.props;
 
-        this.props.actions.reset(match.params.token, {
-            password,
-            passwordConfirm,
-        });
+        this.props.actions.reset(match.params.token, values);
     };
 
-    /**
-     * Создать обработчик поля в state.
-     */
-    createFieldChangeHandler = memoize((field: keyof IState) => (event) => {
-        this.setState<never>({
-            [field]: event.target.value,
-        });
-    });
-
     render() {
-        const {password, passwordConfirm} = this.state;
         const {resetPasswordData} = this.props;
         const isPending = resetPasswordData.status === EStatusCodes.PENDING;
 
-        if (isPending) {
-            return <LoadingOverlay open />;
-        }
-
-        if (resetPasswordData.status === EStatusCodes.SUCCESS) {
-            return <Redirect to={ROUTER.AUTH.LOGIN.FULL_PATH} />;
-        }
-
         return (
-            <Container component="main" maxWidth="xs">
-                <Avatar>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
+            <React.Fragment>
+                <Avatar size="large" icon={<UserOutlined />} />
+                <Typography.Title level={3}>
                     {i18n.t('Auth:reset.title')}
-                </Typography>
-                <form onSubmit={this.handleSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
+                </Typography.Title>
+                <Form
+                    className="auth-form"
+                    initialValues={initialValues}
+                    onFinish={this.handleFinish}
+                >
+                    <Form.Item
                         name="password"
-                        label={i18n.t('Auth:reset.passwordPlaceholder')}
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={password}
-                        onChange={this.createFieldChangeHandler('password')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="passwordConfirm"
-                        label={i18n.t('Auth:reset.passwordConfirmPlaceholder')}
-                        type="password"
-                        id="passwordConfirm"
-                        autoComplete="passwordConfirm"
-                        value={passwordConfirm}
-                        onChange={this.createFieldChangeHandler(
-                            'passwordConfirm',
-                        )}
-                    />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        disabled={isPending}
+                        rules={[
+                            {
+                                required: true,
+                                message: i18n.t('forms.requiredText'),
+                            },
+                        ]}
                     >
-                        {i18n.t('Auth:reset.saveButton')}
-                    </Button>
-                </form>
-            </Container>
+                        <Input
+                            prefix={
+                                <LockOutlined className="site-form-item-icon" />
+                            }
+                            type="password"
+                            placeholder={i18n.t(
+                                'Auth:reset.passwordPlaceholder',
+                            )}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        name="passwordConfirm"
+                        rules={[
+                            {
+                                required: true,
+                                message: i18n.t('forms.requiredText'),
+                            },
+                        ]}
+                    >
+                        <Input
+                            prefix={
+                                <LockOutlined className="site-form-item-icon" />
+                            }
+                            type="password"
+                            placeholder={i18n.t(
+                                'Auth:reset.passwordConfirmPlaceholder',
+                            )}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Row>
+                            <Col span={12}>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    className="login-form-button"
+                                    loading={isPending}
+                                >
+                                    {i18n.t('Auth:reset.saveButton')}
+                                </Button>
+                            </Col>
+                            <Col span={12} className="ta-right">
+                                <Link to={ROUTER.AUTH.LOGIN.FULL_PATH}>
+                                    {i18n.t('Auth:signup.loginText')}
+                                </Link>
+                            </Col>
+                        </Row>
+                    </Form.Item>
+                </Form>
+            </React.Fragment>
         );
     }
 }
