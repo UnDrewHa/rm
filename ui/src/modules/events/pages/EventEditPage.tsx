@@ -1,3 +1,4 @@
+import {DEFAULT_DATE_FORMAT} from 'Core/consts';
 import MomentUtils from '@date-io/moment';
 import {Button, Grid, TextField} from '@material-ui/core';
 import {
@@ -76,7 +77,7 @@ class EventEditPage extends React.Component<TProps, IState> {
         eventsActions.find({
             filter: {
                 room: roomId,
-                date: this.state.date.format('YYYY-MM-DD'),
+                date: this.state.date.format(DEFAULT_DATE_FORMAT),
             },
         });
     }
@@ -119,7 +120,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                 this.props.eventsActions.find({
                     filter: {
                         room: this.state.room,
-                        date: this.state.date.format('YYYY-MM-DD'),
+                        date: this.state.date.format(DEFAULT_DATE_FORMAT),
                     },
                 });
             },
@@ -152,7 +153,7 @@ class EventEditPage extends React.Component<TProps, IState> {
             title,
             from: from.utc().format(),
             to: to.utc().format(),
-            date: date.format('YYYY-MM-DD'),
+            date: date.format(DEFAULT_DATE_FORMAT),
             room,
             owner,
             description,

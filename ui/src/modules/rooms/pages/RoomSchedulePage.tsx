@@ -1,3 +1,4 @@
+import {DEFAULT_DATE_FORMAT} from 'Core/consts';
 import MomentUtils from '@date-io/moment';
 import {Button, Grid} from '@material-ui/core';
 import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
@@ -49,7 +50,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
         eventsActions.find({
             filter: {
                 room: match.params.id,
-                date: date.utc().format('YYYY-MM-DD'),
+                date: date.utc().format(DEFAULT_DATE_FORMAT),
             },
         });
     }
@@ -64,7 +65,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                 eventsActions.find({
                     filter: {
                         room: match.params.id,
-                        date: this.state.date.utc().format('YYYY-MM-DD'),
+                        date: this.state.date.utc().format(DEFAULT_DATE_FORMAT),
                     },
                 });
             },

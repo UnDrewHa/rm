@@ -46,8 +46,8 @@ exports.getAll = catchAsync(async function (req, res) {
         EventModel.getReservedEventsFilter({
             ids,
             date: filter.date,
-            dateFrom: filter.dateFrom,
-            dateTo: filter.dateTo,
+            from: filter.from,
+            to: filter.to,
         }),
     );
 

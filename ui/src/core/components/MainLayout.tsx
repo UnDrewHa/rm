@@ -1,12 +1,4 @@
-import {
-    AppBar,
-    Container,
-    IconButton,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
-import {ProfilePage} from 'Modules/users/pages/ProfilePage';
+import {Layout, Menu} from 'antd';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Route, Switch} from 'react-router-dom';
@@ -20,10 +12,11 @@ import {UserEventsPage} from 'Modules/events/pages/UserEventsPage';
 import {PermissionActions} from 'Modules/permissions/actions/PermissionActions';
 import {TPermissionsList} from 'Modules/permissions/models';
 import {PermissionService} from 'Modules/permissions/service/PermissionService';
-import {RoomsList} from 'Modules/rooms/pages/RoomsList';
+import {RoomsListPage} from 'Modules/rooms/pages/RoomsListPage';
 import {RoomSchedulePage} from 'Modules/rooms/pages/RoomSchedulePage';
 import {UsersActions} from 'Modules/users/actions/UsersActions';
 import {IUserModel} from 'Modules/users/models';
+import {ProfilePage} from 'Modules/users/pages/ProfilePage';
 import {UsersService} from 'Modules/users/service/UsersService';
 
 interface IStateProps {
@@ -68,42 +61,46 @@ class MainLayout extends React.Component<TProps, IState> {
         }
 
         return (
-            <Container maxWidth={false}>
-                <AppBar position="static">
-                    <Toolbar variant="dense">
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="menu"
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" color="inherit">
-                            Photos
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                <Switch>
-                    <Route path={ROUTER.MAIN.PROFILE.FULL_PATH}>
-                        <ProfilePage />
-                    </Route>
-                    <Route path={ROUTER.MAIN.EVENTS.USER_EVENTS.FULL_PATH}>
-                        <UserEventsPage />
-                    </Route>
-                    <Route path={ROUTER.MAIN.EVENTS.CREATE.FULL_PATH}>
-                        <EventEditPage />
-                    </Route>
-                    <Route path={ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH}>
-                        <EventDetailsPage />
-                    </Route>
-                    <Route path={ROUTER.MAIN.ROOMS.DETAILS.FULL_PATH}>
-                        <RoomSchedulePage />
-                    </Route>
-                    <Route path={ROUTER.MAIN.FULL_PATH}>
-                        <RoomsList />
-                    </Route>
-                </Switch>
-            </Container>
+            <Layout className="main-layout">
+                <Layout.Header className="main-layout__header">
+                    <div className="logo" />
+                    <Menu
+                        theme="dark"
+                        mode="horizontal"
+                        defaultSelectedKeys={['2']}
+                    >
+                        <Menu.Item key="1">nav 1</Menu.Item>
+                        <Menu.Item key="2">nav 2</Menu.Item>
+                        <Menu.Item key="3">nav 3</Menu.Item>
+                    </Menu>
+                </Layout.Header>
+                <Layout.Content className="main-layout__content">
+                    <main className="main-layout__inner-content">
+                        <Switch>
+                            <Route path={ROUTER.MAIN.PROFILE.FULL_PATH}>
+                                <ProfilePage />
+                            </Route>
+                            <Route
+                                path={ROUTER.MAIN.EVENTS.USER_EVENTS.FULL_PATH}
+                            >
+                                <UserEventsPage />
+                            </Route>
+                            <Route path={ROUTER.MAIN.EVENTS.CREATE.FULL_PATH}>
+                                <EventEditPage />
+                            </Route>
+                            <Route path={ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH}>
+                                <EventDetailsPage />
+                            </Route>
+                            <Route path={ROUTER.MAIN.ROOMS.DETAILS.FULL_PATH}>
+                                <RoomSchedulePage />
+                            </Route>
+                            <Route path={ROUTER.MAIN.FULL_PATH}>
+                                <RoomsListPage />
+                            </Route>
+                        </Switch>
+                    </main>
+                </Layout.Content>
+            </Layout>
         );
     }
 }

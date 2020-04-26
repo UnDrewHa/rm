@@ -15,3 +15,7 @@ export const changeOnlyDate = (time: Moment, date: Moment) => {
 
     return newTime;
 };
+
+export const formatTime = (time: Moment): string => {
+    return moment(time).utc().format();
+};

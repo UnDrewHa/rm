@@ -1,5 +1,6 @@
 const express = require('express');
 const UserController = require('../controllers/UserController');
+const AuthController = require('../controllers/AuthController');
 
 const route = express.Router();
 
@@ -13,6 +14,11 @@ route
         '/update-me',
         UserController.createPasswordCheckMiddleware('_id'),
         UserController.updateMe,
+    )
+    .patch(
+        '/toggle-favourite',
+        AuthController.protect,
+        UserController.toggleFavourite,
     )
     .delete(
         '/delete-me',

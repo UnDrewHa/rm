@@ -14,7 +14,7 @@ import {IUserModel} from 'Modules/users/models';
 
 interface IOwnProps {
     onSelect: (value, option) => void;
-    userBuildingSelected?: boolean;
+    defaultValue?: IBuildingModel;
 }
 
 interface IStateProps {
@@ -27,6 +27,13 @@ interface IDispatchProps {
 }
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
+
+export const getUserBuilding = (
+    buildings: IBuildingModel[],
+    user: IUserModel,
+): IBuildingModel => {
+    return find(buildings, (item) => item._id === user?.building);
+};
 
 class BuildingsAutocomplete extends React.Component<TProps> {
     constructor(props) {
@@ -50,17 +57,11 @@ class BuildingsAutocomplete extends React.Component<TProps> {
         const {
             buildingsData,
             userInfo,
-            userBuildingSelected,
+            defaultValue,
             ...restProps
         } = this.props;
         const buildingsIsLoading =
             buildingsData.status === EStatusCodes.PENDING;
-        const userBuilding = userBuildingSelected
-            ? find(
-                  buildingsData.data,
-                  (item) => item._id === userInfo?.data?.building,
-              ) || null
-            : null;
 
         return (
             <AutoComplete
@@ -71,7 +72,6 @@ class BuildingsAutocomplete extends React.Component<TProps> {
                         .toUpperCase()
                         .includes(inputValue.toUpperCase())
                 }
-                defaultValue={userBuilding?.address || ''}
                 disabled={buildingsIsLoading}
                 onSelect={this.props.onSelect}
             >
@@ -94,7 +94,7 @@ const mapDispatchToProps = (dispatch): IDispatchProps => ({
 });
 
 /**
- * Страница регистрации.
+ * Компонент выборы здания.
  */
 const connected = connect(
     mapStateToProps,

@@ -203,3 +203,26 @@ exports.create = catchAsync(async function (req, res) {
         data: room,
     });
 });
+
+exports.toggleFavourite = catchAsync(async function (req, res, next) {
+    const {user} = res.locals;
+    const {roomId, type} = req.body.data;
+
+    if (!type || !['on', 'off'].includes(type)) {
+        return next(new AppError('Необходимо указать тип действия'));
+    }
+
+    let action = {$push: {favouriteRooms: roomId}};
+
+    if (type === 'off') {
+        action = {$pull: {favouriteRooms: roomId}};
+    }
+
+    const updated = await UserModel.findOneAndUpdate({_id: user._id}, action, {
+        new: true,
+    });
+
+    res.status(200).send({
+        data: updated,
+    });
+});

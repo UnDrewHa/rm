@@ -49,14 +49,14 @@ EventSchema.pre(/^find/, function () {
 });
 
 EventSchema.statics.getReservedEventsFilter = (filter) => {
-    const {ids, date, dateFrom, dateTo} = filter;
+    const {ids, date, from, to} = filter;
 
     return {
         room: {$in: ids},
         date: date,
         $or: [
-            {from: {$gte: dateFrom, $lt: dateTo}},
-            {from: {$lt: dateFrom}, to: {$gt: dateFrom}},
+            {from: {$gte: from, $lt: to}},
+            {from: {$lt: from}, to: {$gt: from}},
         ],
     };
 };

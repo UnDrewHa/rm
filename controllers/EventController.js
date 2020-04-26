@@ -22,8 +22,8 @@ exports.create = catchAsync(async function (req, res, next) {
         EventModel.getReservedEventsFilter({
             ids: [newEventData.room],
             date: newEventData.date,
-            dateFrom: newEventData.from,
-            dateTo: newEventData.to,
+            from: newEventData.from,
+            to: newEventData.to,
         }),
     );
 
@@ -104,8 +104,8 @@ exports.update = catchAsync(async function (req, res, next) {
         ...EventModel.getReservedEventsFilter({
             ids: [eventData.room],
             date: eventData.date,
-            dateFrom: eventData.from,
-            dateTo: eventData.to,
+            from: eventData.from,
+            to: eventData.to,
         }),
     });
 

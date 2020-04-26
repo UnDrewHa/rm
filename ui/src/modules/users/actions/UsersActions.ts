@@ -3,6 +3,7 @@ import {dispatchAsync} from 'Core/actions/utils';
 import {IDeleteMultipleItems} from 'Core/models';
 import {ISignupData} from 'Modules/auth/models';
 import {
+    TOGGLE_FAVOURITE,
     CHANGE_OWN_PASSWORD,
     CREATE_USER,
     DELETE_ME,
@@ -117,6 +118,17 @@ export class UsersActions {
             this.dispatch,
             DELETE_ME,
             this.service.deleteMe(data),
+        );
+    }
+
+    /**
+     * Добавить в избранное переговорную комнату.
+     */
+    toggleFavourite(roomId: string, type: string) {
+        return dispatchAsync(
+            this.dispatch,
+            TOGGLE_FAVOURITE,
+            this.service.toggleFavourite({roomId, type}),
         );
     }
 }

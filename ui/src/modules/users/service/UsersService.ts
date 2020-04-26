@@ -80,4 +80,13 @@ export class UsersService {
     deleteMe(data: ICheckPasswordData) {
         return axios.delete(this.baseUrl + '/delete-me', {data});
     }
+
+    /**
+     * Удалить пользователя.
+     *
+     * @param {ICheckPasswordData} data Данные для удаления.
+     */
+    toggleFavourite(data: {roomId: string; type: string}) {
+        return axios.patch(this.baseUrl + '/toggle-favourite', {data});
+    }
 }
