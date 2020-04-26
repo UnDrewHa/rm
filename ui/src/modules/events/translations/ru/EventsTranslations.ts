@@ -17,10 +17,19 @@ export default {
         table: {
             header: {
                 id: 'Идентификатор',
-                time: 'Время проведения',
-                name: 'Название',
+                time: 'Время',
+                title: 'Название',
+                date: 'Дата',
                 actions: 'Действия',
+                owner: 'Владелец',
+                description: 'Описание',
             },
+        },
+        ownerModal: {
+            title: 'Данные владельца события',
+            name: 'ФИО: ',
+            email: 'Эл. почта: ',
+            phone: 'Телефон: ',
         },
     },
 };

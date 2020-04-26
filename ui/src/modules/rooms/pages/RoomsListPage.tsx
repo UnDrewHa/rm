@@ -168,7 +168,6 @@ class RoomsListPage extends React.Component<TProps, IState> {
                     className="main-header"
                     title={i18n.t('Rooms:list.title')}
                 />
-
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
                     <Col span={4} className="border-right">
                         {filterDataIsLoading ? (
@@ -247,7 +246,6 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                     <Slider
                                         min={1}
                                         max={200}
-                                        tooltipVisible
                                         tooltipPlacement="right"
                                     />
                                 </Form.Item>

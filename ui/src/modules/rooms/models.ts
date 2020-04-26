@@ -29,6 +29,10 @@ export interface IRoomModel {
     photos?: string[];
 }
 
+export interface IRoomProp {
+    item: IRoomModel;
+}
+
 export interface IRoomCreateModel extends Omit<IRoomModel, '_id'> {}
 
 export interface IMappedRoomsStore {

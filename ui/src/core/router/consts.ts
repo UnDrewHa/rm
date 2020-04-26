@@ -21,6 +21,10 @@ export const ROUTER = {
                 FULL_PATH: '/user-events',
                 PATH: '/user-events',
             },
+            OWNERS: {
+                FULL_PATH: '/events-owners/:id',
+                PATH: '/events-owners/',
+            },
         },
         PROFILE: {
             FULL_PATH: '/profile',

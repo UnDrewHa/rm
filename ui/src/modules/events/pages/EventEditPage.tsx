@@ -1,4 +1,3 @@
-import {DEFAULT_DATE_FORMAT} from 'Core/consts';
 import MomentUtils from '@date-io/moment';
 import {Button, Grid, TextField} from '@material-ui/core';
 import {
@@ -14,6 +13,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {DEFAULT_DATE_FORMAT} from 'Core/consts';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';

@@ -12,5 +12,9 @@ export default {
             passwordPlaceholder: 'Текущий пароль',
             passwordConfirmPlaceholder: 'Подтверждение текущего пароля',
         },
+        favourite: {
+            off: 'Убрать из списка избранных',
+            on: 'Добавить в список избранных',
+        },
     },
 };

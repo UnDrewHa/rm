@@ -1,0 +1,10 @@
+.room-card {
+  .room-options {
+    .ant-typography {
+      display: block;
+    }
+    .ant-typography + .ant-typography {
+      margin-top: 4px;
+    }
+  }
+}

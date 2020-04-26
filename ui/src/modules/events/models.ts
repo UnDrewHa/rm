@@ -1,4 +1,5 @@
 import {IAsyncData} from 'Core/reducer/model';
+import {IUserModel} from 'Modules/users/models';
 
 export interface IGetAllEventsData {
     filter: IUserEventsFilter;
@@ -10,6 +11,7 @@ export interface IUserEventsFilter {
     to?: any;
     date?: string;
     room?: string;
+    populateOwner?: boolean;
 }
 
 export interface IEventModel {
@@ -19,7 +21,7 @@ export interface IEventModel {
     from: string;
     to: string;
     room: string;
-    owner: string;
+    owner: string | IUserModel;
     members?: string[];
     description: string;
     canceled?: boolean;

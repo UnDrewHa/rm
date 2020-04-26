@@ -56,6 +56,10 @@ exports.getAll = catchAsync(async function (req, res) {
         ]),
     );
 
+    if (filter.populateOwner) {
+        await EventModel.populate(events, {path: 'owner'});
+    }
+
     res.status(200).send({
         data: events,
     });
@@ -71,6 +75,8 @@ exports.getDetails = catchAsync(async function (req, res, next) {
     if (!event) {
         return next(new AppError('Документ не найден', 404));
     }
+
+    await EventModel.populate(event, {path: 'owner'});
 
     res.status(200).send({
         data: event,

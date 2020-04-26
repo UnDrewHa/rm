@@ -1,22 +1,21 @@
-import {DEFAULT_DATE_FORMAT} from 'Core/consts';
-import MomentUtils from '@date-io/moment';
-import {Button, Grid} from '@material-ui/core';
-import {DatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import {Button, Calendar, Col, PageHeader, Row, Table} from 'antd';
 import i18n from 'i18next';
-import {basicTableConfig} from 'Modules/events/components/utils';
 import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {DEFAULT_DATE_FORMAT} from 'Core/consts';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {EventsTable} from 'Modules/events/components/EventsTable';
+import {baseColumnsConfig} from 'Modules/events/components/utils';
 import {IEventModel} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
 import {RoomCard} from 'Modules/rooms/components/RoomCard';
+import '../styles/schedule.scss';
 
 interface IState {
     date: Moment;
@@ -36,6 +35,12 @@ interface IOwnProps {
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
+const getFilter = (id, date) => ({
+    room: id,
+    date: date.format(DEFAULT_DATE_FORMAT),
+    populateOwner: true,
+});
+
 class RoomSchedulePage extends React.Component<TProps, IState> {
     constructor(props) {
         super(props);
@@ -48,14 +53,11 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
         };
 
         eventsActions.find({
-            filter: {
-                room: match.params.id,
-                date: date.utc().format(DEFAULT_DATE_FORMAT),
-            },
+            filter: getFilter(match.params.id, date),
         });
     }
 
-    handleDateChange = (date) => {
+    handleDateChange = (date: Moment) => {
         this.setState<never>(
             {
                 date,
@@ -63,13 +65,27 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
             () => {
                 const {eventsActions, match} = this.props;
                 eventsActions.find({
-                    filter: {
-                        room: match.params.id,
-                        date: this.state.date.utc().format(DEFAULT_DATE_FORMAT),
-                    },
+                    filter: getFilter(match.params.id, this.state.date),
                 });
             },
         );
+    };
+
+    handleReserve = (e) => {
+        e.preventDefault();
+        const {match} = this.props;
+        const {id} = match?.params || '';
+
+        InterfaceAction.redirect({
+            to: ROUTER.MAIN.EVENTS.CREATE.FULL_PATH,
+            search: {
+                room: id,
+            },
+        });
+    };
+
+    handleBack = () => {
+        InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
     };
 
     render() {
@@ -78,42 +94,43 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
         const {id} = match?.params || '';
         const isLoading = events.status === EStatusCodes.PENDING;
 
-        if (isLoading) return <LoadingOverlay open />;
-
         return (
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
-                spacing={3}
-            >
-                <Grid item sm={12} md={3} lg={3}>
-                    <Button fullWidth variant="contained" color="primary">
-                        {i18n.t('Rooms:common.reserve')}
-                    </Button>
-                    <MuiPickersUtilsProvider
-                        libInstance={moment}
-                        utils={MomentUtils}
-                    >
-                        <DatePicker
-                            autoOk
-                            variant="static"
-                            openTo="date"
-                            label={i18n.t('Rooms:common.date')}
+            <React.Fragment>
+                <PageHeader
+                    className="main-header"
+                    title={i18n.t('Rooms:schedule.title')}
+                    extra={
+                        <Button
+                            type="primary"
+                            className="room-reserve-button"
+                            onClick={this.handleReserve}
+                        >
+                            {i18n.t('Rooms:common.reserve')}
+                        </Button>
+                    }
+                    onBack={this.handleBack}
+                />
+                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                    <Col span={5} className="border-right">
+                        <Calendar
+                            fullscreen={false}
+                            onSelect={this.handleDateChange}
                             value={date}
-                            onChange={this.handleDateChange}
+                            className="room-schedule-calendar"
                         />
-                    </MuiPickersUtilsProvider>
-                    <RoomCard id={id} />
-                </Grid>
-                <Grid item sm={12} md={9} lg={9}>
-                    <EventsTable
-                        events={events.data}
-                        config={basicTableConfig}
-                    />
-                </Grid>
-            </Grid>
+                        <RoomCard id={id} />
+                    </Col>
+                    <Col span={19}>
+                        <Table
+                            columns={baseColumnsConfig}
+                            dataSource={events.data}
+                            pagination={false}
+                            rowKey="_id"
+                            loading={isLoading}
+                        />
+                    </Col>
+                </Row>
+            </React.Fragment>
         );
     }
 }
