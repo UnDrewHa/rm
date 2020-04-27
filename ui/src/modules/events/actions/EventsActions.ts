@@ -1,5 +1,8 @@
+import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {ROUTER} from 'Core/router/consts';
 import {
     CREATE_EVENT,
     DELETE_EVENTS,
@@ -59,7 +62,25 @@ export class EventsActions {
             this.dispatch,
             CREATE_EVENT,
             this.service.create(data),
-        );
+        )
+            .then((res) => {
+                InterfaceAction.notify(
+                    i18n.t('Events:edit.createSuccess'),
+                    'success',
+                );
+                InterfaceAction.redirect({
+                    to: ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH,
+                    params: {
+                        id: res.data.data._id,
+                    },
+                });
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message || i18n.t('Events:edit.createError'),
+                    'error',
+                );
+            });
     };
 
     /**

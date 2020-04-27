@@ -33,8 +33,7 @@ const EventSchema = new Schema({
     },
     members: [
         {
-            type: Schema.ObjectId,
-            ref: 'User',
+            type: String,
         },
     ],
     description: String,

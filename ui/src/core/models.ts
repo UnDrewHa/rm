@@ -3,3 +3,7 @@ export interface IDeleteMultipleItems {
         ids: string[];
     };
 }
+
+export interface IDataResponse<T> {
+    data: T;
+}

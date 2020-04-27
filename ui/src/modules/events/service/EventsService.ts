@@ -1,5 +1,5 @@
 import {axios} from 'Core/axios';
-import {IDeleteMultipleItems} from 'Core/models';
+import {IDataResponse, IDeleteMultipleItems} from 'Core/models';
 import {
     IEventCreateModel,
     IEventModel,
@@ -22,7 +22,10 @@ export class EventsService {
      * @param {IGetAllEventsData} data Данные для поиска.
      */
     find(data: IGetAllEventsData) {
-        return axios.post(this.baseUrl + '/find', {data});
+        return axios.post<IDataResponse<IEventModel[]>>(
+            this.baseUrl + '/find',
+            {data},
+        );
     }
 
     /**
@@ -31,7 +34,7 @@ export class EventsService {
      * @param {string} id Идентификатор.
      */
     getById(id: string) {
-        return axios.get(this.baseUrl + '/' + id);
+        return axios.get<IDataResponse<IEventModel>>(this.baseUrl + '/' + id);
     }
 
     /**
@@ -40,7 +43,7 @@ export class EventsService {
      * @param {IEventCreateModel} data Данные для создания.
      */
     create(data: IEventCreateModel) {
-        return axios.post(this.baseUrl, {data});
+        return axios.post<IDataResponse<IEventModel>>(this.baseUrl, {data});
     }
 
     /**

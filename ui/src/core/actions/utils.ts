@@ -27,7 +27,7 @@ export function dispatchAsync<T extends any>(
                 payload: res.data,
             });
 
-            return res.data;
+            return res;
         })
         .catch((err) => {
             dispatch({

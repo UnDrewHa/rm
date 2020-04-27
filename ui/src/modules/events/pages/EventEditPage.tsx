@@ -1,31 +1,35 @@
-import MomentUtils from '@date-io/moment';
-import {Button, Grid, TextField} from '@material-ui/core';
+import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import {
-    KeyboardDatePicker,
-    KeyboardTimePicker,
-    MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
+    Button,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    PageHeader,
+    Row,
+    Table,
+    TimePicker,
+} from 'antd';
 import i18n from 'i18next';
-import {memoize} from 'lodash-es';
 import moment, {Moment} from 'moment';
 import queryParser from 'query-string';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {DEFAULT_DATE_FORMAT} from 'Core/consts';
+import {DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT} from 'Core/consts';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {basicTableConfig} from 'Modules/events/components/utils';
-import {EventsTable} from 'Modules/events/components/EventsTable';
+import {columnsWithoutDescription} from 'Modules/events/components/utils';
 import {IEventModel} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
 import {RoomCard} from 'Modules/rooms/components/RoomCard';
-import {changeOnlyDate} from 'Modules/rooms/utils';
+import {changeOnlyDate, formatTime} from 'Modules/rooms/utils';
 import {IUserModel} from 'Modules/users/models';
+import '../styles/events.scss';
 
 interface IState {
     id: string;
@@ -36,6 +40,7 @@ interface IState {
     room: string;
     owner: string;
     description: string;
+    members: string[];
 }
 
 interface IStateProps {
@@ -72,182 +77,217 @@ class EventEditPage extends React.Component<TProps, IState> {
             room: roomId,
             owner: userInfo.data._id,
             description: location?.state?.description || '',
+            members: location?.state?.description || [],
         };
 
         eventsActions.find({
             filter: {
                 room: roomId,
                 date: this.state.date.format(DEFAULT_DATE_FORMAT),
+                populateOwner: true,
             },
         });
     }
 
-    componentDidUpdate(prev) {
-        const {details} = this.props;
-
-        if (
-            details.status === EStatusCodes.SUCCESS &&
-            prev.details.data !== details.data
-        ) {
-            //TODO: Убрать в экшены.
-            InterfaceAction.notify(i18n.t('Events:create.success'), 'success');
-            InterfaceAction.redirect({
-                to: ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH,
-                params: {
-                    id: details.data._id,
-                },
-            });
-        }
-    }
-
-    /**
-     * Создать обработчик поля в state.
-     */
-    createFieldChangeHandler = memoize((field: keyof IState) => (event) => {
-        this.setState<never>({
-            [field]: event.target.value,
-        });
-    });
-
-    handleDateChange = (date) => {
-        this.setState<never>(
-            (prev) => ({
-                date,
-                from: changeOnlyDate(prev.from, date),
-                to: changeOnlyDate(prev.to, date), //TODO во всем местах сделать установку даты еще и во время отправки формы.
-            }),
-            () => {
-                this.props.eventsActions.find({
-                    filter: {
-                        room: this.state.room,
-                        date: this.state.date.format(DEFAULT_DATE_FORMAT),
-                    },
-                });
-            },
-        );
-    };
-
-    handleTimeChange = (timeKey) => (time) => {
-        this.setState<never>({
-            [timeKey]: time,
-        });
-    };
-
-    handleSubmit = (e) => {
-        e.preventDefault();
-        const {
-            id,
-            date,
-            from,
-            to,
-            title,
-            description,
-            owner,
-            room,
-        } = this.state;
+    handleFinish = (values) => {
+        const {date, from, to, title, description, members} = values;
+        const {id, owner, room} = this.state;
         const {eventsActions} = this.props;
         const method = id ? eventsActions.update : eventsActions.create;
 
         method({
             _id: id,
             title,
-            from: from.utc().format(),
-            to: to.utc().format(),
+            from: formatTime(changeOnlyDate(from, date)),
+            to: formatTime(changeOnlyDate(to, date)),
             date: date.format(DEFAULT_DATE_FORMAT),
             room,
             owner,
             description,
+            members,
         });
     };
 
+    handleBack = () => {
+        InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
+    };
+
     render() {
-        const {date, from, to, title, description} = this.state;
+        const {id, room} = this.state;
         const {events, details} = this.props;
         const submitDisabled = details.status === EStatusCodes.PENDING;
+        const eventsIsLoading = events.status === EStatusCodes.PENDING;
 
         return (
-            <Grid
-                container
-                direction="row"
-                justify="flex-start"
-                alignItems="stretch"
-                spacing={3}
-            >
-                <Grid item sm={12} md={2} lg={2}>
-                    <RoomCard id={this.state.room} />
-                </Grid>
-                <Grid item sm={12} md={5} lg={5}>
-                    <form onSubmit={this.handleSubmit}>
-                        <MuiPickersUtilsProvider
-                            libInstance={moment}
-                            utils={MomentUtils}
+            <React.Fragment>
+                <PageHeader
+                    className="main-header"
+                    title={
+                        id
+                            ? i18n.t('Events:edit.title')
+                            : i18n.t('Events:create.title')
+                    }
+                    onBack={this.handleBack}
+                />
+                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                    <Col span={4} className="border-right">
+                        <RoomCard id={room} />
+                    </Col>
+                    <Col span={9} className="border-right">
+                        <Form
+                            className="event-form"
+                            initialValues={this.state}
+                            onFinish={this.handleFinish}
+                            layout="vertical"
                         >
-                            <KeyboardDatePicker
-                                margin="normal"
-                                id="date-picker-dialog"
+                            <Form.Item
+                                name="date"
                                 label={i18n.t('Rooms:common.date')}
-                                value={date}
-                                onChange={this.handleDateChange}
-                            />
-                            <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
+                            >
+                                <DatePicker
+                                    allowClear={false}
+                                    className="input40"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name="from"
                                 label={i18n.t('Rooms:common.from')}
-                                value={from}
-                                onChange={this.handleTimeChange('from')}
-                            />
-                            <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
+                            >
+                                <TimePicker
+                                    allowClear={false}
+                                    format={DEFAULT_TIME_FORMAT}
+                                    className="input40"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name="to"
                                 label={i18n.t('Rooms:common.to')}
-                                value={to}
-                                onChange={this.handleTimeChange('to')}
-                            />
-                        </MuiPickersUtilsProvider>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="title"
-                            label={i18n.t('words.title')}
-                            name="title"
-                            value={title}
-                            onChange={this.createFieldChangeHandler('title')}
-                            autoFocus
+                            >
+                                <TimePicker
+                                    allowClear={false}
+                                    format={DEFAULT_TIME_FORMAT}
+                                    className="input40"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name="title"
+                                label={i18n.t('words.title')}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: i18n.t('forms.requiredText'),
+                                    },
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                name="description"
+                                label={i18n.t('words.description')}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: i18n.t('forms.requiredText'),
+                                    },
+                                ]}
+                            >
+                                <Input.TextArea />
+                            </Form.Item>
+                            <Form.List name="members">
+                                {(fields, {add, remove}) => {
+                                    return (
+                                        <div>
+                                            {fields.map((field, index) => (
+                                                <Form.Item
+                                                    label={
+                                                        index === 0
+                                                            ? i18n.t(
+                                                                  'Events:edit.members.title',
+                                                              )
+                                                            : ''
+                                                    }
+                                                    required={false}
+                                                    key={index}
+                                                >
+                                                    <Form.Item
+                                                        {...field}
+                                                        validateTrigger={[
+                                                            'onChange',
+                                                            'onBlur',
+                                                        ]}
+                                                        rules={[
+                                                            {
+                                                                required: true,
+                                                                whitespace: true,
+                                                                message: i18n.t(
+                                                                    'Events:edit.members.error',
+                                                                ),
+                                                            },
+                                                        ]}
+                                                        noStyle
+                                                    >
+                                                        <Input
+                                                            placeholder={i18n.t(
+                                                                'Events:edit.members.placeholder',
+                                                            )}
+                                                            type="email"
+                                                            className="input60"
+                                                        />
+                                                    </Form.Item>
+                                                    {fields.length > 0 ? (
+                                                        <MinusCircleOutlined
+                                                            className="dynamic-delete-button"
+                                                            style={{
+                                                                margin: '0 8px',
+                                                            }}
+                                                            onClick={() => {
+                                                                remove(
+                                                                    field.name,
+                                                                );
+                                                            }}
+                                                        />
+                                                    ) : null}
+                                                </Form.Item>
+                                            ))}
+                                            <Form.Item>
+                                                <Button
+                                                    type="dashed"
+                                                    onClick={() => {
+                                                        add();
+                                                    }}
+                                                    className="input60"
+                                                >
+                                                    <PlusOutlined />{' '}
+                                                    {i18n.t(
+                                                        'Events:edit.members.add',
+                                                    )}
+                                                </Button>
+                                            </Form.Item>
+                                        </div>
+                                    );
+                                }}
+                            </Form.List>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                className="login-form-button"
+                                loading={submitDisabled}
+                            >
+                                {i18n.t('actions.create')}
+                            </Button>
+                        </Form>
+                    </Col>
+                    <Col span={11} className="border-right">
+                        <Table
+                            columns={columnsWithoutDescription}
+                            dataSource={events.data}
+                            pagination={false}
+                            rowKey="_id"
+                            loading={eventsIsLoading}
                         />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="description"
-                            label={i18n.t('words.description')}
-                            name="description"
-                            value={description}
-                            multiline
-                            onChange={this.createFieldChangeHandler(
-                                'description',
-                            )}
-                            autoFocus
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            disabled={submitDisabled}
-                        >
-                            {i18n.t('actions.create')}
-                        </Button>
-                    </form>
-                </Grid>
-                <Grid item sm={12} md={5} lg={5}>
-                    <EventsTable
-                        events={events.data}
-                        config={basicTableConfig}
-                    />
-                </Grid>
-            </Grid>
+                    </Col>
+                </Row>
+            </React.Fragment>
         );
     }
 }

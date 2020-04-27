@@ -1,6 +1,6 @@
 import {Typography} from 'antd';
 import i18n from 'i18next';
-import {memoize} from 'lodash-es';
+import {filter, memoize} from 'lodash-es';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {ITableConfig} from 'Core/components/models';
@@ -80,14 +80,14 @@ export const baseColumnsConfig = [
         title: () => i18n.t('Events:table.header.date'),
         dataIndex: 'date',
         key: 'date',
-        width: 150,
+        width: 120,
     },
     {
         title: () => i18n.t('Events:table.header.time'),
         dataIndex: 'from',
         key: 'from',
         render: (_, record: IEventModel) => calculateTimeString(record),
-        width: 150,
+        width: 120,
     },
     {
         title: () => i18n.t('Events:table.header.owner'),
@@ -96,12 +96,17 @@ export const baseColumnsConfig = [
         render: (_, record: IEventModel) => {
             const owner = record.owner as IUserModel;
             return (
-                <a onClick={getOwnerClickHandler(owner)}>
+                <a href="#modal" onClick={getOwnerClickHandler(owner)}>
                     {getOwnerName(owner)}
                 </a>
             );
         },
         ellipsis: true,
-        width: 250,
+        width: 220,
     },
 ];
+
+export const columnsWithoutDescription = filter(
+    baseColumnsConfig,
+    (item) => item.key !== 'description',
+);

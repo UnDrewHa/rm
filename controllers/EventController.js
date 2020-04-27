@@ -18,6 +18,7 @@ exports.create = catchAsync(async function (req, res, next) {
         'owner',
         'members',
     ]);
+
     const reservedEvents = await EventModel.find(
         EventModel.getReservedEventsFilter({
             ids: [newEventData.room],
@@ -34,6 +35,7 @@ exports.create = catchAsync(async function (req, res, next) {
     }
 
     const event = await EventModel.create(newEventData);
+    await EventModel.populate(event, {path: 'owner'});
 
     res.status(201).send({
         data: event,

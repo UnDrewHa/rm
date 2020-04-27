@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const app = require('./app');
 
-const CONNECTION_STRING = process.env.CONNECTION_STRING.replace(
+const key = process.argv.includes('localdb')
+    ? 'CONNECTION_STRING_LOCAL'
+    : 'CONNECTION_STRING';
+
+const CONNECTION_STRING = process.env[key].replace(
     '<password>',
     process.env.DATABASE_PASSWORD,
 );
