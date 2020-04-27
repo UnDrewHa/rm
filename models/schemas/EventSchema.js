@@ -47,6 +47,17 @@ EventSchema.pre(/^find/, function () {
     this.sort('from');
 });
 
+EventSchema.pre(/^find/, function () {
+    const currentFilter = this.getFilter();
+    console.log(currentFilter);
+    if (
+        !currentFilter.hasOwnProperty('canceled') &&
+        !currentFilter.hasOwnProperty('_id')
+    ) {
+        this.where({canceled: {$ne: true}});
+    }
+});
+
 EventSchema.statics.getReservedEventsFilter = (filter) => {
     const {ids, date, from, to} = filter;
 
@@ -57,6 +68,7 @@ EventSchema.statics.getReservedEventsFilter = (filter) => {
             {from: {$gte: from, $lt: to}},
             {from: {$lt: from}, to: {$gt: from}},
         ],
+        canceled: {$ne: true},
     };
 };
 

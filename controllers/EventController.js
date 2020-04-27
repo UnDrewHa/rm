@@ -91,11 +91,6 @@ exports.getDetails = catchAsync(async function (req, res, next) {
 exports.update = catchAsync(async function (req, res, next) {
     const {_id} = req.body.data;
 
-    const event = await EventModel.findById(_id);
-    if (!event) {
-        return next(new AppError('Документ не найден', 404));
-    }
-
     const eventData = getFieldsFromObject(req.body.data, [
         'room',
         'date',
@@ -123,11 +118,13 @@ exports.update = catchAsync(async function (req, res, next) {
         );
     }
 
-    await event.update(eventData, {
-        runValidators: true,
+    const updated = await EventModel.findOneAndUpdate({_id}, eventData, {
+        new: true,
     });
 
-    res.status(200).send();
+    res.status(200).send({
+        data: updated,
+    });
 });
 
 /**
@@ -143,5 +140,7 @@ exports.delete = catchAsync(async function (req, res) {
         {canceled: true},
     );
 
-    res.status(200).send();
+    res.status(200).send({
+        data: ids,
+    });
 });

@@ -77,7 +77,7 @@ class EventEditPage extends React.Component<TProps, IState> {
             room: roomId,
             owner: userInfo.data._id,
             description: location?.state?.description || '',
-            members: location?.state?.description || [],
+            members: location?.state?.members || [],
         };
 
         eventsActions.find({

@@ -1,4 +1,4 @@
-import {Typography} from 'antd';
+import {Divider, Tag, Typography} from 'antd';
 import i18n from 'i18next';
 import {filter, memoize} from 'lodash-es';
 import React from 'react';
@@ -7,6 +7,8 @@ import {ITableConfig} from 'Core/components/models';
 import {ROUTER} from 'Core/router/consts';
 import {EEventNames} from 'Core/EventEmitter/enums';
 import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
+import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
+import {EventEditButton} from 'Modules/events/components/EventEditButton';
 import {IEventModel} from 'Modules/events/models';
 import {calculateTimeString} from 'Modules/events/utils';
 import {IUserModel} from 'Modules/users/models';
@@ -110,3 +112,35 @@ export const columnsWithoutDescription = filter(
     baseColumnsConfig,
     (item) => item.key !== 'description',
 );
+
+export const columnsWithoutOwner = [
+    ...filter(baseColumnsConfig, (item) => item.key !== 'owner'),
+    {
+        title: () => i18n.t('Events:table.header.members'),
+        dataIndex: 'members',
+        key: 'members',
+        render: (_, record: IEventModel) => (
+            <React.Fragment>
+                {record.members.map((item) => (
+                    <Tag key={item}>{item}</Tag>
+                ))}
+            </React.Fragment>
+        ),
+    },
+];
+
+export const columnsWithActions = [
+    ...columnsWithoutOwner,
+    {
+        title: () => i18n.t('Events:table.header.actions'),
+        dataIndex: 'actions',
+        key: 'actions',
+        render: (_, record: IEventModel) => (
+            <React.Fragment>
+                <EventEditButton event={record} />
+                <Divider type="vertical" />
+                <EventDeleteButton ids={[record._id]} />
+            </React.Fragment>
+        ),
+    },
+];

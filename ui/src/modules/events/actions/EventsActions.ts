@@ -93,7 +93,25 @@ export class EventsActions {
             this.dispatch,
             UPDATE_EVENT,
             this.service.update(data),
-        );
+        )
+            .then((res) => {
+                InterfaceAction.notify(
+                    i18n.t('Events:edit.updateSuccess'),
+                    'success',
+                );
+                InterfaceAction.redirect({
+                    to: ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH,
+                    params: {
+                        id: res.data.data._id,
+                    },
+                });
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message || i18n.t('Events:edit.updateError'),
+                    'error',
+                );
+            });
     };
 
     /**
@@ -106,6 +124,19 @@ export class EventsActions {
             this.dispatch,
             DELETE_EVENTS,
             this.service.delete({data: {ids}}),
-        );
+        )
+            .then((res) => {
+                InterfaceAction.notify(
+                    i18n.t('Events:cancel.cancelSuccess'),
+                    'success',
+                );
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message ||
+                        i18n.t('Events:cancel.cancelError'),
+                    'error',
+                );
+            });
     };
 }

@@ -1,27 +1,23 @@
-import {
-    Container,
-    Link as Links,
-    Paper,
-    Tab,
-    Tabs,
-    Typography,
-} from '@material-ui/core';
+import {Col, PageHeader, Row, Table, Tabs} from 'antd';
 import i18n from 'i18next';
+import {isEmpty} from 'lodash-es';
+import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
 import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
-import {ITableConfig} from 'Core/components/models';
-import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {withRouter} from 'react-router-dom';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {EventsTable} from 'Modules/events/components/EventsTable';
+import {
+    columnsWithoutOwner,
+    columnsWithActions,
+} from 'Modules/events/components/utils';
 import {IEventModel, IUserEventsFilter} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
-import {calculateTimeString} from 'Modules/events/utils';
 import {IUserModel} from 'Modules/users/models';
 
 enum ETabNames {
@@ -32,6 +28,7 @@ enum ETabNames {
 
 interface IState {
     currentTab: ETabNames;
+    selectedRowKeys: string[];
 }
 
 interface IStateProps {
@@ -55,6 +52,7 @@ class UserEventsPage extends React.Component<TProps, IState> {
 
         this.state = {
             currentTab: ETabNames.ACTIVE,
+            selectedRowKeys: [],
         };
 
         eventsActions.find({
@@ -63,53 +61,9 @@ class UserEventsPage extends React.Component<TProps, IState> {
                 userInfo.data,
             ),
         });
-
-        this.tableConfig = {
-            keys: ['id', 'time', 'name', 'actions'],
-            getItems: function (items: IEventModel[]) {
-                return items.map((item) => ({
-                    id: (
-                        <Link to={ROUTER.MAIN.EVENTS.DETAILS.PATH + item._id}>
-                            {item._id}
-                        </Link>
-                    ),
-                    time: calculateTimeString(item),
-                    name: item.title,
-                    actions: (
-                        <div>
-                            <Link
-                                to={{
-                                    pathname:
-                                        ROUTER.MAIN.EVENTS.CREATE.FULL_PATH,
-                                    state: {
-                                        id: item._id,
-                                        title: item.title,
-                                        date: moment(item.date),
-                                        from: moment(item.from),
-                                        to: moment(item.to),
-                                        description: item.description,
-                                    },
-                                    search: `?room=${item.room}`,
-                                }}
-                            >
-                                {i18n.t('actions.edit')}
-                            </Link>
-                            <br />
-                            <Links
-                                onClick={() => eventsActions.delete([item._id])}
-                            >
-                                {i18n.t('actions.delete')}
-                            </Links>
-                        </div>
-                    ),
-                }));
-            },
-        };
     }
 
-    tableConfig: ITableConfig;
-
-    handleTabChange = (_, currentTab: ETabNames) => {
+    handleTabChange = (currentTab: ETabNames) => {
         this.setState(
             {
                 currentTab,
@@ -126,11 +80,28 @@ class UserEventsPage extends React.Component<TProps, IState> {
         );
     };
 
+    handleBack = () => {
+        InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
+    };
+
+    handleTableCheck = (selectedRowKeys: string[]) => {
+        this.setState({
+            selectedRowKeys,
+        });
+    };
+
+    handleAfterDelete = () => {
+        this.setState({
+            selectedRowKeys: [],
+        });
+    };
+
     getEventsFilterByTab(tab: ETabNames, user: IUserModel): IUserEventsFilter {
         if (tab === ETabNames.ACTIVE) {
             return {
                 owner: user._id,
                 to: {$gt: moment().utc().format()},
+                canceled: {$ne: true},
             };
         }
 
@@ -138,6 +109,7 @@ class UserEventsPage extends React.Component<TProps, IState> {
             return {
                 owner: user._id,
                 to: {$lte: moment().utc().format()},
+                canceled: {$ne: true},
             };
         }
 
@@ -155,41 +127,68 @@ class UserEventsPage extends React.Component<TProps, IState> {
 
     render() {
         const {events} = this.props;
-        const {currentTab} = this.state;
+        const {currentTab, selectedRowKeys} = this.state;
         const isLoading = events.status === EStatusCodes.PENDING;
-
-        if (isLoading) return <LoadingOverlay open />;
+        const columnsConfig =
+            currentTab === ETabNames.ACTIVE
+                ? columnsWithActions
+                : columnsWithoutOwner;
+        const rowSelection =
+            currentTab === ETabNames.ACTIVE
+                ? {
+                      onChange: this.handleTableCheck,
+                  }
+                : null;
+        const footerIsVisible =
+            currentTab === ETabNames.ACTIVE && !isEmpty(selectedRowKeys);
+        const footer = footerIsVisible ? (
+            <EventDeleteButton
+                ids={selectedRowKeys}
+                layout="button"
+                placement="right"
+                afterDelete={this.handleAfterDelete}
+            />
+        ) : null;
 
         return (
-            <Container>
-                <Paper>
-                    <Typography>{i18n.t('Events:userEvents.title')}</Typography>
-                    <Tabs
-                        value={currentTab}
-                        onChange={this.handleTabChange}
-                        indicatorColor="primary"
-                        textColor="primary"
-                        centered
-                    >
-                        <Tab
-                            label={i18n.t('Events:userEvents.ACTIVE')}
-                            value={ETabNames.ACTIVE}
+            <React.Fragment>
+                <PageHeader
+                    className="main-header"
+                    title={i18n.t('Events:userEvents.title')}
+                    onBack={this.handleBack}
+                />
+                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                    <Col span={24}>
+                        <Tabs
+                            defaultActiveKey={ETabNames.ACTIVE}
+                            onChange={this.handleTabChange}
+                        >
+                            <Tabs.TabPane
+                                tab={i18n.t('Events:userEvents.ACTIVE')}
+                                key={ETabNames.ACTIVE}
+                            />
+                            <Tabs.TabPane
+                                tab={i18n.t('Events:userEvents.COMPLETED')}
+                                key={ETabNames.COMPLETED}
+                            />
+                            <Tabs.TabPane
+                                tab={i18n.t('Events:userEvents.CANCELED')}
+                                key={ETabNames.CANCELED}
+                            />
+                        </Tabs>
+                        <Table
+                            rowSelection={rowSelection}
+                            columns={columnsConfig}
+                            dataSource={events.data}
+                            pagination={false}
+                            rowKey="_id"
+                            loading={isLoading}
+                            footer={() => footer}
+                            className="events-table"
                         />
-                        <Tab
-                            label={i18n.t('Events:userEvents.COMPLETED')}
-                            value={ETabNames.COMPLETED}
-                        />
-                        <Tab
-                            label={i18n.t('Events:userEvents.CANCELED')}
-                            value={ETabNames.CANCELED}
-                        />
-                    </Tabs>
-                    <EventsTable
-                        events={events.data}
-                        config={this.tableConfig}
-                    />
-                </Paper>
-            </Container>
+                    </Col>
+                </Row>
+            </React.Fragment>
         );
     }
 }
