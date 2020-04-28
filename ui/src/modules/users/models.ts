@@ -26,6 +26,7 @@ export interface IUserModel {
     name?: string;
     surname?: string;
     patronymic?: string;
+    fullName?: string;
 }
 
 export interface IUpdateUser extends IUserModel, ICheckPasswordData {

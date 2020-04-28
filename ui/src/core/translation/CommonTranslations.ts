@@ -3,6 +3,8 @@ export default {
         words: {
             title: 'Заголовок',
             description: 'Описание',
+            yes: 'Да',
+            no: 'Отмена',
         },
         links: {
             login: 'Войти',
@@ -18,6 +20,7 @@ export default {
             edit: 'Редактировать',
             find: 'Найти',
             save: 'Сохранить',
+            cancel: 'Отменить',
         },
         forms: {
             requiredText: 'Поле обязательно для заполнения',

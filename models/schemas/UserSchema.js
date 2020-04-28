@@ -83,6 +83,16 @@ const UserSchema = new Schema({
     },
 });
 
+UserSchema.virtual('fullName').get(function () {
+    let fullName = `${this.name} ${this.surname}`;
+
+    if (this.patronymic) {
+        fullName += ` ${this.patronymic}`;
+    }
+
+    return fullName.trim();
+});
+
 UserSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
 

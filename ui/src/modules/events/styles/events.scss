@@ -7,3 +7,11 @@
     width: 60%;
   }
 }
+
+.event-members {
+  max-width: 400px;
+
+  .ant-tag {
+    margin: 0 4px 4px 0;
+  }
+}

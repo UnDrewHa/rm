@@ -78,7 +78,7 @@ exports.getDetails = catchAsync(async function (req, res, next) {
         return next(new AppError('Документ не найден', 404));
     }
 
-    await EventModel.populate(event, {path: 'owner'});
+    await EventModel.populate(event, [{path: 'owner'}, {path: 'room'}]);
 
     res.status(200).send({
         data: event,

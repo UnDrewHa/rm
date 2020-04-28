@@ -7,7 +7,7 @@ export interface IGetAllEventsData {
 
 export interface IUserEventsFilter {
     owner?: string;
-    canceled?: boolean;
+    canceled?: any;
     to?: any;
     date?: string;
     room?: string;
@@ -20,7 +20,7 @@ export interface IEventModel {
     date: string;
     from: string;
     to: string;
-    room: string;
+    room: string | IUserModel;
     owner: string | IUserModel;
     members?: string[];
     description: string;

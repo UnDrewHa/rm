@@ -72,6 +72,7 @@ const initialValues = {
     projector: false,
     whiteboard: false,
     flipchart: false,
+    building: '',
 };
 
 class RoomsListPage extends React.Component<TProps, IState> {
@@ -80,7 +81,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
 
         this.state = {
             building: this.props.defaultBuilding || null,
-            formValues: null,
+            formValues: initialValues,
         };
     }
 
@@ -91,6 +92,15 @@ class RoomsListPage extends React.Component<TProps, IState> {
         this.setState({
             building: option,
         });
+    };
+
+    handleChange = (changedValues) => {
+        this.setState((prev) => ({
+            formValues: {
+                ...prev.formValues,
+                ...changedValues,
+            },
+        }));
     };
 
     handleFinish = (values) => {
@@ -153,7 +163,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
     }
 
     render() {
-        const {building} = this.state;
+        const {building, formValues} = this.state;
         const {
             defaultBuilding,
             filterDataIsLoading,
@@ -180,6 +190,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                     building: defaultBuilding?.address,
                                 }}
                                 onFinish={this.handleFinish}
+                                onValuesChange={this.handleChange}
                             >
                                 <Form.Item
                                     name="building"
@@ -241,7 +252,9 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 </Form.Item>
                                 <Form.Item
                                     name="seats"
-                                    label={i18n.t('Rooms:common.seats')}
+                                    label={i18n.t('Rooms:common.seats', {
+                                        num: formValues?.seats || null,
+                                    })}
                                 >
                                     <Slider
                                         min={1}

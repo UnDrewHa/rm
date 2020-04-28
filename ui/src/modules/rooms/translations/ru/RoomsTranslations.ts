@@ -7,7 +7,7 @@ export default {
             projector: 'Проектор',
             whiteboard: 'Маркерная доска',
             flipchart: 'Флипчарт',
-            seats: 'Посадочных мест',
+            seats: 'Посадочных мест: {{num}}',
             to: 'Время окончания',
             from: 'Время начала',
             date: 'Дата встречи',

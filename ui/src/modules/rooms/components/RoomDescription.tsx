@@ -16,7 +16,8 @@ export const RoomDescription = ({item}: IRoomProp) => {
             </Typography.Paragraph>
             <Typography.Paragraph className="room-options">
                 <Typography.Text>
-                    <UserOutlined /> {item.seats} {i18n.t('Rooms:common.seats')}
+                    <UserOutlined />{' '}
+                    {i18n.t('Rooms:common.seats', {num: item.seats})}
                 </Typography.Text>
                 <Typography.Text>
                     {item.tv ? (

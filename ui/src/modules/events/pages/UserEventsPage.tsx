@@ -1,7 +1,6 @@
 import {Col, PageHeader, Row, Table, Tabs} from 'antd';
 import i18n from 'i18next';
 import {isEmpty} from 'lodash-es';
-import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
 import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -16,6 +15,7 @@ import {
     columnsWithoutOwner,
     columnsWithActions,
 } from 'Modules/events/components/utils';
+import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
 import {IEventModel, IUserEventsFilter} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
 import {IUserModel} from 'Modules/users/models';
