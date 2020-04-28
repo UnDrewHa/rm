@@ -1,34 +1,44 @@
-import {Button, Container, TextField, Typography} from '@material-ui/core';
+import {
+    LockOutlined,
+    MailOutlined,
+    PhoneOutlined,
+    UploadOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
+import {
+    Avatar,
+    Button,
+    Col,
+    Form,
+    Input,
+    PageHeader,
+    Row,
+    Typography,
+    Upload,
+} from 'antd';
 import i18n from 'i18next';
-import {memoize} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {LoadingOverlay} from 'Core/components/LoadingOverlay';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {UsersActions} from 'Modules/users/actions/UsersActions';
+import {ProfileFormSkeleton} from 'Modules/users/components/ProfileFormSkeleton';
 import {IUserModel} from 'Modules/users/models';
 import {UsersService} from 'Modules/users/service/UsersService';
 
 interface IState {
-    login: string;
-    email: string;
-    building: string;
-    phone?: string;
-    name?: string;
-    surname?: string;
-    patronymic?: string;
-    newPassword?: string;
-    password: string;
-    passwordConfirm: string;
+    building: IBuildingModel;
+    photo: string;
 }
 
 interface IStateProps {
     userInfo: IAsyncData<IUserModel>;
+    dataIsLoading: boolean;
 }
 
 interface IDispatchProps {
@@ -39,70 +49,44 @@ interface IOwnProps {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
+const getInitial = (user: IUserModel) => ({
+    login: user.login || '',
+    email: user.email || '',
+    building: (user.building as any).address || '',
+    phone: user.phone || '',
+    name: user.name || '',
+    surname: user.surname || '',
+    patronymic: user.patronymic || '',
+    newPassword: '',
+    password: '',
+    passwordConfirm: '',
+});
+
 class ProfilePage extends React.Component<TProps, IState> {
     constructor(props: TProps) {
         super(props);
 
-        const {
-            userInfo: {data},
-        } = props;
-
         this.state = {
-            login: data.login || '',
-            email: data.email || '',
-            building: data.building || '',
-            phone: data.phone || '',
-            name: data.name || '',
-            surname: data.surname || '',
-            patronymic: data.patronymic || '',
-            newPassword: '',
-            password: '',
-            passwordConfirm: '',
+            building: (props.userInfo.data?.building as any) || null,
+            photo: props.userInfo.data?.photo || '',
         };
     }
 
     /**
      * Обработчик отправки формы.
      */
-    handleSubmit = (e) => {
-        e.preventDefault();
-        const {
-            login,
-            email,
-            building,
-            phone,
-            name,
-            surname,
-            patronymic,
-            newPassword,
-            password,
-            passwordConfirm,
-        } = this.state;
+    handleFinish = (values) => {
         const {userInfo, usersActions} = this.props;
+        const building =
+            this.state.building?._id || userInfo.data.building?._id;
 
         usersActions.updateMe({
+            ...values,
             _id: userInfo.data._id,
-            login,
-            email,
             building,
-            phone,
-            name,
-            surname,
-            patronymic,
-            password,
-            passwordConfirm,
-            newPassword,
+            photo: this.state.photo,
         });
     };
-
-    /**
-     * Создать обработчик поля в state.
-     */
-    createFieldChangeHandler = memoize((field: keyof IState) => (event) => {
-        this.setState<never>({
-            [field]: event.target.value,
-        });
-    });
 
     /**
      * Обработчик выбора здания.
@@ -111,158 +95,272 @@ class ProfilePage extends React.Component<TProps, IState> {
      */
     handleBuildingSelect = (building: IBuildingModel) => {
         this.setState({
-            building: building._id,
+            building: building,
         });
     };
 
+    handleBack = () => {
+        window.history.back();
+    };
+
+    handleBeforeUpload = (file) => {
+        const isJpgOrPng =
+            file.type === 'image/jpeg' || file.type === 'image/png';
+        if (!isJpgOrPng) {
+            InterfaceAction.notify(
+                'Можно загрузить фото следующих форматов: JPG, PNG',
+                'error',
+            );
+        }
+        const isLt2M = file.size / 1024 / 1024 < 1;
+        if (!isLt2M) {
+            InterfaceAction.notify(
+                'Размер загружаемого файла не должен превышать 1Мб',
+                'error',
+            );
+        }
+
+        return isJpgOrPng && isLt2M;
+    };
+
+    handleUploadChange = (info) => {
+        if (info.file.status === 'done') {
+            this.setState(
+                {
+                    photo: info.file.response.data,
+                },
+                () => {
+                    InterfaceAction.notify(
+                        i18n.t('Users:upload.success'),
+                        'success',
+                    );
+                },
+            );
+        } else if (info.file.status === 'error') {
+            InterfaceAction.notify(i18n.t('Users:upload.error'), 'error');
+        }
+    };
+
     render() {
-        const {
-            login,
-            email,
-            phone,
-            name,
-            surname,
-            patronymic,
-            newPassword,
-            password,
-            passwordConfirm,
-        } = this.state;
-        const {userInfo} = this.props;
+        const {userInfo, dataIsLoading} = this.props;
         const isLoading = userInfo.status === EStatusCodes.PENDING;
 
-        if (isLoading) return <LoadingOverlay open />;
-
         return (
-            <Container component="main" maxWidth="xs">
-                <Typography component="h1" variant="h5">
-                    {i18n.t('Users:profile.title')}
-                </Typography>
-                <form onSubmit={this.handleSubmit}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="login"
-                        label={i18n.t('Users:profile.loginPlaceholder')}
-                        name="login"
-                        autoComplete="login"
-                        value={login}
-                        onChange={this.createFieldChangeHandler('login')}
-                        autoFocus
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label={i18n.t('Users:profile.emailPlaceholder')}
-                        name="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={this.createFieldChangeHandler('email')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="phone"
-                        label={i18n.t('Users:profile.phonePlaceholder')}
-                        name="phone"
-                        autoComplete="phone"
-                        value={phone}
-                        onChange={this.createFieldChangeHandler('phone')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="name"
-                        label={i18n.t('Users:profile.namePlaceholder')}
-                        name="name"
-                        autoComplete="name"
-                        value={name}
-                        onChange={this.createFieldChangeHandler('name')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="surname"
-                        label={i18n.t('Users:profile.surnamePlaceholder')}
-                        name="surname"
-                        autoComplete="surname"
-                        value={surname}
-                        onChange={this.createFieldChangeHandler('surname')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="patronymic"
-                        label={i18n.t('Users:profile.patronymicPlaceholder')}
-                        name="patronymic"
-                        autoComplete="patronymic"
-                        value={patronymic}
-                        onChange={this.createFieldChangeHandler('patronymic')}
-                    />
-                    <BuildingsAutocomplete
-                        onSelect={this.handleBuildingSelect}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        name="newPassword"
-                        label={i18n.t('Users:profile.newPasswordPlaceholder')}
-                        type="password"
-                        id="newPassword"
-                        autoComplete="current-newPassword"
-                        value={newPassword}
-                        onChange={this.createFieldChangeHandler('newPassword')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label={i18n.t('Users:profile.passwordPlaceholder')}
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        value={password}
-                        onChange={this.createFieldChangeHandler('password')}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="passwordConfirm"
-                        label={i18n.t(
-                            'Users:profile.passwordConfirmPlaceholder',
+            <React.Fragment>
+                <PageHeader
+                    className="main-header"
+                    title={i18n.t('Users:profile.title')}
+                    onBack={this.handleBack}
+                />
+                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                    <Col span={10} className="border-right">
+                        {dataIsLoading ? (
+                            <ProfileFormSkeleton />
+                        ) : (
+                            <Form
+                                className="profile-form"
+                                initialValues={{
+                                    ...getInitial(userInfo.data),
+                                }}
+                                onFinish={this.handleFinish}
+                                labelCol={{span: 8}}
+                                wrapperCol={{span: 16}}
+                            >
+                                <Form.Item
+                                    name="login"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: i18n.t(
+                                                'forms.requiredText',
+                                            ),
+                                        },
+                                    ]}
+                                    label={i18n.t(
+                                        'Users:profile.loginPlaceholder',
+                                    )}
+                                >
+                                    <Input
+                                        prefix={
+                                            <UserOutlined className="site-form-item-icon" />
+                                        }
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="email"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: i18n.t(
+                                                'forms.requiredText',
+                                            ),
+                                        },
+                                    ]}
+                                    label={i18n.t(
+                                        'Users:profile.emailPlaceholder',
+                                    )}
+                                >
+                                    <Input
+                                        type="email"
+                                        prefix={
+                                            <MailOutlined className="site-form-item-icon" />
+                                        }
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="phone"
+                                    label={i18n.t(
+                                        'Users:profile.phonePlaceholder',
+                                    )}
+                                >
+                                    <Input
+                                        minLength={11}
+                                        maxLength={12}
+                                        prefix={
+                                            <PhoneOutlined className="site-form-item-icon" />
+                                        }
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="building"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: i18n.t(
+                                                'forms.requiredText',
+                                            ),
+                                        },
+                                    ]}
+                                    label={i18n.t(
+                                        'Users:profile.buildingPlaceholder',
+                                    )}
+                                >
+                                    <BuildingsAutocomplete
+                                        onSelect={this.handleBuildingSelect}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="name"
+                                    label={i18n.t(
+                                        'Users:profile.namePlaceholder',
+                                    )}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    name="surname"
+                                    label={i18n.t(
+                                        'Users:profile.surnamePlaceholder',
+                                    )}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    name="patronymic"
+                                    label={i18n.t(
+                                        'Users:profile.patronymicPlaceholder',
+                                    )}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    name="newPassword"
+                                    label={i18n.t(
+                                        'Users:profile.newPasswordPlaceholder',
+                                    )}
+                                >
+                                    <Input
+                                        prefix={
+                                            <LockOutlined className="site-form-item-icon" />
+                                        }
+                                        type="password"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="password"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: i18n.t(
+                                                'forms.requiredText',
+                                            ),
+                                        },
+                                    ]}
+                                    label={i18n.t(
+                                        'Users:profile.passwordPlaceholder',
+                                    )}
+                                >
+                                    <Input
+                                        prefix={
+                                            <LockOutlined className="site-form-item-icon" />
+                                        }
+                                        type="password"
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    name="passwordConfirm"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: i18n.t(
+                                                'forms.requiredText',
+                                            ),
+                                        },
+                                    ]}
+                                    label={i18n.t(
+                                        'Users:profile.passwordConfirmPlaceholder',
+                                    )}
+                                >
+                                    <Input
+                                        prefix={
+                                            <LockOutlined className="site-form-item-icon" />
+                                        }
+                                        type="password"
+                                    />
+                                </Form.Item>
+                                <Button
+                                    type="primary"
+                                    htmlType="submit"
+                                    className="login-form-button"
+                                    loading={isLoading}
+                                >
+                                    {i18n.t('actions.save')}
+                                </Button>
+                            </Form>
                         )}
-                        type="password"
-                        id="passwordConfirm"
-                        autoComplete="passwordConfirm"
-                        value={passwordConfirm}
-                        onChange={this.createFieldChangeHandler(
-                            'passwordConfirm',
-                        )}
-                    />
-                    <Button type="submit" variant="contained" color="primary">
-                        {i18n.t('actions.save')}
-                    </Button>
-                </form>
-            </Container>
+                    </Col>
+                    <Col span={14}>
+                        <Avatar
+                            size={128}
+                            icon={<UserOutlined />}
+                            src={this.state.photo}
+                            style={{marginBottom: 10}}
+                        />
+                        <Typography.Paragraph>
+                            <Upload
+                                action="http://localhost:5000/users/upload"
+                                withCredentials
+                                name="photo"
+                                beforeUpload={this.handleBeforeUpload}
+                                onChange={this.handleUploadChange}
+                                showUploadList={false}
+                            >
+                                <Button>
+                                    <UploadOutlined />{' '}
+                                    {i18n.t('Users:upload.button')}
+                                </Button>
+                            </Upload>
+                        </Typography.Paragraph>
+                    </Col>
+                </Row>
+            </React.Fragment>
         );
     }
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     userInfo: state.user,
+    dataIsLoading: state.user.status === EStatusCodes.PENDING,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

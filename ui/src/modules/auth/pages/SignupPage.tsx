@@ -10,7 +10,7 @@ import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {AuthActions} from 'Modules/auth/actions/AuthActions';
 import {AuthService} from 'Modules/auth/service/AuthService';
-import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocompleteANT';
+import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {IUserModel} from 'Modules/users/models';
 

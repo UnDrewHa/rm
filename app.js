@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json());
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/${process.env.PUBLIC_PATH}`));
 app.use(cookieParser());
 
 app.use(

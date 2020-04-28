@@ -1,8 +1,6 @@
-import {LinearProgress, TextField} from '@material-ui/core';
-import {Autocomplete} from '@material-ui/lab';
+import {BuildOutlined} from '@ant-design/icons';
+import {AutoComplete, Input} from 'antd';
 import i18n from 'i18next';
-import {find} from 'lodash-es';
-import {isFunction} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {EStatusCodes} from 'Core/reducer/enums';
@@ -14,8 +12,7 @@ import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
 import {IUserModel} from 'Modules/users/models';
 
 interface IOwnProps {
-    onSelect: (building: IBuildingModel) => void;
-    userBuildingSelected?: boolean;
+    onSelect: (value, option) => void;
 }
 
 interface IStateProps {
@@ -29,80 +26,46 @@ interface IDispatchProps {
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
-interface IState {
-    building: IBuildingModel;
-}
-
-class BuildingsAutocomplete extends React.Component<TProps, IState> {
+class BuildingsAutocomplete extends React.Component<TProps> {
     constructor(props) {
         super(props);
         const {buildingsActions, buildingsData} = this.props;
-
-        this.state = {
-            building: null,
-        };
 
         if (buildingsData.status === EStatusCodes.IDLE) {
             buildingsActions.getAll();
         }
     }
 
-    /**
-     * Обработчик выбора здания.
-     *
-     * @param event Объект события.
-     * @param {IBuildingModel} building Выбранное здание.
-     */
-    handleBuildingSelect = (event, building: IBuildingModel) => {
-        const {onSelect} = this.props;
-
-        this.setState(
-            {
-                building,
-            },
-            () => {
-                isFunction(onSelect) && onSelect(building);
-            },
-        );
+    getOptions = (buildings: IBuildingModel[]) => {
+        return buildings.map((item) => ({
+            value: item.address,
+            fullValue: item.address + item.name,
+            ...item,
+        }));
     };
 
     render() {
-        const {building} = this.state;
-        const {buildingsData, userInfo, userBuildingSelected} = this.props;
+        const {buildingsData, userInfo, ...restProps} = this.props;
         const buildingsIsLoading =
             buildingsData.status === EStatusCodes.PENDING;
-        const userBuilding = userBuildingSelected //TODO: перенести на уровень выше
-            ? find(
-                  buildingsData.data,
-                  (item) => item._id === userInfo?.data?.building,
-              ) || null
-            : null;
 
         return (
-            <div>
-                <Autocomplete
-                    id="building"
-                    options={buildingsData.data}
-                    getOptionLabel={(item) => item.address}
-                    onChange={this.handleBuildingSelect}
-                    value={building || userBuilding}
-                    disabled={buildingsIsLoading}
-                    disabledItemsFocusable={buildingsIsLoading}
-                    disableClearable
-                    renderInput={(params) => {
-                        return (
-                            <TextField
-                                {...params}
-                                label={i18n.t(
-                                    'Auth:signup.buildingPlaceholder',
-                                )}
-                                variant="outlined"
-                            />
-                        );
-                    }}
+            <AutoComplete
+                {...restProps}
+                options={this.getOptions(buildingsData.data)}
+                filterOption={(inputValue, option) =>
+                    option.fullValue
+                        .toUpperCase()
+                        .includes(inputValue.toUpperCase())
+                }
+                disabled={buildingsIsLoading}
+                onSelect={this.props.onSelect}
+            >
+                <Input.Search
+                    prefix={<BuildOutlined className="site-form-item-icon" />}
+                    placeholder={i18n.t('Auth:signup.buildingPlaceholder')}
                 />
-                {buildingsIsLoading && <LinearProgress />}
-            </div>
+            </AutoComplete>
         );
     }
 }
@@ -117,7 +80,7 @@ const mapDispatchToProps = (dispatch): IDispatchProps => ({
 });
 
 /**
- * Страница регистрации.
+ * Компонент выборы здания.
  */
 const connected = connect(
     mapStateToProps,

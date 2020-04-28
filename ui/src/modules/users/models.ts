@@ -1,5 +1,6 @@
 import {IAsyncData} from 'Core/reducer/model';
 import {ERoles} from 'Modules/auth/enums';
+import {IBuildingModel} from 'Modules/buildings/models';
 
 /**
  * Данные для изменения пароля.
@@ -17,7 +18,7 @@ export interface IUserModel {
     _id: string;
     login: string;
     email: string;
-    building: string;
+    building: IBuildingModel;
     role?: ERoles;
     active?: boolean;
     phone?: string;
@@ -29,8 +30,21 @@ export interface IUserModel {
     fullName?: string;
 }
 
-export interface IUpdateUser extends IUserModel, ICheckPasswordData {
+export interface IUpdateUser extends ICheckPasswordData {
+    _id: string;
     newPassword?: string;
+    login?: string;
+    email?: string;
+    building?: IBuildingModel;
+    role?: ERoles;
+    active?: boolean;
+    phone?: string;
+    favouriteRooms?: string[];
+    photo?: string;
+    name?: string;
+    surname?: string;
+    patronymic?: string;
+    fullName?: string;
 }
 
 export interface IMappedUserStore {

@@ -9,6 +9,8 @@
 
 .main-layout {
   &__header {
+    display: flex;
+    align-items: center;
     position: fixed;
     z-index: 1;
     width: 100%;

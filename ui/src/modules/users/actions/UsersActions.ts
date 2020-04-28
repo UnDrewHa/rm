@@ -1,15 +1,17 @@
+import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
 import {IDeleteMultipleItems} from 'Core/models';
 import {ISignupData} from 'Modules/auth/models';
 import {
-    TOGGLE_FAVOURITE,
     CHANGE_OWN_PASSWORD,
     CREATE_USER,
     DELETE_ME,
     DELETE_USERS,
     GET_USER_INFO,
     GET_USERS,
+    TOGGLE_FAVOURITE,
     UPDATE_ME,
     UPDATE_USER,
 } from 'Modules/users/actions/actionTypes';
@@ -105,7 +107,20 @@ export class UsersActions {
             this.dispatch,
             UPDATE_ME,
             this.service.updateMe(data),
-        );
+        )
+            .then((_) => {
+                InterfaceAction.notify(
+                    i18n.t('Users:profile.updateSuccess'),
+                    'success',
+                );
+            })
+            .catch((error) => {
+                InterfaceAction.notify(
+                    error?.error?.message ||
+                        i18n.t('Users:profile.updateError'),
+                    'error',
+                );
+            });
     }
 
     /**

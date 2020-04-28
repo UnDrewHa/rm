@@ -22,10 +22,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
-import {
-    getUserBuilding,
-    BuildingsAutocomplete,
-} from 'Modules/buildings/components/BuildingsAutocompleteANT';
+import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
 import {RoomsList} from 'Modules/rooms/components/RoomsList';
@@ -342,7 +339,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
 const mapStateToProps = (state: TAppStore): IStateProps => {
     return {
         roomsList: state.rooms.list,
-        defaultBuilding: getUserBuilding(state.buildings.data, state.user.data),
+        defaultBuilding: state.user.data.building,
         filterDataIsLoading:
             state.buildings.status === EStatusCodes.PENDING ||
             state.user.status === EStatusCodes.PENDING,

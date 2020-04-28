@@ -1,3 +1,4 @@
+const sharp = require('sharp');
 const UserModel = require('../models/UserModel');
 const {
     catchAsync,
@@ -69,6 +70,7 @@ exports.updateMe = catchAsync(async function (req, res) {
         'patronymic',
         'active',
         'newPassword',
+        'login',
     ]);
 
     user.email = userData.email || user.email;
@@ -83,14 +85,23 @@ exports.updateMe = catchAsync(async function (req, res) {
     if (userData.newPassword) {
         user.password = userData.newPassword;
         user.passwordConfirm = userData.newPassword;
-    }
-    await user.save();
 
-    if (userData.newPassword) {
-        createAndSendToken(res, 200, user);
+        await user.save();
+        await UserModel.populate(user, {path: 'building'});
+        return createAndSendToken(res, 200, user, user);
     }
 
-    res.status(200).send();
+    const updated = await UserModel.findOneAndUpdate(
+        {_id: user._id},
+        userData,
+        {new: true},
+    );
+
+    await UserModel.populate(updated, {path: 'building'});
+
+    res.status(200).send({
+        data: updated,
+    });
 });
 
 /**
@@ -114,6 +125,8 @@ exports.deleteMe = catchAsync(async function (req, res) {
  */
 exports.getUserInfo = catchAsync(async function (req, res) {
     const {user} = res.locals;
+
+    await UserModel.populate(user, {path: 'building'});
 
     res.status(200).json({
         data: user,
@@ -197,10 +210,10 @@ exports.create = catchAsync(async function (req, res) {
             'patronymic',
         ]),
     };
-    const room = await UserModel.create(newUserData);
+    const user = await UserModel.create(newUserData);
 
     res.status(201).send({
-        data: room,
+        data: user,
     });
 });
 
@@ -222,7 +235,28 @@ exports.toggleFavourite = catchAsync(async function (req, res, next) {
         new: true,
     });
 
+    await UserModel.populate(updated, {path: 'building'});
+
     res.status(200).send({
         data: updated,
+    });
+});
+
+exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
+    if (!req.file) return next();
+    const filename = `${res.locals.user._id}-${Date.now()}.jpeg`;
+    const path = `${process.env.PUBLIC_PATH}/img/users/${filename}`;
+    const pathWithoutPublic = path.replace(process.env.PUBLIC_PATH, '');
+
+    req.file.filename = filename;
+
+    await sharp(req.file.buffer)
+        .resize(500, 500)
+        .toFormat('jpeg')
+        .jpeg({quality: 90})
+        .toFile(path);
+
+    res.status(200).json({
+        data: pathWithoutPublic,
     });
 });

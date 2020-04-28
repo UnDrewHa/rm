@@ -1,7 +1,10 @@
 const express = require('express');
 const UserController = require('../controllers/UserController');
 const AuthController = require('../controllers/AuthController');
+const multer = require('multer');
+const UploadController = require('../controllers/UploadController');
 
+const uploadMiddleware = multer({dest: 'public/img/users'});
 const route = express.Router();
 
 route
@@ -25,6 +28,12 @@ route
         UserController.createPasswordCheckMiddleware('_id'),
         UserController.deleteMe,
     )
-    .get('/info', UserController.getUserInfo);
+    .get('/info', UserController.getUserInfo)
+    .post(
+        '/upload',
+        AuthController.protect,
+        UploadController.uploadSingle,
+        UserController.resizeAndSavePhoto,
+    );
 
 module.exports = route;

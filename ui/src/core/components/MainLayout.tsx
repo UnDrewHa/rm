@@ -15,6 +15,7 @@ import {PermissionService} from 'Modules/permissions/service/PermissionService';
 import {RoomsListPage} from 'Modules/rooms/pages/RoomsListPage';
 import {RoomSchedulePage} from 'Modules/rooms/pages/RoomSchedulePage';
 import {UsersActions} from 'Modules/users/actions/UsersActions';
+import {ProfileAvatar} from 'Modules/users/components/ProfileAvatar';
 import {IUserModel} from 'Modules/users/models';
 import {ProfilePage} from 'Modules/users/pages/ProfilePage';
 import {UsersService} from 'Modules/users/service/UsersService';
@@ -73,6 +74,7 @@ class MainLayout extends React.Component<TProps, IState> {
                         <Menu.Item key="2">nav 2</Menu.Item>
                         <Menu.Item key="3">nav 3</Menu.Item>
                     </Menu>
+                    <ProfileAvatar />
                 </Layout.Header>
                 <Layout.Content className="main-layout__content">
                     <main className="main-layout__inner-content">

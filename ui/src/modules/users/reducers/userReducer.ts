@@ -6,6 +6,7 @@ import {CLEAR_AUTH_DATA, LOGIN, SIGNUP} from 'Modules/auth/actions/actionTypes';
 import {
     GET_USER_INFO,
     TOGGLE_FAVOURITE,
+    UPDATE_ME,
 } from 'Modules/users/actions/actionTypes';
 import {IUserModel} from 'Modules/users/models';
 
@@ -15,7 +16,7 @@ export const getInitialState = (): IAsyncData<IUserModel> => ({
     error: null,
 });
 
-const asyncActions = [LOGIN, SIGNUP, GET_USER_INFO];
+const asyncActions = [LOGIN, SIGNUP, GET_USER_INFO, UPDATE_ME];
 
 export const userReducer = (
     state: IAsyncData<IUserModel> = getInitialState(),
