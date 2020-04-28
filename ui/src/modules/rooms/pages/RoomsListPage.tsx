@@ -73,13 +73,15 @@ const initialValues = {
 };
 
 class RoomsListPage extends React.Component<TProps, IState> {
-    constructor(props) {
+    constructor(props: TProps) {
         super(props);
 
         this.state = {
             building: this.props.defaultBuilding || null,
             formValues: initialValues,
         };
+
+        props.roomsActions.clear();
     }
 
     /**

@@ -26,6 +26,13 @@ export class RoomsService {
     }
 
     /**
+     * Найти избранные переговорные комнаты.
+     */
+    getFavourite() {
+        return axios.get(this.baseUrl + '/favourites');
+    }
+
+    /**
      * Получить детальную информацию.
      *
      * @param {string} id Идентификатор.

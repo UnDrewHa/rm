@@ -117,3 +117,15 @@ exports.update = catchAsync(async function (req, res, next) {
 
     res.status(200).send();
 });
+
+/**
+ * Контроллер удаления пользователя.
+ */
+exports.getFavourites = catchAsync(async function (req, res) {
+    const {user} = res.locals;
+    const rooms = await RoomModel.find({_id: {$in: user.favouriteRooms}});
+
+    res.status(200).json({
+        data: rooms,
+    });
+});

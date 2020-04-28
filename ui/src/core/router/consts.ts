@@ -7,6 +7,10 @@ export const ROUTER = {
                 FULL_PATH: '/rooms/:id',
                 PATH: '/rooms/',
             },
+            FAVOURITES: {
+                FULL_PATH: '/favourites-rooms',
+                PATH: '/favourites-rooms',
+            },
         },
         EVENTS: {
             DETAILS: {

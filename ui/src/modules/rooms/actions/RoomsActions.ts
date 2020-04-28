@@ -2,6 +2,7 @@ import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
 import {IDeleteMultipleItems} from 'Core/models';
 import {
+    CLEAR_ROOMS_DATA,
     CREATE_ROOM,
     DELETE_ROOMS,
     FIND_ROOMS,
@@ -34,6 +35,17 @@ export class RoomsActions {
             this.dispatch,
             FIND_ROOMS,
             this.service.find(data),
+        );
+    }
+
+    /**
+     * Найти избранные переговорные комнаты.
+     */
+    getFavourite() {
+        return dispatchAsync(
+            this.dispatch,
+            FIND_ROOMS,
+            this.service.getFavourite(),
         );
     }
 
@@ -87,5 +99,14 @@ export class RoomsActions {
             DELETE_ROOMS,
             this.service.delete(data),
         );
+    }
+
+    /**
+     * Очистить стор.
+     */
+    clear() {
+        this.dispatch({
+            type: CLEAR_ROOMS_DATA,
+        });
     }
 }

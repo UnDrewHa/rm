@@ -12,6 +12,7 @@ import {UserEventsPage} from 'Modules/events/pages/UserEventsPage';
 import {PermissionActions} from 'Modules/permissions/actions/PermissionActions';
 import {TPermissionsList} from 'Modules/permissions/models';
 import {PermissionService} from 'Modules/permissions/service/PermissionService';
+import {FavouritesRoomsPage} from 'Modules/rooms/pages/FavouritesRoomsPage';
 import {RoomsListPage} from 'Modules/rooms/pages/RoomsListPage';
 import {RoomSchedulePage} from 'Modules/rooms/pages/RoomSchedulePage';
 import {UsersActions} from 'Modules/users/actions/UsersActions';
@@ -79,6 +80,9 @@ class MainLayout extends React.Component<TProps, IState> {
                 <Layout.Content className="main-layout__content">
                     <main className="main-layout__inner-content">
                         <Switch>
+                            <Route path={ROUTER.MAIN.ROOMS.FAVOURITES.FULL_PATH}>
+                                <FavouritesRoomsPage />
+                            </Route>
                             <Route path={ROUTER.MAIN.PROFILE.FULL_PATH}>
                                 <ProfilePage />
                             </Route>
