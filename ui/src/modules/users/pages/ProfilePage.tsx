@@ -99,10 +99,6 @@ class ProfilePage extends React.Component<TProps, IState> {
         });
     };
 
-    handleBack = () => {
-        window.history.back();
-    };
-
     handleBeforeUpload = (file) => {
         const isJpgOrPng =
             file.type === 'image/jpeg' || file.type === 'image/png';
@@ -141,7 +137,6 @@ class ProfilePage extends React.Component<TProps, IState> {
                 <PageHeader
                     className="main-header"
                     title={i18n.t('Users:profile.title')}
-                    onBack={this.handleBack}
                 />
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
                     <Col span={10} className="border-right">

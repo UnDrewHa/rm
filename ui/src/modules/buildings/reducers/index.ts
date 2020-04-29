@@ -13,11 +13,13 @@ export const getInitialState = (): IAsyncData<IBuildingModel[]> => ({
     error: null,
 });
 
+const asyncActions = [GET_BUILDINGS];
+
 export const buildingsReducer = (
     state: IAsyncData<IBuildingModel[]> = getInitialState(),
     action: IReduxAction<IBuildingModel[]>,
 ) => {
-    if (action.originalType === GET_BUILDINGS) {
+    if (asyncActions.includes(action.originalType)) {
         return createAsyncDataReducer<IBuildingModel[], IBuildingModel[]>(
             GET_BUILDINGS,
             state,

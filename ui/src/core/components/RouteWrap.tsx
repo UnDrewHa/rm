@@ -14,7 +14,7 @@ import {UsersService} from 'Modules/users/service/UsersService';
 
 interface IOwnProps {
     role?: ERoles;
-    actionsAccess: string[];
+    actionsAccess?: string[];
     children: any;
     [a: string]: any;
 }
@@ -40,14 +40,21 @@ const RouteWrap = (props: TProps) => {
         children,
         ...rest
     } = props;
-    const RIGHT_ROLE = !role || checkRole(role, userInfo.data);
-    const RIGHT_ACTIONS = checkAccess(actionsAccess, permissions.data);
+    const content = <Route {...rest}>{children}</Route>;
 
-    if (!RIGHT_ROLE || !RIGHT_ACTIONS) {
-        return null;
+    if (
+        !role &&
+        actionsAccess &&
+        checkAccess(actionsAccess, permissions.data)
+    ) {
+        return content;
     }
 
-    return <Route {...rest}>{children}</Route>;
+    if (!actionsAccess && role && checkRole(role, userInfo.data)) {
+        return content;
+    }
+
+    return null;
 };
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({

@@ -37,6 +37,38 @@ export const ROUTER = {
         ADMIN: {
             FULL_PATH: '/admin',
             PATH: '/admin',
+            USERS: {
+                FULL_PATH: '/admin/users',
+                PATH: '/admin/users',
+                EDIT: {
+                    FULL_PATH: '/admin/users/edit',
+                    PATH: '/admin/users/edit',
+                },
+            },
+            ROOMS: {
+                FULL_PATH: '/admin/rooms',
+                PATH: '/admin/rooms',
+                EDIT: {
+                    FULL_PATH: '/admin/rooms/edit',
+                    PATH: '/admin/rooms/edit',
+                },
+            },
+            BUILDINGS: {
+                FULL_PATH: '/admin/buildings',
+                PATH: '/admin/buildings',
+                EDIT: {
+                    FULL_PATH: '/admin/buildings/edit',
+                    PATH: '/admin/buildings/edit',
+                },
+            },
+            EVENTS: {
+                FULL_PATH: '/admin/events',
+                PATH: '/admin/events',
+                EDIT: {
+                    FULL_PATH: '/admin/events/edit',
+                    PATH: '/admin/events/edit',
+                },
+            },
         },
     },
     AUTH: {

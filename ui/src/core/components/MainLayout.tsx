@@ -1,5 +1,6 @@
 import {Layout, Menu} from 'antd';
 import i18n from 'i18next';
+import {AdminLayoutPage} from 'Modules/admin/pages/AdminLayoutPage';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Link, Switch} from 'react-router-dom';
@@ -14,12 +15,13 @@ import {UserEventsPage} from 'Modules/events/pages/UserEventsPage';
 import {PermissionActions} from 'Modules/permissions/actions/PermissionActions';
 import {
     EEventsActions,
+    ERoles,
     ERoomsActions,
     EUsersActions,
 } from 'Modules/permissions/enums';
 import {TPermissionsList} from 'Modules/permissions/models';
 import {PermissionService} from 'Modules/permissions/service/PermissionService';
-import {checkAccess} from 'Modules/permissions/utils';
+import {checkAccess, checkRole} from 'Modules/permissions/utils';
 import {FavouritesRoomsPage} from 'Modules/rooms/pages/FavouritesRoomsPage';
 import {RoomsListPage} from 'Modules/rooms/pages/RoomsListPage';
 import {RoomSchedulePage} from 'Modules/rooms/pages/RoomSchedulePage';
@@ -48,6 +50,11 @@ const menuConfig = [
         key: ROUTER.MAIN.PROFILE.FULL_PATH,
         label: () => i18n.t('menu.profile'),
         accessActions: [EUsersActions.UPDATE_ME],
+    },
+    {
+        key: ROUTER.MAIN.ADMIN.FULL_PATH,
+        label: () => i18n.t('menu.admin'),
+        role: ERoles.ADMIN,
     },
 ];
 
@@ -92,7 +99,7 @@ class MainLayout extends React.Component<TProps, IState> {
     }
 
     render() {
-        const {location, permissions} = this.props;
+        const {location, permissions, userInfo} = this.props;
         if (this.state.isLoading) {
             return <LoadingOverlay />;
         }
@@ -108,10 +115,13 @@ class MainLayout extends React.Component<TProps, IState> {
                     >
                         {menuConfig.map((item) => {
                             if (
-                                !checkAccess(
-                                    item.accessActions,
-                                    permissions.data,
-                                )
+                                (item.accessActions &&
+                                    !checkAccess(
+                                        item.accessActions,
+                                        permissions.data,
+                                    )) ||
+                                (item.role &&
+                                    !checkRole(item.role, userInfo.data))
                             ) {
                                 return null;
                             }
@@ -127,6 +137,12 @@ class MainLayout extends React.Component<TProps, IState> {
                 <Layout.Content className="main-layout__content">
                     <main className="main-layout__inner-content">
                         <Switch>
+                            <RouteWrap
+                                role={ERoles.ADMIN}
+                                path={ROUTER.MAIN.ADMIN.FULL_PATH}
+                            >
+                                <AdminLayoutPage />
+                            </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[ERoomsActions.GET_ALL]}
                                 path={ROUTER.MAIN.ROOMS.FAVOURITES.FULL_PATH}

@@ -5,10 +5,8 @@ import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
 import {
@@ -78,10 +76,6 @@ class UserEventsPage extends React.Component<TProps, IState> {
                 });
             },
         );
-    };
-
-    handleBack = () => {
-        InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
     };
 
     handleTableCheck = (selectedRowKeys: string[]) => {
@@ -155,7 +149,6 @@ class UserEventsPage extends React.Component<TProps, IState> {
                 <PageHeader
                     className="main-header"
                     title={i18n.t('Events:userEvents.title')}
-                    onBack={this.handleBack}
                 />
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
                     <Col span={24}>

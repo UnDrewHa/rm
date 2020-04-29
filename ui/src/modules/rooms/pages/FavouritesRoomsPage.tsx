@@ -30,10 +30,6 @@ class FavouritesRoomsPage extends React.Component<TProps> {
         this.props.roomsActions.getFavourite();
     }
 
-    handleBack = () => {
-        window.history.back();
-    };
-
     render() {
         const {roomsDataIsLoading, roomsList} = this.props;
 
@@ -42,7 +38,6 @@ class FavouritesRoomsPage extends React.Component<TProps> {
                 <PageHeader
                     className="main-header"
                     title={i18n.t('Rooms:favourites.title')}
-                    onBack={this.handleBack}
                 />
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
                     <Col span={24}>

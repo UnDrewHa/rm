@@ -1,4 +1,5 @@
 import i18n from 'i18next';
+import AdminTranslations from 'Modules/admin/translations/ru/AdminTranslations';
 import AuthTranslations from 'Modules/auth/translations/ru/AuthTranslations';
 import BuildingsTranslations from 'Modules/buildings/translations/ru/BuildingsTranslations';
 import EventsTranslations from 'Modules/events/translations/ru/EventsTranslations';
@@ -18,6 +19,7 @@ export function i18nInit(): Promise<Function> {
                 ...RoomsTranslations,
                 ...EventsTranslations,
                 ...UsersTranslations,
+                ...AdminTranslations,
             },
         },
         defaultNS: 'Common',
