@@ -9,8 +9,15 @@ const {AppError} = require('../utils/errorUtils');
  * Контроллер регистрации пользователя.
  */
 exports.signup = catchAsync(async function (req, res) {
-    //TODO: Убрать прямую передачу body в методы create. Заменить на getFieldsFromReqBody
-    const user = await UserModel.create(req.body.data);
+    const user = await UserModel.create(
+        getFieldsFromReqBody(req.body.data, [
+            'login',
+            'password',
+            'passwordConfirm',
+            'email',
+            'building',
+        ]),
+    );
 
     createAndSendToken(res, 201, user, user);
 });

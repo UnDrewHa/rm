@@ -1,7 +1,7 @@
-import {createStore, applyMiddleware} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
+import {createLogger} from 'redux-logger';
 import thunk from 'redux-thunk';
 import {rootReducer} from '../reducer';
-import {createLogger} from 'redux-logger';
 
 //TODO: Настроить в зависимости от process.env.
 export const store = createStore(

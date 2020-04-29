@@ -6,6 +6,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import {
+    message,
     Avatar,
     Button,
     Col,
@@ -20,7 +21,6 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
@@ -107,17 +107,11 @@ class ProfilePage extends React.Component<TProps, IState> {
         const isJpgOrPng =
             file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
-            InterfaceAction.notify(
-                'Можно загрузить фото следующих форматов: JPG, PNG',
-                'error',
-            );
+            message.error('Можно загрузить фото следующих форматов: JPG, PNG');
         }
         const isLt2M = file.size / 1024 / 1024 < 1;
         if (!isLt2M) {
-            InterfaceAction.notify(
-                'Размер загружаемого файла не должен превышать 1Мб',
-                'error',
-            );
+            message.error('Размер загружаемого файла не должен превышать 1Мб');
         }
 
         return isJpgOrPng && isLt2M;
@@ -130,14 +124,11 @@ class ProfilePage extends React.Component<TProps, IState> {
                     photo: info.file.response.data,
                 },
                 () => {
-                    InterfaceAction.notify(
-                        i18n.t('Users:upload.success'),
-                        'success',
-                    );
+                    message.success(i18n.t('Users:upload.success'));
                 },
             );
         } else if (info.file.status === 'error') {
-            InterfaceAction.notify(i18n.t('Users:upload.error'), 'error');
+            message.error(i18n.t('Users:upload.error'));
         }
     };
 

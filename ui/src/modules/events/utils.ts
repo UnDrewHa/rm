@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 import {IEventModel} from 'Modules/events/models';
 
 export const calculateTimeString = (event: IEventModel) => {
@@ -7,3 +7,6 @@ export const calculateTimeString = (event: IEventModel) => {
 
     return `${from} - ${to}`;
 };
+
+export const disabledDate = (current: Moment) =>
+    current && current < moment().subtract(1, 'day');

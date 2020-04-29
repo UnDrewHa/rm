@@ -1,3 +1,4 @@
+import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
@@ -64,10 +65,7 @@ export class EventsActions {
             this.service.create(data),
         )
             .then((res) => {
-                InterfaceAction.notify(
-                    i18n.t('Events:edit.createSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Events:edit.createSuccess'));
                 InterfaceAction.redirect({
                     to: ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH,
                     params: {
@@ -76,9 +74,8 @@ export class EventsActions {
                 });
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message || i18n.t('Events:edit.createError'),
-                    'error',
                 );
             });
     };
@@ -95,10 +92,7 @@ export class EventsActions {
             this.service.update(data),
         )
             .then((res) => {
-                InterfaceAction.notify(
-                    i18n.t('Events:edit.updateSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Events:edit.updateSuccess'));
                 InterfaceAction.redirect({
                     to: ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH,
                     params: {
@@ -107,9 +101,8 @@ export class EventsActions {
                 });
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message || i18n.t('Events:edit.updateError'),
-                    'error',
                 );
             });
     };
@@ -126,16 +119,12 @@ export class EventsActions {
             this.service.delete({data: {ids}}),
         )
             .then((res) => {
-                InterfaceAction.notify(
-                    i18n.t('Events:cancel.cancelSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Events:cancel.cancelSuccess'));
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message ||
                         i18n.t('Events:cancel.cancelError'),
-                    'error',
                 );
             });
     };

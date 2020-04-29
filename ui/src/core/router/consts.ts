@@ -34,6 +34,10 @@ export const ROUTER = {
             FULL_PATH: '/profile',
             PATH: '/profile',
         },
+        ADMIN: {
+            FULL_PATH: '/admin',
+            PATH: '/admin',
+        },
     },
     AUTH: {
         FULL_PATH: '/auth',

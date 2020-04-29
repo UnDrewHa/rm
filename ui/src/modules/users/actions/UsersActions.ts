@@ -1,7 +1,7 @@
+import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
 import {IDeleteMultipleItems} from 'Core/models';
 import {ISignupData} from 'Modules/auth/models';
 import {
@@ -109,16 +109,12 @@ export class UsersActions {
             this.service.updateMe(data),
         )
             .then((_) => {
-                InterfaceAction.notify(
-                    i18n.t('Users:profile.updateSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Users:profile.updateSuccess'));
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message ||
                         i18n.t('Users:profile.updateError'),
-                    'error',
                 );
             });
     }

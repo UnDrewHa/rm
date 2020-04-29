@@ -22,7 +22,6 @@ const RoomSchema = new Schema({
         required: [true, getFieldErrorMessage('этаж')],
         validate: {
             validator: function (field) {
-                //TODO: Добавить валидацию на основе данных здания.
                 return field > 0;
             },
             message: 'Введите существующий номер этажа',

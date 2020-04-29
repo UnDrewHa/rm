@@ -13,6 +13,7 @@ import {
     TimePicker,
 } from 'antd';
 import i18n from 'i18next';
+import {disabledDate} from 'Modules/events/utils';
 import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -229,7 +230,10 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                     name="date"
                                     label={i18n.t('Rooms:common.date')}
                                 >
-                                    <DatePicker allowClear={false} />
+                                    <DatePicker
+                                        allowClear={false}
+                                        disabledDate={disabledDate}
+                                    />
                                 </Form.Item>
                                 <Form.Item
                                     name="from"

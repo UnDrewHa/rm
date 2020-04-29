@@ -11,6 +11,7 @@ import {
     TimePicker,
 } from 'antd';
 import i18n from 'i18next';
+import {disabledDate} from 'Modules/events/utils';
 import moment, {Moment} from 'moment';
 import queryParser from 'query-string';
 import React from 'react';
@@ -89,6 +90,26 @@ class EventEditPage extends React.Component<TProps, IState> {
         });
     }
 
+    handleDateChange = (date: Moment) => {
+        this.setState(
+            {
+                date,
+            },
+            () => {
+                const {location, eventsActions} = this.props;
+                const roomId = queryParser.parse(location.search).room;
+
+                eventsActions.find({
+                    filter: {
+                        room: roomId as string,
+                        date: date.format(DEFAULT_DATE_FORMAT),
+                        populateOwner: true,
+                    },
+                });
+            },
+        );
+    };
+
     handleFinish = (values) => {
         const {date, from, to, title, description, members} = values;
         const {id, owner, room} = this.state;
@@ -147,6 +168,8 @@ class EventEditPage extends React.Component<TProps, IState> {
                                 <DatePicker
                                     allowClear={false}
                                     className="input40"
+                                    onChange={this.handleDateChange}
+                                    disabledDate={disabledDate}
                                 />
                             </Form.Item>
                             <Form.Item

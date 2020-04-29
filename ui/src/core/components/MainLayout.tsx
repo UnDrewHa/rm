@@ -94,7 +94,7 @@ class MainLayout extends React.Component<TProps, IState> {
     render() {
         const {location, permissions} = this.props;
         if (this.state.isLoading) {
-            return <LoadingOverlay open />;
+            return <LoadingOverlay />;
         }
 
         return (

@@ -1,3 +1,4 @@
+import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
@@ -37,9 +38,8 @@ export class AuthActions {
                 InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message || i18n.t('Auth:login.loginError'),
-                    'error',
                 );
             });
     };
@@ -52,16 +52,12 @@ export class AuthActions {
     signUp = (data: ISignupData) => {
         dispatchAsync(this.dispatch, SIGNUP, this.service.signup(data))
             .then((_) => {
-                InterfaceAction.notify(
-                    i18n.t('Auth:signup.signupSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Auth:signup.signupSuccess'));
                 InterfaceAction.redirect(ROUTER.AUTH.LOGIN.FULL_PATH);
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message || i18n.t('Auth:signup.signupError'),
-                    'error',
                 );
             });
     };
@@ -74,15 +70,11 @@ export class AuthActions {
     forgot = (data: IForgotPasswordData) => {
         dispatchAsync(this.dispatch, RESET_PASSWORD, this.service.forgot(data))
             .then((_) => {
-                InterfaceAction.notify(
-                    i18n.t('Auth:forgot.forgotSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Auth:forgot.forgotSuccess'));
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message || i18n.t('Auth:forgot.forgotError'),
-                    'error',
                 );
             });
     };
@@ -100,16 +92,12 @@ export class AuthActions {
             this.service.reset(token, data),
         )
             .then((_) => {
-                InterfaceAction.notify(
-                    i18n.t('Auth:reset.resetSuccess'),
-                    'success',
-                );
+                message.success(i18n.t('Auth:reset.resetSuccess'));
                 InterfaceAction.redirect(ROUTER.AUTH.LOGIN.FULL_PATH);
             })
             .catch((error) => {
-                InterfaceAction.notify(
+                message.error(
                     error?.error?.message || i18n.t('Auth:reset.resetError'),
-                    'error',
                 );
             });
     };
