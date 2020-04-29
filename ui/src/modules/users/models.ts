@@ -1,6 +1,6 @@
 import {IAsyncData} from 'Core/reducer/model';
-import {ERoles} from 'Modules/auth/enums';
 import {IBuildingModel} from 'Modules/buildings/models';
+import {ERoles} from 'Modules/permissions/enums';
 
 /**
  * Данные для изменения пароля.

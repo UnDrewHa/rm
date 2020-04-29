@@ -25,5 +25,11 @@ export default {
         forms: {
             requiredText: 'Поле обязательно для заполнения',
         },
+        menu: {
+            list: 'Список комнат',
+            ownEvents: 'Мои мероприятия',
+            favourites: 'Избранные комнаты',
+            profile: 'Профиль',
+        },
     },
 };

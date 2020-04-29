@@ -23,6 +23,9 @@ module.exports = {
         'users:create',
         'users:update',
         'users:delete',
+        'users:updateMe',
+        'users:changePassword',
+        'users:deleteMe',
 
         'rooms:create',
         'rooms:update',
