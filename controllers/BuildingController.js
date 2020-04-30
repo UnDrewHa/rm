@@ -32,11 +32,13 @@ exports.getAll = catchAsync(async function (req, res) {
 exports.delete = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
 
-    await BuildingModel.deleteMany({
+    const docs = await BuildingModel.deleteMany({
         _id: {$in: ids},
     });
 
-    res.status(200).send();
+    res.status(200).send({
+        data: ids,
+    });
 });
 
 /**
@@ -58,4 +60,20 @@ exports.update = catchAsync(async function (req, res, next) {
     );
 
     res.status(200).send();
+});
+
+/**
+ * Контроллер получения детальной информации документа.
+ */
+exports.getDetails = catchAsync(async function (req, res, next) {
+    const {id} = req.params;
+
+    const data = await BuildingModel.findById(id);
+    if (!data) {
+        return next(new AppError('Документ не найден', 404));
+    }
+
+    res.status(200).send({
+        data,
+    });
 });

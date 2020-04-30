@@ -7,11 +7,12 @@ const AdminRoute = require('./AdminRoute');
 const UserRoute = require('./UserRoute');
 const RoomRoute = require('./RoomRoute');
 const EventRoute = require('./EventRoute');
+const BuildingRoute = require('./BuildingRoute');
 
 const router = express.Router();
 
 router.use('/auth', AuthRoute);
-router.get('/buildings', BuildingController.getAll);
+router.use('/buildings', BuildingRoute);
 router.use('/users', AuthController.protect, UserRoute);
 router.use('/rooms', AuthController.protect, RoomRoute);
 router.use('/events', AuthController.protect, EventRoute);

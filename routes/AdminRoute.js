@@ -1,5 +1,4 @@
 const express = require('express');
-const BuildingController = require('../controllers/BuildingController');
 const RoomController = require('../controllers/RoomController');
 const UserController = require('../controllers/UserController');
 const EventController = require('../controllers/EventController');
@@ -22,13 +21,6 @@ router
 router
     .get('/events/:id', EventController.getDetails)
     .post('/events/find', EventController.getAll);
-
-router
-    .route('/buildings')
-    .get(BuildingController.getAll)
-    .post(BuildingController.create)
-    .patch(BuildingController.update)
-    .delete(BuildingController.delete);
 
 router
     .route('/rooms')

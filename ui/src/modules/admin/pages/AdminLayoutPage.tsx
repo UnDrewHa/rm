@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import {Col, Menu, PageHeader, Row} from 'antd';
 import i18n from 'i18next';
+import {BuildingEdit} from 'Modules/admin/pages/buildings/BuildingEdit';
 import React from 'react';
 import {withRouter, Link, Switch} from 'react-router-dom';
 import {RouteWrap} from 'Core/components/RouteWrap';
@@ -196,7 +197,7 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                                     ROUTER.MAIN.ADMIN.BUILDINGS.EDIT.FULL_PATH
                                 }
                             >
-                                <AdminMainPage />
+                                <BuildingEdit />
                             </RouteWrap>
                             <RouteWrap
                                 role={ERoles.ADMIN}

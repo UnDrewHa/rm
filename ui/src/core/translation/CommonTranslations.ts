@@ -21,9 +21,12 @@ export default {
             find: 'Найти',
             save: 'Сохранить',
             cancel: 'Отменить',
+            search: 'Найти',
+            reset: 'Сбросить',
         },
         forms: {
             requiredText: 'Поле обязательно для заполнения',
+            searchPlaceholder: 'Введите текст для поиска',
         },
         menu: {
             list: 'Список комнат',

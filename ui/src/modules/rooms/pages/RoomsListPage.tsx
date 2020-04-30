@@ -347,7 +347,7 @@ const mapStateToProps = (state: TAppStore): IStateProps => {
         roomsList: state.rooms.list,
         defaultBuilding: state.user.data.building,
         filterDataIsLoading:
-            state.buildings.status === EStatusCodes.PENDING ||
+            state.buildings.list.status === EStatusCodes.PENDING ||
             state.user.status === EStatusCodes.PENDING,
         roomsDataIsLoading: state.rooms.list.status === EStatusCodes.PENDING,
     };

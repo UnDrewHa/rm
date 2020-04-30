@@ -1,6 +1,9 @@
-import {Table} from 'antd';
-import {isEmpty} from 'lodash-es';
+import {SearchOutlined} from '@ant-design/icons';
+import {Button, Input, Space, Table} from 'antd';
+import i18n from 'i18next';
+import {get, isEmpty} from 'lodash-es';
 import React from 'react';
+import Highlighter from 'react-highlight-words';
 import {connect} from 'react-redux';
 import {DeleteButton} from 'Core/components/DeleteButton';
 import {EStatusCodes} from 'Core/reducer/enums';
@@ -9,6 +12,8 @@ import {TAppStore} from 'Core/store/model';
 
 interface IState {
     selectedRowKeys: string[];
+    searchText: string;
+    searchedColumn: string;
 }
 
 interface IStateProps {
@@ -20,7 +25,7 @@ interface IDispatchProps {
 }
 
 interface IOwnProps {
-    getConfig: (actions) => any[];
+    getConfig: (actions, getColumnSearchProps) => any[];
     storePath: string;
     action: any;
     service: any;
@@ -33,10 +38,98 @@ class BlankList extends React.Component<TProps, IState> {
         super(props);
 
         props.actions.getAll();
+
         this.state = {
             selectedRowKeys: [],
+            searchText: '',
+            searchedColumn: '',
         };
     }
+
+    searchInput = null;
+
+    getColumnSearchProps = (dataIndex) => ({
+        filterDropdown: ({
+            setSelectedKeys,
+            selectedKeys,
+            confirm,
+            clearFilters,
+        }) => (
+            <div style={{padding: 8}}>
+                <Input
+                    ref={(node) => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={i18n.t('forms.searchPlaceholder')}
+                    value={selectedKeys[0]}
+                    onChange={(e) =>
+                        setSelectedKeys(e.target.value ? [e.target.value] : [])
+                    }
+                    onPressEnter={() =>
+                        this.handleSearch(selectedKeys, confirm, dataIndex)
+                    }
+                    style={{width: 188, marginBottom: 8, display: 'block'}}
+                />
+                <Space>
+                    <Button
+                        type="primary"
+                        onClick={() =>
+                            this.handleSearch(selectedKeys, confirm, dataIndex)
+                        }
+                        icon={<SearchOutlined />}
+                        size="small"
+                        style={{width: 90}}
+                    >
+                        {i18n.t('actions.search')}
+                    </Button>
+                    <Button
+                        onClick={() => this.handleReset(clearFilters)}
+                        size="small"
+                        style={{width: 90}}
+                    >
+                        {i18n.t('actions.reset')}
+                    </Button>
+                </Space>
+            </div>
+        ),
+        filterIcon: (filtered) => (
+            <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}} />
+        ),
+        onFilter: (value, record) =>
+            record[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+        onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: (text) =>
+            this.state.searchedColumn === dataIndex ? (
+                <Highlighter
+                    highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
+                    searchWords={[this.state.searchText]}
+                    autoEscape
+                    textToHighlight={text.toString()}
+                />
+            ) : (
+                text
+            ),
+    });
+
+    handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        this.setState({
+            searchText: selectedKeys[0],
+            searchedColumn: dataIndex,
+        });
+    };
+
+    handleReset = (clearFilters) => {
+        clearFilters();
+        this.setState({searchText: ''});
+    };
 
     renderFooter = () => {
         const {selectedRowKeys} = this.state;
@@ -77,9 +170,13 @@ class BlankList extends React.Component<TProps, IState> {
                 rowSelection={{
                     onChange: this.handleTableCheck,
                 }}
-                columns={getConfig(actions)}
+                columns={getConfig(actions, this.getColumnSearchProps)}
                 dataSource={data}
-                pagination={false}
+                pagination={{
+                    hideOnSinglePage: true,
+                    pageSize: 25,
+                    pageSizeOptions: ['25', '50', '100', '200'],
+                }}
                 rowKey="_id"
                 loading={isLoading}
                 footer={this.renderFooter}
@@ -94,7 +191,7 @@ const mapStateToProps = (
     ownProps: IOwnProps,
 ): IStateProps => {
     return {
-        items: state[ownProps.storePath],
+        items: get(state, ownProps.storePath, []),
     };
 };
 

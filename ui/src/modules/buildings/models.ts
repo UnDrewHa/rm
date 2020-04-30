@@ -13,5 +13,8 @@ export interface IBuildingModel {
 export interface IBuildingCreateModel extends Omit<IBuildingModel, '_id'> {}
 
 export interface IMappedBuildingsStore {
-    buildings: IAsyncData<IBuildingModel[]>;
+    buildings: {
+        list: IAsyncData<IBuildingModel[]>;
+        details: IAsyncData<IBuildingModel>;
+    }
 }

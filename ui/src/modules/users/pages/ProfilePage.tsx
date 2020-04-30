@@ -21,13 +21,13 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import {FormSkeleton} from 'Core/components/FormSkeleton';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {ProfileFormSkeleton} from 'Modules/users/components/ProfileFormSkeleton';
 import {IUserModel} from 'Modules/users/models';
 import {UsersService} from 'Modules/users/service/UsersService';
 
@@ -141,7 +141,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
                     <Col span={10} className="border-right">
                         {dataIsLoading ? (
-                            <ProfileFormSkeleton />
+                            <FormSkeleton fields={10} />
                         ) : (
                             <Form
                                 className="profile-form"

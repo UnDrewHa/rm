@@ -1,5 +1,5 @@
 import {axios} from 'Core/axios';
-import {IDeleteMultipleItems} from 'Core/models';
+import {IDataResponse, IDeleteMultipleItems} from 'Core/models';
 import {IBuildingCreateModel, IBuildingModel} from 'Modules/buildings/models';
 
 /**
@@ -16,6 +16,17 @@ export class BuildingsService {
      * Получить список всех зданий.
      */
     getAll = (): Promise<any> => axios.get(this.baseUrl);
+
+    /**
+     * Получить детальную информацию.
+     *
+     * @param {string} id Идентификатор.
+     */
+    getById(id: string) {
+        return axios.get<IDataResponse<IBuildingModel>>(
+            this.baseUrl + '/' + id,
+        );
+    }
 
     /**
      * Создать здание.

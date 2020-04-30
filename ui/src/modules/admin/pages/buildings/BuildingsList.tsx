@@ -7,16 +7,18 @@ import {BlankList} from 'Modules/admin/pages/BlankList';
 import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
 import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
 
-const getColumnsConfig = (actions) => [
+const getColumnsConfig = (actions, getColumnSearchProps) => [
     {
         title: () => i18n.t('table.header.name'),
         dataIndex: 'name',
         key: 'name',
+        ...getColumnSearchProps('name'),
     },
     {
         title: () => i18n.t('table.header.address'),
         dataIndex: 'address',
         key: 'address',
+        ...getColumnSearchProps('address'),
     },
     {
         title: () => i18n.t('table.header.floors'),
@@ -41,7 +43,7 @@ export const BuildingsList = () => {
     return (
         <BlankList
             getConfig={getColumnsConfig}
-            storePath="buildings"
+            storePath="buildings.list"
             action={BuildingsActions}
             service={BuildingsService}
         />

@@ -7,7 +7,7 @@ export default {
         menu: {
             common: {
                 list: 'Список',
-                create: 'Создать',
+                create: 'Создать/Изменить',
             },
             main: {
                 title: 'Главная',
