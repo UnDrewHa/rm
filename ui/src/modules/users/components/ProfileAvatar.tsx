@@ -54,7 +54,7 @@ const ProfileAvatar = ({userInfo}: TProps) => {
 };
 
 const mapState = (state: TAppStore): IStateProps => ({
-    userInfo: state.user,
+    userInfo: state.users.profile,
 });
 
 const mapDispatch = (dispatch: Dispatch): IDispatchProps => ({

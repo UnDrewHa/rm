@@ -28,6 +28,13 @@ export class UsersService {
     }
 
     /**
+     * Получить данные пользователя.
+     */
+    getById(id: string) {
+        return axios.get(this.baseUrl + '/' + id);
+    }
+
+    /**
      * Создать пользователя.
      *
      * @param {ISignupData} data Данные для создания.

@@ -8,80 +8,86 @@ const {LIST_OF_ROLES, USER_ROLE} = require('../../rbac/roles');
 
 const {Schema} = mongoose;
 
-const UserSchema = new Schema({
-    login: {
-        type: String,
-        required: [true, getFieldErrorMessage('логин')],
-        unique: true,
-        minlength: 2,
-        maxlength: 20,
-    },
-    password: {
-        type: String,
-        required: [true, getFieldErrorMessage('пароль')],
-        minlength: 8,
-        select: false,
-    },
-    passwordChangedAt: Date,
-    passwordConfirm: {
-        type: String,
-        required: [true, getFieldErrorMessage('повторный пароль')],
-        validate: {
-            validator: function (field) {
-                return field === this.password;
-            },
-            message: 'Введенные пароли не совпадают',
+const UserSchema = new Schema(
+    {
+        login: {
+            type: String,
+            required: [true, getFieldErrorMessage('логин')],
+            unique: true,
+            minlength: 2,
+            maxlength: 20,
         },
-    },
-    email: {
-        type: String,
-        required: [true, getFieldErrorMessage('e-mail')],
-        unique: true,
-        lowercase: true,
-        validate: [
-            validator.isEmail,
-            'Введите корректный адрес электронной почты',
+        password: {
+            type: String,
+            required: [true, getFieldErrorMessage('пароль')],
+            minlength: 8,
+            select: false,
+        },
+        passwordChangedAt: Date,
+        passwordConfirm: {
+            type: String,
+            required: [true, getFieldErrorMessage('повторный пароль')],
+            validate: {
+                validator: function (field) {
+                    return field === this.password;
+                },
+                message: 'Введенные пароли не совпадают',
+            },
+        },
+        email: {
+            type: String,
+            required: [true, getFieldErrorMessage('e-mail')],
+            unique: true,
+            lowercase: true,
+            validate: [
+                validator.isEmail,
+                'Введите корректный адрес электронной почты',
+            ],
+        },
+        phone: {
+            type: String,
+            validate: {
+                validator: function (field) {
+                    return validator.isMobilePhone(
+                        field,
+                        validator.isMobilePhoneLocales['ru-RU'],
+                    );
+                },
+                message: 'Введите корректный номер телефона',
+            },
+        },
+        role: {
+            type: String,
+            enum: LIST_OF_ROLES,
+            default: USER_ROLE,
+        },
+        building: {
+            type: Schema.ObjectId,
+            ref: 'Building',
+            required: [true, getFieldErrorMessage('здание')],
+        },
+        favouriteRooms: [
+            {
+                type: mongoose.Schema.ObjectId,
+                ref: 'Room',
+            },
         ],
-    },
-    phone: {
-        type: String,
-        validate: {
-            validator: function (field) {
-                return validator.isMobilePhone(
-                    field,
-                    validator.isMobilePhoneLocales['ru-RU'],
-                );
-            },
-            message: 'Введите корректный номер телефона',
+        photo: String,
+        name: String,
+        surname: String,
+        patronymic: String,
+        passwordResetToken: String,
+        passwordResetExpires: Date,
+        active: {
+            type: Boolean,
+            default: true,
         },
     },
-    role: {
-        type: String,
-        enum: LIST_OF_ROLES,
-        default: USER_ROLE,
+    {
+        toObject: {virtuals: true},
+        toJSON: {virtuals: true},
     },
-    building: {
-        type: Schema.ObjectId,
-        ref: 'Building',
-        required: [true, getFieldErrorMessage('здание')],
-    },
-    favouriteRooms: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Room',
-        },
-    ],
-    photo: String,
-    name: String,
-    surname: String,
-    patronymic: String,
-    passwordResetToken: String,
-    passwordResetExpires: Date,
-    active: {
-        type: Boolean,
-        default: true,
-    },
-});
+);
 
 UserSchema.virtual('fullName').get(function () {
     let fullName = `${this.name} ${this.surname}`;
@@ -90,7 +96,7 @@ UserSchema.virtual('fullName').get(function () {
         fullName += ` ${this.patronymic}`;
     }
 
-    return fullName.trim();
+    return fullName.replace(/undefined/gi, '').trim();
 });
 
 UserSchema.pre('save', async function (next) {

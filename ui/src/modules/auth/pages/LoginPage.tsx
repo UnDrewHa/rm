@@ -114,7 +114,7 @@ class LoginPage extends React.Component<TProps> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    userData: state.user,
+    userData: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

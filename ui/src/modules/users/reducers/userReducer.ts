@@ -1,13 +1,8 @@
-import {SUCCESS} from 'Core/actions/actionTypes';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'Core/reducer/model';
 import {createAsyncDataReducer} from 'Core/reducer/utils';
-import {CLEAR_AUTH_DATA, LOGIN, SIGNUP} from 'Modules/auth/actions/actionTypes';
-import {
-    GET_USER_INFO,
-    TOGGLE_FAVOURITE,
-    UPDATE_ME,
-} from 'Modules/users/actions/actionTypes';
+import {CLEAR_AUTH_DATA} from 'Modules/auth/actions/actionTypes';
+import {GET_USER_BY_ID} from 'Modules/users/actions/actionTypes';
 import {IUserModel} from 'Modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel> => ({
@@ -16,7 +11,7 @@ export const getInitialState = (): IAsyncData<IUserModel> => ({
     error: null,
 });
 
-const asyncActions = [LOGIN, SIGNUP, GET_USER_INFO, UPDATE_ME];
+const asyncActions = [GET_USER_BY_ID];
 
 export const userReducer = (
     state: IAsyncData<IUserModel> = getInitialState(),
@@ -27,13 +22,6 @@ export const userReducer = (
             state,
             action,
         );
-    }
-
-    if (action.type === TOGGLE_FAVOURITE + SUCCESS) {
-        return {
-            ...state,
-            data: action.payload.data,
-        };
     }
 
     if (action.type === CLEAR_AUTH_DATA) {

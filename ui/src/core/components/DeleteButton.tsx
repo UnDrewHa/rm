@@ -14,7 +14,7 @@ interface IOwnProps {
 type TProps = IOwnProps;
 
 export const DeleteButton = (props: TProps) => {
-    const {actions, ids, placement = 'top', afterDelete, layout} = props;
+    const {actions, ids, placement = 'left', afterDelete, layout} = props;
     const handleDelete = (e) => {
         e.preventDefault();
         return actions.delete(ids).then(afterDelete);

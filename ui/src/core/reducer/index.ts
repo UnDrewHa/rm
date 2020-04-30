@@ -5,13 +5,13 @@ import {buildingsRootReducer} from 'Modules/buildings/reducers';
 import {eventsRootReducer} from 'Modules/events/reducers';
 import {permissionsReducer} from 'Modules/permissions/reducers';
 import {roomsRootReducer} from 'Modules/rooms/reducers';
-import {userReducer} from 'Modules/users/reducers/userReducer';
+import {usersRootReducer} from 'Modules/users/reducers';
 
 /**
  * Корневой редюсер приложения.
  */
 export const rootReducer = combineReducers<TAppStore>({
-    user: userReducer,
+    users: usersRootReducer,
     buildings: buildingsRootReducer,
     resetPassword: resetPasswordReducer,
     permissions: permissionsReducer,

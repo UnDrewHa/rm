@@ -13,7 +13,6 @@ import {
     TimePicker,
 } from 'antd';
 import i18n from 'i18next';
-import {disabledDate} from 'Modules/events/utils';
 import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -25,6 +24,7 @@ import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
+import {disabledDate} from 'Modules/events/utils';
 import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
 import {RoomsList} from 'Modules/rooms/components/RoomsList';
 import {IRoomModel} from 'Modules/rooms/models';
@@ -345,10 +345,10 @@ class RoomsListPage extends React.Component<TProps, IState> {
 const mapStateToProps = (state: TAppStore): IStateProps => {
     return {
         roomsList: state.rooms.list,
-        defaultBuilding: state.user.data.building,
+        defaultBuilding: state.users.profile.data.building,
         filterDataIsLoading:
             state.buildings.list.status === EStatusCodes.PENDING ||
-            state.user.status === EStatusCodes.PENDING,
+            state.users.profile.status === EStatusCodes.PENDING,
         roomsDataIsLoading: state.rooms.list.status === EStatusCodes.PENDING,
     };
 };

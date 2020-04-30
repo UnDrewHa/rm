@@ -345,8 +345,8 @@ class ProfilePage extends React.Component<TProps, IState> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    userInfo: state.user,
-    dataIsLoading: state.user.status === EStatusCodes.PENDING,
+    userInfo: state.users.profile,
+    dataIsLoading: state.users.profile.status === EStatusCodes.PENDING,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

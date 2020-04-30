@@ -188,7 +188,7 @@ class UserEventsPage extends React.Component<TProps, IState> {
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     events: state.events.list,
-    userInfo: state.user,
+    userInfo: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

@@ -6,12 +6,14 @@ import {
 } from '@ant-design/icons';
 import {Col, Menu, PageHeader, Row} from 'antd';
 import i18n from 'i18next';
-import {BuildingEdit} from 'Modules/admin/pages/buildings/BuildingEdit';
 import React from 'react';
 import {withRouter, Link, Switch} from 'react-router-dom';
 import {RouteWrap} from 'Core/components/RouteWrap';
 import {ROUTER} from 'Core/router/consts';
 import {BuildingsList} from 'Modules/admin/pages/buildings/BuildingsList';
+import {BuildingEdit} from 'Modules/admin/pages/buildings/BuildingEdit';
+import {UsersList} from 'Modules/admin/pages/users/UsersList';
+import {UserEdit} from 'Modules/admin/pages/users/UserEdit';
 import {AdminMainPage} from 'Modules/admin/pages/AdminMainPage';
 import {ERoles} from 'Modules/permissions/enums';
 
@@ -169,13 +171,13 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                                 role={ERoles.ADMIN}
                                 path={ROUTER.MAIN.ADMIN.USERS.EDIT.FULL_PATH}
                             >
-                                <AdminMainPage />
+                                <UserEdit />
                             </RouteWrap>
                             <RouteWrap
                                 role={ERoles.ADMIN}
                                 path={ROUTER.MAIN.ADMIN.USERS.FULL_PATH}
                             >
-                                <AdminMainPage />
+                                <UsersList />
                             </RouteWrap>
 
                             <RouteWrap

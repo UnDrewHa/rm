@@ -1,10 +1,8 @@
 const express = require('express');
 const UserController = require('../controllers/UserController');
 const AuthController = require('../controllers/AuthController');
-const multer = require('multer');
 const UploadController = require('../controllers/UploadController');
 
-const uploadMiddleware = multer({dest: 'public/img/users'});
 const route = express.Router();
 
 route
@@ -18,11 +16,7 @@ route
         UserController.createPasswordCheckMiddleware('_id'),
         UserController.updateMe,
     )
-    .patch(
-        '/toggle-favourite',
-        AuthController.protect,
-        UserController.toggleFavourite,
-    )
+    .patch('/toggle-favourite', UserController.toggleFavourite)
     .delete(
         '/delete-me',
         UserController.createPasswordCheckMiddleware('_id'),
@@ -31,9 +25,21 @@ route
     .get('/info', UserController.getUserInfo)
     .post(
         '/upload',
-        AuthController.protect,
         UploadController.uploadSingle,
         UserController.resizeAndSavePhoto,
     );
+
+route
+    .route('/')
+    .get(AuthController.restrictedTo(['admin']), UserController.getAll)
+    .post(AuthController.restrictedTo(['admin']), UserController.create)
+    .patch(AuthController.restrictedTo(['admin']), UserController.update)
+    .delete(AuthController.restrictedTo(['admin']), UserController.delete);
+
+route.get(
+    '/:id',
+    AuthController.restrictedTo(['admin']),
+    UserController.getById,
+);
 
 module.exports = route;

@@ -28,5 +28,19 @@ export default {
             button: 'Загрузить новое фото',
             saveButton: 'Сохранить фото',
         },
+        edit: {
+            loginPlaceholder: 'Имя пользователя',
+            emailPlaceholder: 'Эл. почта',
+            rolePlaceholder: 'Роль',
+            activePlaceholder: 'Активный аккаунт',
+            createSuccess: 'Пользователь успешно создан',
+            createError: 'Ошибка при создании пользователя',
+            updateSuccess: 'Данные пользователя успешно обновлены',
+            updateError: 'Ошибка при обновлении данных пользователя',
+        },
+        delete: {
+            deleteSuccess: 'Выбранные записи успешно удалены',
+            deleteError: 'Ошибка при удалении выбранных записей',
+        },
     },
 };

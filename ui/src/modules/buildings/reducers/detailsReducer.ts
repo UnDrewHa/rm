@@ -4,7 +4,6 @@ import {createAsyncDataReducer} from 'Core/reducer/utils';
 import {
     CLEAR_BUILDINGS_DATA,
     GET_BUILDING_BY_ID,
-    GET_BUILDINGS,
 } from 'Modules/buildings/actions/actionTypes';
 import {IBuildingModel} from 'Modules/buildings/models';
 

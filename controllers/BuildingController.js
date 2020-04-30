@@ -32,7 +32,7 @@ exports.getAll = catchAsync(async function (req, res) {
 exports.delete = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
 
-    const docs = await BuildingModel.deleteMany({
+    await BuildingModel.deleteMany({
         _id: {$in: ids},
     });
 

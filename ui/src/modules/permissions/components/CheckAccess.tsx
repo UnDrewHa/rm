@@ -42,7 +42,7 @@ const CheckAccess = (props: TProps) => {
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     permissions: state.permissions,
-    userInfo: state.user,
+    userInfo: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

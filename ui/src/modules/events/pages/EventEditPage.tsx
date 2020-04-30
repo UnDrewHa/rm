@@ -11,7 +11,6 @@ import {
     TimePicker,
 } from 'antd';
 import i18n from 'i18next';
-import {disabledDate} from 'Modules/events/utils';
 import moment, {Moment} from 'moment';
 import queryParser from 'query-string';
 import React from 'react';
@@ -27,6 +26,7 @@ import {EventsActions} from 'Modules/events/actions/EventsActions';
 import {columnsWithoutDescription} from 'Modules/events/components/utils';
 import {IEventModel} from 'Modules/events/models';
 import {EventsService} from 'Modules/events/service/EventsService';
+import {disabledDate} from 'Modules/events/utils';
 import {RoomCard} from 'Modules/rooms/components/RoomCard';
 import {changeOnlyDate, formatTime} from 'Modules/rooms/utils';
 import {IUserModel} from 'Modules/users/models';
@@ -318,7 +318,7 @@ class EventEditPage extends React.Component<TProps, IState> {
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     events: state.events.list,
     details: state.events.details,
-    userInfo: state.user,
+    userInfo: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

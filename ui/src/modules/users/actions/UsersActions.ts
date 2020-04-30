@@ -2,13 +2,15 @@ import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
-import {IDeleteMultipleItems} from 'Core/models';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {ROUTER} from 'Core/router/consts';
 import {ISignupData} from 'Modules/auth/models';
 import {
     CHANGE_OWN_PASSWORD,
     CREATE_USER,
     DELETE_ME,
     DELETE_USERS,
+    GET_USER_BY_ID,
     GET_USER_INFO,
     GET_USERS,
     TOGGLE_FAVOURITE,
@@ -30,79 +32,115 @@ export class UsersActions {
     /**
      * Найти бронирования переговорных комнат.
      */
-    getAll() {
+    getAll = () => {
         return dispatchAsync(this.dispatch, GET_USERS, this.service.getAll());
-    }
+    };
 
     /**
      * Получить данные пользователя.
      */
-    getUserInfo() {
+    getUserInfo = () => {
         return dispatchAsync(
             this.dispatch,
             GET_USER_INFO,
             this.service.getUserInfo(),
         );
-    }
+    };
+
+    /**
+     * Получить данные пользователя.
+     */
+    getById = (id: string) => {
+        return dispatchAsync(
+            this.dispatch,
+            GET_USER_BY_ID,
+            this.service.getById(id),
+        );
+    };
 
     /**
      * Создать бронирование.
      *
      * @param {ISignupData} data Данные для создания.
      */
-    create(data: ISignupData) {
+    create = (data: ISignupData) => {
         return dispatchAsync(
             this.dispatch,
             CREATE_USER,
             this.service.create(data),
-        );
-    }
+        )
+            .then((res) => {
+                message.success(i18n.t('Users:edit.createSuccess'));
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Users:edit.createError'),
+                );
+            });
+    };
 
     /**
      * Обновить бронирование.
      *
      * @param {IUpdateUser} data Данные для обновления.
      */
-    update(data: IUpdateUser) {
+    update = (data: IUpdateUser) => {
         return dispatchAsync(
             this.dispatch,
             UPDATE_USER,
             this.service.update(data),
-        );
-    }
+        )
+            .then((res) => {
+                message.success(i18n.t('Users:edit.updateSuccess'));
+                InterfaceAction.redirect(ROUTER.MAIN.ADMIN.USERS.FULL_PATH);
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Users:edit.updateError'),
+                );
+            });
+    };
 
     /**
      * Удалить бронирования переговорных комнат.
      *
-     * @param {IDeleteMultipleItems} data Данные для удаления.
+     * @param {string[]} ids Данные для удаления.
      */
-    delete(data: IDeleteMultipleItems) {
+    delete = (ids: string[]) => {
         return dispatchAsync(
             this.dispatch,
             DELETE_USERS,
-            this.service.delete(data),
-        );
-    }
+            this.service.delete({data: {ids}}),
+        )
+            .then((res) => {
+                message.success(i18n.t('Users:delete.deleteSuccess'));
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Users:delete.deleteError'),
+                );
+            });
+    };
 
     /**
      * Обновить пароль пользователя.
      *
      * @param {ICheckPasswordData} data Данные для обновления.
      */
-    changePassword(data: ICheckPasswordData) {
+    changePassword = (data: ICheckPasswordData) => {
         return dispatchAsync(
             this.dispatch,
             CHANGE_OWN_PASSWORD,
             this.service.changePassword(data),
         );
-    }
+    };
 
     /**
      * Обновить пользователя.
      *
      * @param {IUpdateUser} data Данные для обновления.
      */
-    updateMe(data: IUpdateUser) {
+    updateMe = (data: IUpdateUser) => {
         return dispatchAsync(
             this.dispatch,
             UPDATE_ME,
@@ -117,29 +155,29 @@ export class UsersActions {
                         i18n.t('Users:profile.updateError'),
                 );
             });
-    }
+    };
 
     /**
      * Удалить пользователя.
      *
      * @param {ICheckPasswordData} data Данные для удаления.
      */
-    deleteMe(data: ICheckPasswordData) {
+    deleteMe = (data: ICheckPasswordData) => {
         return dispatchAsync(
             this.dispatch,
             DELETE_ME,
             this.service.deleteMe(data),
         );
-    }
+    };
 
     /**
      * Добавить в избранное переговорную комнату.
      */
-    toggleFavourite(roomId: string, type: string) {
+    toggleFavourite = (roomId: string, type: string) => {
         return dispatchAsync(
             this.dispatch,
             TOGGLE_FAVOURITE,
             this.service.toggleFavourite({roomId, type}),
         );
-    }
+    };
 }

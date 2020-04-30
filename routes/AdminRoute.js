@@ -1,16 +1,8 @@
 const express = require('express');
 const RoomController = require('../controllers/RoomController');
-const UserController = require('../controllers/UserController');
 const EventController = require('../controllers/EventController');
 
 const router = express.Router();
-
-router
-    .route('/users')
-    .get(UserController.getAll)
-    .post(UserController.create)
-    .patch(UserController.update)
-    .delete(UserController.delete);
 
 router
     .route('/events')

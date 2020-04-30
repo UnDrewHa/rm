@@ -1,9 +1,9 @@
 import {message} from 'antd';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {ROUTER} from 'Core/router/consts';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
 import {dispatchAsync} from 'Core/actions/utils';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {ROUTER} from 'Core/router/consts';
 import {
     CLEAR_BUILDINGS_DATA,
     CREATE_BUILDING,

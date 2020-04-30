@@ -134,6 +134,20 @@ exports.getUserInfo = catchAsync(async function (req, res) {
 });
 
 /**
+ * Контроллер удаления пользователя.
+ */
+exports.getById = catchAsync(async function (req, res) {
+    const {id} = req.params;
+    const user = await UserModel.findById(id);
+
+    await UserModel.populate(user, {path: 'building'});
+
+    res.status(200).json({
+        data: user,
+    });
+});
+
+/**
  * Контроллер получения списка пользователей.
  */
 exports.getAll = catchAsync(async function (req, res) {
@@ -150,17 +164,13 @@ exports.getAll = catchAsync(async function (req, res) {
 exports.delete = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
 
-    await UserModel.updateMany(
-        {
-            _id: {$in: ids},
-        },
-        {active: false},
-        {
-            runValidators: true,
-        },
-    );
+    await UserModel.deleteMany({
+        _id: {$in: ids},
+    });
 
-    res.status(200).send();
+    res.status(200).send({
+        data: ids,
+    });
 });
 
 /**
@@ -168,28 +178,21 @@ exports.delete = catchAsync(async function (req, res) {
  */
 exports.update = catchAsync(async function (req, res, next) {
     const {_id} = req.body.data;
+    const data = getFieldsFromObject(req.body.data, [
+        'email',
+        'login',
+        'building',
+        'role',
+        'active',
+    ]);
 
-    const user = await UserModel.findById(_id);
-    if (!user) {
-        return next(new AppError('Документ не найден', 404));
-    }
+    const updated = await UserModel.findOneAndUpdate({_id}, data, {
+        new: true,
+    });
 
-    await user.update(
-        getFieldsFromObject(req.body.data, [
-            'email',
-            'phone',
-            'building',
-            'photo',
-            'name',
-            'surname',
-            'patronymic',
-        ]),
-        {
-            runValidators: true,
-        },
-    );
-
-    res.status(200).send();
+    res.status(200).send({
+        data: updated,
+    });
 });
 
 /**
@@ -202,12 +205,9 @@ exports.create = catchAsync(async function (req, res) {
         ...getFieldsFromObject(req.body.data, [
             'login',
             'email',
-            'phone',
             'building',
-            'photo',
-            'name',
-            'surname',
-            'patronymic',
+            'role',
+            'active',
         ]),
     };
     const user = await UserModel.create(newUserData);

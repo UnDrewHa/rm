@@ -51,9 +51,12 @@ const mapStateToProps = (
     ownProps: IOwnProps,
 ): IStateProps => {
     return {
-        isFavourite: find(state.user?.data?.favouriteRooms, (roomId) => {
-            return roomId === ownProps?.roomId;
-        }),
+        isFavourite: find(
+            state.users.profile?.data?.favouriteRooms,
+            (roomId) => {
+                return roomId === ownProps?.roomId;
+            },
+        ),
     };
 };
 

@@ -72,7 +72,7 @@ class BuildingsAutocomplete extends React.Component<TProps> {
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     buildingsData: state.buildings.list,
-    userInfo: state.user,
+    userInfo: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({

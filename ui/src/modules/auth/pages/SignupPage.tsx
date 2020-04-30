@@ -185,7 +185,7 @@ class SignupPage extends React.Component<TProps, IState> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    userData: state.user,
+    userData: state.users.profile,
     buildingsData: state.buildings.list,
 });
 

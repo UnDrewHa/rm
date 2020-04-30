@@ -48,12 +48,9 @@ export interface IUpdateUser extends ICheckPasswordData {
 }
 
 export interface IMappedUserStore {
-    user: IAsyncData<IUserModel>;
-}
-
-export interface IMappedUserStore2 {
     users: {
         list: IAsyncData<IUserModel[]>;
-        item: IAsyncData<IUserModel>;
+        details: IAsyncData<IUserModel>;
+        profile: IAsyncData<IUserModel>;
     };
 }
