@@ -9,7 +9,7 @@ import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
 import {RoomDescription} from 'Modules/rooms/components/RoomDescription';
 import {RoomImage} from 'Modules/rooms/components/RoomImage';
 import {RoomTitle} from 'Modules/rooms/components/RoomTitle';
-import {IRoomModel} from 'Modules/rooms/models';
+import {IRoomFullModel, IRoomModel} from 'Modules/rooms/models';
 import {RoomsService} from 'Modules/rooms/service/RoomsService';
 import '../styles/roomCard.scss';
 
@@ -19,7 +19,7 @@ interface IOwnProps {
 
 interface IStateProps {
     roomsList: IAsyncData<IRoomModel[]>;
-    details: IAsyncData<IRoomModel>;
+    details: IAsyncData<IRoomFullModel>;
 }
 
 interface IDispatchProps {
@@ -29,7 +29,7 @@ interface IDispatchProps {
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
 interface IState {
-    roomData: IRoomModel;
+    roomData: IRoomFullModel;
 }
 
 class RoomCard extends React.Component<TProps, IState> {

@@ -21,5 +21,23 @@ export default {
         favourites: {
             title: 'Избранные переговорные комнаты',
         },
+        edit: {
+            namePlaceholder: 'Название',
+            descriptionPlaceholder: 'Описание',
+            seatsPlaceholder: 'Количество сидячих мест',
+            floorPlaceholder: 'Этаж',
+            buildingPlaceholder: 'Здание',
+            createSuccess: 'Комната успешно создана',
+            createError: 'Ошибка при создании комнаты',
+            updateSuccess: 'Данные комнаты успешно обновлены',
+            updateError: 'Ошибка при обновлении данных комнаты',
+            title: 'Данные:',
+            photoTitle: 'Фотографии:',
+            upload: 'Загрузить фото',
+        },
+        delete: {
+            deleteSuccess: 'Выбранные записи успешно удалены',
+            deleteError: 'Ошибка при удалении выбранных записей',
+        },
     },
 };

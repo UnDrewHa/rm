@@ -1,3 +1,4 @@
+const {get} = require('lodash');
 const sharp = require('sharp');
 const UserModel = require('../models/UserModel');
 const {
@@ -150,8 +151,10 @@ exports.getById = catchAsync(async function (req, res) {
 /**
  * Контроллер получения списка пользователей.
  */
-exports.getAll = catchAsync(async function (req, res) {
-    const users = await UserModel.find();
+exports.find = catchAsync(async function (req, res) {
+    const filter = get(req.body.data, 'filter', {});
+
+    const users = await UserModel.find(filter);
 
     res.status(200).send({
         data: users,

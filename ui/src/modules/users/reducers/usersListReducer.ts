@@ -4,7 +4,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'Core/reducer/model';
 import {createAsyncDataReducer} from 'Core/reducer/utils';
 import {CLEAR_AUTH_DATA} from 'Modules/auth/actions/actionTypes';
-import {DELETE_USERS, GET_USERS} from 'Modules/users/actions/actionTypes';
+import {DELETE_USERS, FIND_USERS} from 'Modules/users/actions/actionTypes';
 import {IUserModel} from 'Modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel[]> => ({
@@ -13,7 +13,7 @@ export const getInitialState = (): IAsyncData<IUserModel[]> => ({
     error: null,
 });
 
-const asyncActions = [GET_USERS];
+const asyncActions = [FIND_USERS];
 
 export const usersListReducer = (
     state: IAsyncData<IUserModel[]> = getInitialState(),

@@ -7,3 +7,7 @@ export interface IDeleteMultipleItems {
 export interface IDataResponse<T> {
     data: T;
 }
+
+export interface IFindBody<T> {
+    filter: T;
+}

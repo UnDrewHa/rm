@@ -1,7 +1,11 @@
 import {axios} from 'Core/axios';
-import {IDeleteMultipleItems} from 'Core/models';
+import {IDeleteMultipleItems, IFindBody} from 'Core/models';
 import {ISignupData} from 'Modules/auth/models';
-import {ICheckPasswordData, IUpdateUser} from 'Modules/users/models';
+import {
+    ICheckPasswordData,
+    IUpdateUser,
+    IUserFilterModel,
+} from 'Modules/users/models';
 
 /**
  * Сервис модуля Permissions.
@@ -16,8 +20,8 @@ export class UsersService {
     /**
      * Получить весь список.
      */
-    getAll() {
-        return axios.get(this.baseUrl);
+    find(data: IFindBody<IUserFilterModel>) {
+        return axios.post(this.baseUrl + '/find', {data});
     }
 
     /**

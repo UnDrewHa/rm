@@ -1,4 +1,4 @@
-const {isEmpty} = require('lodash');
+const sharp = require('sharp');
 const RoomModel = require('../models/RoomModel');
 const EventModel = require('../models/EventModel');
 const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
@@ -19,6 +19,7 @@ exports.create = catchAsync(async function (req, res) {
             'whiteboard',
             'flipchart',
             'building',
+            'photos',
         ]),
     );
 
@@ -69,6 +70,8 @@ exports.getDetails = catchAsync(async function (req, res, next) {
         return next(new AppError('Документ не найден', 404));
     }
 
+    await RoomModel.populate(room, {path: 'building'});
+
     res.status(200).send({
         data: room,
     });
@@ -84,38 +87,37 @@ exports.delete = catchAsync(async function (req, res) {
         _id: {$in: ids},
     });
 
-    res.status(200).send();
+    res.status(200).send({
+        data: ids,
+    });
 });
 
 /**
  * Контроллер обновление документа "Переговорная комната".
  */
-exports.update = catchAsync(async function (req, res, next) {
+exports.update = catchAsync(async function (req, res) {
     const {_id} = req.body.data;
 
-    const room = await RoomModel.findById(_id);
-    if (!room) {
-        return next(new AppError('Документ не найден', 404));
-    }
+    const data = getFieldsFromObject(req.body.data, [
+        'name',
+        'description',
+        'seats',
+        'floor',
+        'tv',
+        'projector',
+        'whiteboard',
+        'flipchart',
+        'building',
+        'photos',
+    ]);
 
-    await room.update(
-        getFieldsFromObject(req.body.data, [
-            'name',
-            'description',
-            'seats',
-            'floor',
-            'tv',
-            'projector',
-            'whiteboard',
-            'flipchart',
-            'building',
-        ]),
-        {
-            runValidators: true,
-        },
-    );
+    const updated = await RoomModel.findOneAndUpdate({_id: _id}, data, {
+        new: true,
+    });
 
-    res.status(200).send();
+    res.status(200).send({
+        data: updated,
+    });
 });
 
 /**
@@ -127,5 +129,24 @@ exports.getFavourites = catchAsync(async function (req, res) {
 
     res.status(200).json({
         data: rooms,
+    });
+});
+
+exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
+    if (!req.file) return next();
+    const filename = `room-${Date.now()}.jpeg`;
+    const path = `${process.env.PUBLIC_PATH}/img/rooms/${filename}`;
+    const pathWithoutPublic = path.replace(process.env.PUBLIC_PATH, '');
+
+    req.file.filename = filename;
+
+    await sharp(req.file.buffer)
+        .resize(800, 450)
+        .toFormat('jpeg')
+        .jpeg({quality: 90})
+        .toFile(path);
+
+    res.status(200).json({
+        data: pathWithoutPublic,
     });
 });

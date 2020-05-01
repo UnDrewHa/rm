@@ -1,17 +1,18 @@
 import {IAsyncData} from 'Core/reducer/model';
+import {IBuildingModel} from 'Modules/buildings/models';
 
 export interface IGetAllRoomsData {
     filter: {
         building: string;
         floors?: number[];
-        date: string;
-        from: string;
-        to: string;
+        date?: string;
+        from?: string;
+        to?: string;
         tv?: boolean;
         projector?: boolean;
         whiteboard?: boolean;
         flipchart?: boolean;
-        notReserved: boolean;
+        notReserved?: boolean;
     };
 }
 
@@ -29,8 +30,12 @@ export interface IRoomModel {
     photos?: string[];
 }
 
+export interface IRoomFullModel extends Omit<IRoomModel, 'building'> {
+    building: IBuildingModel;
+}
+
 export interface IRoomProp {
-    item: IRoomModel;
+    item: any;
 }
 
 export interface IRoomCreateModel extends Omit<IRoomModel, '_id'> {}
@@ -38,6 +43,6 @@ export interface IRoomCreateModel extends Omit<IRoomModel, '_id'> {}
 export interface IMappedRoomsStore {
     rooms: {
         list: IAsyncData<IRoomModel[]>;
-        details: IAsyncData<IRoomModel>;
+        details: IAsyncData<IRoomFullModel>;
     };
 }

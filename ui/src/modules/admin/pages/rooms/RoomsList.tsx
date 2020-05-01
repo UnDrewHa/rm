@@ -1,5 +1,5 @@
 import {SearchOutlined} from '@ant-design/icons';
-import {Button, Checkbox, Divider, Tooltip} from 'antd';
+import {Button, Divider, Tooltip} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -11,70 +11,34 @@ import {TAppStore} from 'Core/store/model';
 import {BlankList} from 'Modules/admin/pages/BlankList';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
-import {ERoles} from 'Modules/permissions/enums';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {IUserModel} from 'Modules/users/models';
-import {UsersService} from 'Modules/users/service/UsersService';
+import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
+import {IRoomModel} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => [
     {
-        title: () => i18n.t('table.header.fullName'),
-        dataIndex: 'fullName',
-        key: 'fullName',
-        ...getColumnSearchProps('fullName'),
+        title: () => i18n.t('table.header.name'),
+        dataIndex: 'name',
+        key: 'name',
+        ...getColumnSearchProps('name'),
     },
     {
-        title: () => i18n.t('table.header.login'),
-        dataIndex: 'login',
-        key: 'login',
-        ...getColumnSearchProps('login'),
+        title: () => i18n.t('table.header.description'),
+        dataIndex: 'description',
+        key: 'description',
+        ...getColumnSearchProps('description'),
     },
     {
-        title: () => i18n.t('table.header.email'),
-        dataIndex: 'email',
-        key: 'email',
-        ...getColumnSearchProps('email'),
+        title: () => i18n.t('table.header.seats'),
+        dataIndex: 'seats',
+        key: 'seats',
+        ...getColumnSearchProps('seats'),
     },
     {
-        title: () => i18n.t('table.header.phone'),
-        dataIndex: 'phone',
-        key: 'phone',
-        ...getColumnSearchProps('phone'),
-    },
-    {
-        title: () => i18n.t('table.header.role'),
-        dataIndex: 'role',
-        key: 'role',
-        filters: [
-            {
-                text: ERoles.ADMIN,
-                value: ERoles.ADMIN,
-            },
-            {
-                text: ERoles.USER,
-                value: ERoles.USER,
-            },
-        ],
-        onFilter: (value, record) => record.role === value,
-    },
-    {
-        title: () => i18n.t('table.header.active'),
-        dataIndex: 'active',
-        key: 'active',
-        render: (_, record) => <Checkbox checked={record.active !== false} />,
-        filters: [
-            {
-                text: i18n.t('words.yes'),
-                value: true,
-            },
-            {
-                text: i18n.t('words.no'),
-                value: false,
-            },
-        ],
-        onFilter: (value, record) => {
-            return value ? record.active !== false : record.active === false;
-        },
+        title: () => i18n.t('table.header.floor'),
+        dataIndex: 'floor',
+        key: 'floor',
+        ...getColumnSearchProps('floor'),
     },
     {
         title: () => i18n.t('table.header.actions'),
@@ -82,7 +46,7 @@ const getColumnsConfig = (actions, getColumnSearchProps) => [
         key: 'actions',
         render: (_, record) => (
             <React.Fragment>
-                <EditButton id={record._id} pathname="USERS" />
+                <EditButton id={record._id} pathname="ROOMS" />
                 <Divider type="vertical" />
                 <DeleteButton ids={[record._id]} actions={actions} />
             </React.Fragment>
@@ -91,11 +55,11 @@ const getColumnsConfig = (actions, getColumnSearchProps) => [
 ];
 
 interface IStateProps {
-    items: IAsyncData<IUserModel[]>;
+    items: IAsyncData<IRoomModel[]>;
 }
 
 interface IDispatchProps {
-    actions: UsersActions;
+    actions: RoomsActions;
 }
 
 type TProps = IStateProps & IDispatchProps;
@@ -104,7 +68,7 @@ interface IState {
     building: IBuildingModel;
 }
 
-class UsersList extends React.Component<TProps, IState> {
+class RoomsList extends React.Component<TProps, IState> {
     state = {
         building: null,
     };
@@ -122,7 +86,9 @@ class UsersList extends React.Component<TProps, IState> {
         const {actions} = this.props;
 
         actions.find({
-            building: this.state.building._id,
+            filter: {
+                building: this.state.building._id,
+            },
         });
     };
 
@@ -159,17 +125,17 @@ class UsersList extends React.Component<TProps, IState> {
 
 const mapStateToProps = (state: TAppStore): IStateProps => {
     return {
-        items: state.users.list,
+        items: state.rooms.list,
     };
 };
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
-    actions: new UsersActions(new UsersService(), dispatch),
+    actions: new RoomsActions(new RoomsService(), dispatch),
 });
 
 const connected = connect<IStateProps, IDispatchProps>(
     mapStateToProps,
     mapDispatchToProps,
-)(UsersList);
+)(RoomsList);
 
-export {connected as UsersList};
+export {connected as RoomsList};

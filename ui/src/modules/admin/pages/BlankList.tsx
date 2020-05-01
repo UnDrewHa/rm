@@ -1,14 +1,10 @@
 import {SearchOutlined} from '@ant-design/icons';
 import {Button, Input, Space, Table} from 'antd';
 import i18n from 'i18next';
-import {get, isEmpty} from 'lodash-es';
+import {isEmpty} from 'lodash-es';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import {connect} from 'react-redux';
 import {DeleteButton} from 'Core/components/DeleteButton';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
 
 interface IState {
     selectedRowKeys: string[];
@@ -16,28 +12,17 @@ interface IState {
     searchedColumn: string;
 }
 
-interface IStateProps {
-    items: IAsyncData<any[]>;
-}
-
-interface IDispatchProps {
-    actions: any;
-}
-
 interface IOwnProps {
     getConfig: (actions, getColumnSearchProps) => any[];
-    storePath: string;
-    action: any;
-    service: any;
+    actions: any;
+    items: any[];
+    isLoading: boolean;
+    title?: () => any;
 }
 
-type TProps = IOwnProps & IStateProps & IDispatchProps;
-
-class BlankList extends React.Component<TProps, IState> {
-    constructor(props: TProps) {
+export class BlankList extends React.Component<IOwnProps, IState> {
+    constructor(props: IOwnProps) {
         super(props);
-
-        props.actions.getAll();
 
         this.state = {
             selectedRowKeys: [],
@@ -158,12 +143,7 @@ class BlankList extends React.Component<TProps, IState> {
     };
 
     render() {
-        const {
-            items: {status, data},
-            getConfig,
-            actions,
-        } = this.props;
-        const isLoading = status === EStatusCodes.PENDING;
+        const {items, getConfig, actions, isLoading, title} = this.props;
 
         return (
             <Table
@@ -171,7 +151,7 @@ class BlankList extends React.Component<TProps, IState> {
                     onChange: this.handleTableCheck,
                 }}
                 columns={getConfig(actions, this.getColumnSearchProps)}
-                dataSource={data}
+                dataSource={items}
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 25,
@@ -179,32 +159,11 @@ class BlankList extends React.Component<TProps, IState> {
                 }}
                 rowKey="_id"
                 loading={isLoading}
+                title={title}
                 footer={this.renderFooter}
                 className="admin-table"
+                bordered
             />
         );
     }
 }
-
-const mapStateToProps = (
-    state: TAppStore,
-    ownProps: IOwnProps,
-): IStateProps => {
-    return {
-        items: get(state, ownProps.storePath, []),
-    };
-};
-
-const mapDispatchToProps = (dispatch, ownProps: IOwnProps): IDispatchProps => ({
-    actions: new ownProps.action(new ownProps.service(), dispatch),
-});
-
-/**
- * Страница регистрации.
- */
-const connected = connect<IStateProps, IDispatchProps, IOwnProps>(
-    mapStateToProps,
-    mapDispatchToProps,
-)(BlankList);
-
-export {connected as BlankList};

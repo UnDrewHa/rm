@@ -31,7 +31,6 @@ route
 
 route
     .route('/')
-    .get(AuthController.restrictedTo(['admin']), UserController.getAll)
     .post(AuthController.restrictedTo(['admin']), UserController.create)
     .patch(AuthController.restrictedTo(['admin']), UserController.update)
     .delete(AuthController.restrictedTo(['admin']), UserController.delete);
@@ -40,6 +39,11 @@ route.get(
     '/:id',
     AuthController.restrictedTo(['admin']),
     UserController.getById,
+);
+route.post(
+    '/find',
+    AuthController.restrictedTo(['admin']),
+    UserController.find,
 );
 
 module.exports = route;

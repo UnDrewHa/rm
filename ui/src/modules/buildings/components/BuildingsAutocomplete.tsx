@@ -60,6 +60,7 @@ class BuildingsAutocomplete extends React.Component<TProps> {
                 }
                 disabled={buildingsIsLoading}
                 onSelect={this.props.onSelect}
+                className="building-autocomplete"
             >
                 <Input.Search
                     prefix={<BuildOutlined className="site-form-item-icon" />}

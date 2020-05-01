@@ -10,14 +10,18 @@ import {
     CREATE_USER,
     DELETE_ME,
     DELETE_USERS,
+    FIND_USERS,
     GET_USER_BY_ID,
     GET_USER_INFO,
-    GET_USERS,
     TOGGLE_FAVOURITE,
     UPDATE_ME,
     UPDATE_USER,
 } from 'Modules/users/actions/actionTypes';
-import {ICheckPasswordData, IUpdateUser} from 'Modules/users/models';
+import {
+    ICheckPasswordData,
+    IUpdateUser,
+    IUserFilterModel,
+} from 'Modules/users/models';
 import {UsersService} from 'Modules/users/service/UsersService';
 
 /**
@@ -32,8 +36,12 @@ export class UsersActions {
     /**
      * Найти бронирования переговорных комнат.
      */
-    getAll = () => {
-        return dispatchAsync(this.dispatch, GET_USERS, this.service.getAll());
+    find = (filter: IUserFilterModel) => {
+        return dispatchAsync(
+            this.dispatch,
+            FIND_USERS,
+            this.service.find({filter}),
+        );
     };
 
     /**

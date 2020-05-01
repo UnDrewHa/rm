@@ -1,8 +1,10 @@
 import Axios from 'axios';
 import {handleNetworkError, handleUnauthorized} from 'Core/axios/handlers';
 
+export const BASE_URL = 'http://localhost:5000';
+
 const axios = Axios.create({
-    baseURL: 'http://localhost:5000',
+    baseURL: BASE_URL,
     timeout: 60000,
     withCredentials: true,
 });

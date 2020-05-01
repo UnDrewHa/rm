@@ -17,6 +17,7 @@ import {
     Typography,
     Upload,
 } from 'antd';
+import {BASE_URL} from 'Core/axios';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -324,7 +325,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                         />
                         <Typography.Paragraph>
                             <Upload
-                                action="http://localhost:5000/users/upload"
+                                action={`${BASE_URL}/users/upload`}
                                 withCredentials
                                 name="photo"
                                 beforeUpload={this.handleBeforeUpload}

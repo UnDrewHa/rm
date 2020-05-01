@@ -1,7 +1,13 @@
+import {filter, includes} from 'lodash-es';
+import {SUCCESS} from 'Core/actions/actionTypes';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'Core/reducer/model';
 import {createAsyncDataReducer} from 'Core/reducer/utils';
-import {CLEAR_ROOMS_DATA, FIND_ROOMS} from 'Modules/rooms/actions/actionTypes';
+import {
+    CLEAR_ROOMS_DATA,
+    DELETE_ROOMS,
+    FIND_ROOMS,
+} from 'Modules/rooms/actions/actionTypes';
 import {IRoomModel} from 'Modules/rooms/models';
 
 const getInitialState = (): IAsyncData<IRoomModel[]> => ({
@@ -10,17 +16,31 @@ const getInitialState = (): IAsyncData<IRoomModel[]> => ({
     error: null,
 });
 
+const asyncActions = [FIND_ROOMS];
+
 export const roomsListReducer = (
     state: IAsyncData<IRoomModel[]> = getInitialState(),
     action: IReduxAction<IRoomModel[]>,
 ): IAsyncData<IRoomModel[]> => {
-    const {originalType, type} = action;
+    const {originalType, type, payload} = action;
 
-    if (originalType === FIND_ROOMS) {
+    if (asyncActions.includes(originalType)) {
         return createAsyncDataReducer<IRoomModel[], IRoomModel[]>(
-            FIND_ROOMS,
+            originalType,
             state,
         )(state, action);
+    }
+
+    if (type === DELETE_ROOMS + SUCCESS) {
+        const newData = filter(
+            state.data,
+            (item) => !includes(payload.data, item._id),
+        );
+
+        return {
+            ...state,
+            data: newData,
+        };
     }
 
     if (type === CLEAR_ROOMS_DATA) {

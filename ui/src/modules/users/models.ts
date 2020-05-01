@@ -30,6 +30,15 @@ export interface IUserModel {
     fullName?: string;
 }
 
+export interface IUserFilterModel {
+    login?: string;
+    email?: string;
+    building: string;
+    role?: ERoles;
+    active?: boolean;
+    phone?: string;
+}
+
 export interface IUpdateUser extends ICheckPasswordData {
     _id: string;
     newPassword?: string;
