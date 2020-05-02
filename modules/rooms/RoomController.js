@@ -2,10 +2,13 @@ const {difference, isEmpty} = require('lodash');
 const fs = require('fs');
 const util = require('util');
 const sharp = require('sharp');
-const RoomModel = require('../models/RoomModel');
-const EventModel = require('../models/EventModel');
-const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
-const {AppError} = require('../utils/errorUtils');
+const RoomModel = require('./RoomModel');
+const EventModel = require('../events/EventModel');
+const {
+    catchAsync,
+    getFieldsFromObject,
+} = require('../../common/utils/controllersUtils');
+const {AppError} = require('../../common/utils/errorUtils');
 
 const unlinkFile = util.promisify(fs.unlink);
 

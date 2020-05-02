@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {getFieldErrorMessage} = require('../../utils/errorUtils');
-const {LIST_OF_ROLES, USER_ROLE} = require('../../rbac/roles');
+const {getFieldErrorMessage} = require('../../common/utils/errorUtils');
+const {LIST_OF_ROLES, USER_ROLE} = require('../permissions/roles');
 
 const {Schema} = mongoose;
 

@@ -2,13 +2,13 @@ const fs = require('fs');
 const util = require('util');
 const {get} = require('lodash');
 const sharp = require('sharp');
-const UserModel = require('../models/UserModel');
+const UserModel = require('./UserModel');
 const {
     catchAsync,
     getFieldsFromObject,
     createAndSendToken,
-} = require('../utils/controllersUtils');
-const {AppError} = require('../utils/errorUtils');
+} = require('../../common/utils/controllersUtils');
+const {AppError} = require('../../common/utils/errorUtils');
 
 const unlinkFile = util.promisify(fs.unlink);
 

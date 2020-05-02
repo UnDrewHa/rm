@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const UserModel = require('../models/UserModel');
-const {catchAsync, createAndSendToken} = require('../utils/controllersUtils');
-const {sendEmail} = require('../service/EmailTransport');
-const {AppError} = require('../utils/errorUtils');
+const UserModel = require('../users/UserModel');
+const {
+    catchAsync,
+    createAndSendToken,
+} = require('../../common/utils/controllersUtils');
+const {sendEmail} = require('../emails/EmailTransport');
+const {AppError} = require('../../common/utils/errorUtils');
 
 /**
  * Контроллер регистрации пользователя.

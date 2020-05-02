@@ -1,6 +1,9 @@
-const BuildingModel = require('../models/BuildingModel');
-const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
-const {AppError} = require('../utils/errorUtils');
+const BuildingModel = require('./BuildingModel');
+const {
+    catchAsync,
+    getFieldsFromObject,
+} = require('../../common/utils/controllersUtils');
+const {AppError} = require('../../common/utils/errorUtils');
 
 /**
  * Контроллер создания документа "Здание".

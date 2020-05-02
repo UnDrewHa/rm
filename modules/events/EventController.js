@@ -1,7 +1,10 @@
 const {isEmpty} = require('lodash');
-const EventModel = require('../models/EventModel');
-const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
-const {AppError} = require('../utils/errorUtils');
+const EventModel = require('./EventModel');
+const {
+    catchAsync,
+    getFieldsFromObject,
+} = require('../../common/utils/controllersUtils');
+const {AppError} = require('../../common/utils/errorUtils');
 
 /**
  * Контроллер создания документа "Встреча".

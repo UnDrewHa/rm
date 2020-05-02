@@ -1,7 +1,7 @@
 const express = require('express');
-const RoomController = require('../controllers/RoomController');
-const AuthController = require('../controllers/AuthController');
-const UploadController = require('../controllers/UploadController');
+const RoomController = require('./RoomController');
+const AuthController = require('../auth/AuthController');
+const UploadController = require('../upload/UploadController');
 
 const router = express.Router();
 

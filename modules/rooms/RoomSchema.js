@@ -1,7 +1,7 @@
 const {isEmpty} = require('lodash');
 const mongoose = require('mongoose');
-const {getFieldsFromObject} = require('../../utils/controllersUtils');
-const {getFieldErrorMessage} = require('../../utils/errorUtils');
+const {getFieldsFromObject} = require('../../common/utils/controllersUtils');
+const {getFieldErrorMessage} = require('../../common/utils/errorUtils');
 
 const {Schema} = mongoose;
 

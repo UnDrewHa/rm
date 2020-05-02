@@ -3,9 +3,9 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const ErrorController = require('./controllers/ErrorController');
-const RouterMap = require('./routes');
-const {AppError} = require('./utils/errorUtils');
+const ErrorController = require('./modules/errors/ErrorController');
+const RouterMap = require('./router');
+const {AppError} = require('./common/utils/errorUtils');
 
 dotenv.config({
     path: './config.env',
