@@ -3,12 +3,13 @@ const util = require('util');
 const {get} = require('lodash');
 const sharp = require('sharp');
 const UserModel = require('./UserModel');
+const {commonHTTPCodes} = require('../../common/errors');
 const {
     catchAsync,
     getFieldsFromObject,
-    createAndSendToken,
 } = require('../../common/utils/controllersUtils');
-const {AppError} = require('../../common/utils/errorUtils');
+const {AppError} = require('../../common/errors');
+const {logger} = require('../../core/Logger');
 
 const unlinkFile = util.promisify(fs.unlink);
 
@@ -23,7 +24,10 @@ exports.createPasswordCheckMiddleware = function (key) {
 
         if (!fieldValue || !password) {
             return next(
-                new Error('Необходимо указать пароль для изменения данных'),
+                new AppError(
+                    'Необходимо указать пароль для изменения данных',
+                    commonHTTPCodes.BAD_REQUEST,
+                ),
             );
         }
 
@@ -34,10 +38,14 @@ exports.createPasswordCheckMiddleware = function (key) {
             user && (await user.checkPassword(password, user.password));
 
         if (!user || !CORRECT_PASSWORD) {
-            return next(new Error('Неверный логин или пароль'));
+            return next(
+                new AppError(
+                    'Неверный логин или пароль',
+                    commonHTTPCodes.BAD_REQUEST,
+                ),
+            );
         }
 
-        //TODO Сделать нормально.
         user.password = undefined;
 
         res.locals.user = user;
@@ -49,7 +57,7 @@ exports.createPasswordCheckMiddleware = function (key) {
 /**
  * Контроллер изменения пароля.
  */
-exports.changePassword = catchAsync(async function (req, res) {
+exports.changePassword = catchAsync(async function (req, res, next) {
     const {newPassword, newPasswordConfirm} = req.body.data;
     const {user} = res.locals;
 
@@ -57,13 +65,14 @@ exports.changePassword = catchAsync(async function (req, res) {
     user.passwordConfirm = newPasswordConfirm;
     await user.save();
 
-    createAndSendToken(res, 200, user);
+    res.locals.user = user;
+    next();
 });
 
 /**
  * Контроллер обновления данных пользователя.
  */
-exports.updateMe = catchAsync(async function (req, res) {
+exports.updateMe = catchAsync(async function (req, res, next) {
     const {user} = res.locals;
     const userData = getFieldsFromObject(req.body.data, [
         'email',
@@ -82,8 +91,8 @@ exports.updateMe = catchAsync(async function (req, res) {
 
     if (NEED_TO_DELETE_OLD_PHOTO) {
         unlinkFile(process.env.PUBLIC_PATH + user.photo)
-            .then((_) => console.log('Файл удален'))
-            .catch((err) => console.log(err));
+            .then((_) => logger.info('Фото профиля успешно удалены'))
+            .catch((err) => logger.error('Ошибка удаления фото профиля', err));
     }
 
     user.email = userData.email || user.email;
@@ -101,7 +110,9 @@ exports.updateMe = catchAsync(async function (req, res) {
 
         await user.save();
         await UserModel.populate(user, {path: 'building'});
-        return createAndSendToken(res, 200, user, user);
+
+        res.locals.user = user;
+        next();
     }
 
     const updated = await UserModel.findOneAndUpdate(
@@ -190,8 +201,8 @@ exports.delete = catchAsync(async function (req, res) {
     Promise.all(
         usersPhoto.map((path) => unlinkFile(process.env.PUBLIC_PATH + path)),
     )
-        .then((_) => console.log('Файлы удалены'))
-        .catch((err) => console.log(err));
+        .then((_) => logger.info('Фото профиля успешно удалены'))
+        .catch((err) => logger.error('Ошибка удаления фото профиля', err));
 
     res.status(200).send({
         data: users.map((item) => item._id),
@@ -247,7 +258,12 @@ exports.toggleFavourite = catchAsync(async function (req, res, next) {
     const {roomId, type} = req.body.data;
 
     if (!type || !['on', 'off'].includes(type)) {
-        return next(new AppError('Необходимо указать тип действия'));
+        return next(
+            new AppError(
+                'Необходимо указать тип действия',
+                commonHTTPCodes.BAD_REQUEST,
+            ),
+        );
     }
 
     let action = {$push: {favouriteRooms: roomId}};

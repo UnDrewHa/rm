@@ -1,9 +1,10 @@
 const BuildingModel = require('./BuildingModel');
+const {commonErrors, commonHTTPCodes} = require('../../common/errors');
 const {
     catchAsync,
     getFieldsFromObject,
 } = require('../../common/utils/controllersUtils');
-const {AppError} = require('../../common/utils/errorUtils');
+const {AppError} = require('../../common/errors');
 
 /**
  * Контроллер создания документа "Здание".
@@ -52,7 +53,9 @@ exports.update = catchAsync(async function (req, res, next) {
 
     const building = await BuildingModel.findById(_id);
     if (!building) {
-        return next(new AppError('Документ не найден', 404));
+        return next(
+            new AppError(commonErrors.NOT_FOUND, commonHTTPCodes.NOT_FOUND),
+        );
     }
 
     await building.update(
@@ -73,7 +76,9 @@ exports.getDetails = catchAsync(async function (req, res, next) {
 
     const data = await BuildingModel.findById(id);
     if (!data) {
-        return next(new AppError('Документ не найден', 404));
+        return next(
+            new AppError(commonErrors.NOT_FOUND, commonHTTPCodes.NOT_FOUND),
+        );
     }
 
     res.status(200).send({

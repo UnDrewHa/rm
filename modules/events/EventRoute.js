@@ -6,7 +6,7 @@ const router = express.Router();
 router
     .post('/', EventController.create)
     .patch('/', EventController.update)
-    .delete('/', EventController.delete)
+    .delete('/', EventController.cancel)
     .post('/find', EventController.getAll)
     .get('/:id', EventController.getDetails);
 

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const app = require('./app');
+const {logger} = require('./core/Logger');
+const {handleUnhandled} = require('./common/errors');
 
 const key = process.argv.includes('localdb')
     ? 'CONNECTION_STRING_LOCAL'
@@ -18,16 +20,8 @@ mongoose.connect(CONNECTION_STRING, {
 });
 
 const server = app.listen(process.env.PORT, () => {
-    console.log(`App is running on PORT: ${process.env.PORT}`);
+    logger.info(`App is running on PORT: ${process.env.PORT}`);
 });
 
-function handleUnhandled(error) {
-    console.error(error);
-
-    server.close(() => {
-        process.exit(1);
-    });
-}
-
-process.on('uncaughtException', handleUnhandled);
-process.on('unhandledRejection', handleUnhandled);
+process.on('uncaughtException', handleUnhandled(server));
+process.on('unhandledRejection', handleUnhandled(server));

@@ -1,10 +1,11 @@
 const {isEmpty} = require('lodash');
 const EventModel = require('./EventModel');
+const {commonErrors, commonHTTPCodes} = require('../../common/errors');
 const {
     catchAsync,
     getFieldsFromObject,
 } = require('../../common/utils/controllersUtils');
-const {AppError} = require('../../common/utils/errorUtils');
+const {AppError} = require('../../common/errors');
 
 /**
  * Контроллер создания документа "Встреча".
@@ -33,7 +34,10 @@ exports.create = catchAsync(async function (req, res, next) {
 
     if (!isEmpty(reservedEvents)) {
         return next(
-            new AppError('Переговорка забронирована на выбранное время'),
+            new AppError(
+                'Переговорка забронирована на выбранное время',
+                commonHTTPCodes.BAD_REQUEST,
+            ),
         );
     }
 
@@ -78,7 +82,9 @@ exports.getDetails = catchAsync(async function (req, res, next) {
 
     const event = await EventModel.findById(id);
     if (!event) {
-        return next(new AppError('Документ не найден', 404));
+        return next(
+            new AppError(commonErrors.NOT_FOUND, commonHTTPCodes.NOT_FOUND),
+        );
     }
 
     await EventModel.populate(event, [{path: 'owner'}, {path: 'room'}]);
@@ -117,7 +123,10 @@ exports.update = catchAsync(async function (req, res, next) {
 
     if (!isEmpty(reservedEvents)) {
         return next(
-            new AppError('Переговорка забронирована на выбранное время'),
+            new AppError(
+                'Переговорка забронирована на выбранное время',
+                commonHTTPCodes.BAD_REQUEST,
+            ),
         );
     }
 
@@ -133,7 +142,7 @@ exports.update = catchAsync(async function (req, res, next) {
 /**
  * Контроллер удаления документов "Встреча".
  */
-exports.delete = catchAsync(async function (req, res) {
+exports.cancel = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
 
     await EventModel.updateMany(

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {getFieldErrorMessage} = require('../../common/utils/errorUtils');
+const {getFieldErrorMessage} = require('../../common/errors');
 
 const {Schema} = mongoose;
 

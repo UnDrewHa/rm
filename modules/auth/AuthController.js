@@ -1,17 +1,15 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const UserModel = require('../users/UserModel');
-const {
-    catchAsync,
-    createAndSendToken,
-} = require('../../common/utils/controllersUtils');
+const {commonErrors, commonHTTPCodes} = require('../../common/errors');
+const {catchAsync} = require('../../common/utils/controllersUtils');
 const {sendEmail} = require('../emails/EmailTransport');
-const {AppError} = require('../../common/utils/errorUtils');
+const {AppError} = require('../../common/errors');
 
 /**
  * Контроллер регистрации пользователя.
  */
-exports.signup = catchAsync(async function (req, res) {
+exports.signup = catchAsync(async function (req, res, next) {
     const user = await UserModel.create(
         getFieldsFromReqBody(req.body.data, [
             'login',
@@ -22,16 +20,18 @@ exports.signup = catchAsync(async function (req, res) {
         ]),
     );
 
-    createAndSendToken(res, 201, user, user);
+    res.locals.user = user;
+    next();
 });
 
 /**
  * Контроллер входа пользователя в систему.
  */
-exports.login = catchAsync(async function (req, res) {
+exports.login = catchAsync(async function (req, res, next) {
     const {user} = res.locals;
 
-    createAndSendToken(res, 200, user, user);
+    res.locals.user = user;
+    next();
 });
 
 /**
@@ -42,7 +42,10 @@ exports.protect = catchAsync(async function (req, res, next) {
 
     if (!token) {
         return next(
-            new AppError('Вам необходимо авторизоваться в приложении', 401),
+            new AppError(
+                commonErrors.UNAUTHORIZED,
+                commonHTTPCodes.UNAUTHORIZED,
+            ),
         );
     }
 
@@ -53,12 +56,18 @@ exports.protect = catchAsync(async function (req, res, next) {
         return next(
             new AppError(
                 'Такого пользователя больше не существует. Вам необходимо пройти регистрацию заново',
+                commonHTTPCodes.BAD_REQUEST,
             ),
         );
     }
 
     if (user.passwordChangedAfter(decodedData.iat)) {
-        return next(new AppError('Вам необходимо произвести вход', 401));
+        return next(
+            new AppError(
+                commonErrors.UNAUTHORIZED,
+                commonHTTPCodes.UNAUTHORIZED,
+            ),
+        );
     }
 
     res.locals.user = user;
@@ -75,10 +84,7 @@ exports.restrictedTo = function (roles) {
     return function (req, res, next) {
         if (!roles.includes(res.locals.user.role)) {
             return next(
-                new AppError(
-                    'Ваш уровень доступа не соответствует необходимому',
-                    403,
-                ),
+                new AppError(commonErrors.FORBIDDEN, commonHTTPCodes.FORBIDDEN),
             );
         }
 
@@ -93,13 +99,21 @@ exports.forgot = catchAsync(async function (req, res, next) {
     const {email} = req.body.data;
 
     if (!email) {
-        return next(new AppError('Введите корректный e-mail адрес'));
+        return next(
+            new AppError(
+                'Введите корректный e-mail адрес',
+                commonHTTPCodes.BAD_REQUEST,
+            ),
+        );
     }
 
     const user = await UserModel.findOne({email});
     if (!user) {
         return next(
-            new AppError('Пользователь с указанным e-mail адресом не найден'),
+            new AppError(
+                'Пользователь с указанным e-mail адресом не найден',
+                commonHTTPCodes.NOT_FOUND,
+            ),
         );
     }
 
@@ -117,7 +131,12 @@ exports.forgot = catchAsync(async function (req, res, next) {
             .clearTokensInfo(resetToken)
             .save({validateBeforeSave: false});
 
-        return next(new AppError('Ошибка отправки сообщения с токеном'));
+        return next(
+            new AppError(
+                'Ошибка отправки сообщения с токеном',
+                commonHTTPCodes.INTERNAL_SERVER_ERROR,
+            ),
+        );
     }
 
     res.status(200).send();
@@ -141,6 +160,7 @@ exports.reset = catchAsync(async function (req, res, next) {
         return next(
             new AppError(
                 'Вы ввели невалидную или протухшую ссылку для сброса пароля',
+                commonHTTPCodes.BAD_REQUEST,
             ),
         );
     }
@@ -152,5 +172,6 @@ exports.reset = catchAsync(async function (req, res, next) {
 
     await user.save();
 
-    createAndSendToken(res, 200, user);
+    res.locals.user = user;
+    next();
 });

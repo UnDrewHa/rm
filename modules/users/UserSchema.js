@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcript = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {getFieldErrorMessage} = require('../../common/utils/errorUtils');
+const {getFieldErrorMessage} = require('../../common/errors');
 const {LIST_OF_ROLES, USER_ROLE} = require('../permissions/roles');
 
 const {Schema} = mongoose;
@@ -130,12 +130,10 @@ UserSchema.methods.checkPassword = function (enteredPassword, userPassword) {
 /**
  * Получить JWT токен.
  *
- * @param {object} user Данные пользователя.
- *
  * @returns {string} JWT токен.
  */
-UserSchema.methods.getToken = function (user) {
-    return jwt.sign({id: user._id}, process.env.JWT_SECRET, {
+UserSchema.methods.getToken = function () {
+    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 };
@@ -162,9 +160,7 @@ UserSchema.methods.passwordChangedAfter = function (timestamp) {
  * Получить токен восстановления пароля.
  */
 UserSchema.methods.getResetToken = function () {
-    const token = crypto.randomBytes(32).toString('hex');
-
-    return token;
+    return crypto.randomBytes(32).toString('hex');
 };
 
 /**

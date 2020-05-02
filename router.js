@@ -6,6 +6,7 @@ const RoomRoute = require('./modules/rooms/RoomRoute');
 const EventRoute = require('./modules/events/EventRoute');
 const BuildingRoute = require('./modules/buildings/BuildingRoute');
 const PermissionRoute = require('./modules/permissions/PermissionRoute');
+const {notFoundMiddleware} = require('./common/errors');
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/events', AuthController.protect, EventRoute);
 router.use('/permissions', AuthController.protect, PermissionRoute);
 router.use('/rooms', AuthController.protect, RoomRoute);
 router.use('/users', AuthController.protect, UserRoute);
+router.all('*', notFoundMiddleware);
 
 module.exports = router;

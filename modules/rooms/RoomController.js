@@ -4,11 +4,13 @@ const util = require('util');
 const sharp = require('sharp');
 const RoomModel = require('./RoomModel');
 const EventModel = require('../events/EventModel');
+const {commonErrors, commonHTTPCodes} = require('../../common/errors');
 const {
     catchAsync,
     getFieldsFromObject,
 } = require('../../common/utils/controllersUtils');
-const {AppError} = require('../../common/utils/errorUtils');
+const {AppError} = require('../../common/errors');
+const {logger} = require('../../core/Logger');
 
 const unlinkFile = util.promisify(fs.unlink);
 
@@ -75,7 +77,9 @@ exports.getDetails = catchAsync(async function (req, res, next) {
 
     const room = await RoomModel.findById(id);
     if (!room) {
-        return next(new AppError('Документ не найден', 404));
+        return next(
+            new AppError(commonErrors.NOT_FOUND, commonHTTPCodes.NOT_FOUND),
+        );
     }
 
     await RoomModel.populate(room, {path: 'building'});
@@ -108,8 +112,8 @@ exports.delete = catchAsync(async function (req, res) {
     Promise.all(
         photos.map((path) => unlinkFile(process.env.PUBLIC_PATH + path)),
     )
-        .then((_) => console.log('Файлы удалены'))
-        .catch((err) => console.log(err));
+        .then((_) => logger.info('Файлы удалены'))
+        .catch((err) => logger.error('Ошибка удаления файлов', err));
 
     res.status(200).send({
         data: rooms.map((item) => item._id),
@@ -149,8 +153,8 @@ exports.update = catchAsync(async function (req, res) {
                 unlinkFile(process.env.PUBLIC_PATH + src),
             ),
         )
-            .then((_) => console.log('Файлы удалены'))
-            .catch((err) => console.log(err));
+            .then((_) => logger.info('Фото комнаты успешно удалены'))
+            .catch((err) => logger.error('Ошибка удаления фото комнаты', err));
     }
 
     res.status(200).send({

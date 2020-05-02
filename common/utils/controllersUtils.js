@@ -1,4 +1,21 @@
 /**
+ * Получить настройки для кук токена.
+ */
+const getTokenCookieOptions = () => {
+    const cookieOptions = {
+        expires: new Date(
+            Date.now() +
+                process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
+        ),
+        httpOnly: true,
+    };
+
+    if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+    return cookieOptions;
+};
+
+/**
  * Получить объект с данными из тела запроса.
  *
  * @param {object} obj Тело запроса.
@@ -33,32 +50,16 @@ exports.catchAsync = function (fn) {
 
 /**
  * Сформировать и отправит JWT Token.
- *
- * @param {object} res Объект ответа.
- * @param {number} statusCode HTTP Status Code.
- * @param {object} user Пользователь.
- * @param {object} data Данные, для отправки с ответом.
- *
- * @returns {void} void.
  */
-//TODO: отвязаться от express.
-exports.createAndSendToken = function (res, statusCode, user, data = null) {
-    const token = user.getToken(user);
-    //TODO: вынести в функцию получения конфига.
-    const cookieOptions = {
-        expires: new Date(
-            Date.now() +
-                process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000,
-        ),
-        httpOnly: true,
-    };
-    if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+exports.createAndSendToken = function (req, res) {
+    const {user} = res.locals;
+    const token = user.getToken();
 
-    res.cookie('token', token, cookieOptions);
+    res.cookie('token', token, getTokenCookieOptions());
 
-    data && (data.password = undefined); //TODO: разобраться что за хуйня
+    user.password = undefined;
 
-    res.status(statusCode).json({
-        data,
+    res.status(200).json({
+        data: user,
     });
 };

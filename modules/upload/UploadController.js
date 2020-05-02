@@ -1,5 +1,6 @@
 const multer = require('multer');
-const {AppError} = require('../../common/utils/errorUtils');
+const {commonHTTPCodes} = require('../../common/errors');
+const {AppError} = require('../../common/errors');
 
 const multerStorage = multer.memoryStorage();
 
@@ -8,7 +9,10 @@ const multerFilter = (req, file, cb) => {
         cb(null, true);
     } else {
         cb(
-            new AppError('Not an image! Please upload only images.', 400),
+            new AppError(
+                'Для загрузки принимаются только изображения',
+                commonHTTPCodes.BAD_REQUEST,
+            ),
             false,
         );
     }

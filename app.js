@@ -3,9 +3,9 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const ErrorController = require('./modules/errors/ErrorController');
 const RouterMap = require('./router');
-const {AppError} = require('./common/utils/errorUtils');
+const {commonHTTPCodes} = require('./common/errors');
+const {errorMiddleware} = require('./common/errors');
 
 dotenv.config({
     path: './config.env',
@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.static(`${__dirname}/${process.env.PUBLIC_PATH}`));
 app.use(cookieParser());
-
 app.use(
     cors({
         origin: function (origin, callback) {
@@ -28,20 +27,19 @@ app.use(
             if (!origin || origin.includes('localhost')) {
                 callback(null, true);
             } else {
-                callback(new Error('Not allowed by CORS'));
+                callback(
+                    new AppError(
+                        'Not allowed by CORS',
+                        commonHTTPCodes.FORBIDDEN,
+                    ),
+                );
             }
         },
         optionsSuccessStatus: 200,
         credentials: true,
     }),
 );
-
 app.use(RouterMap);
-
-app.all('*', (req, res, next) => {
-    next(new AppError('404, not found!', 404));
-});
-
-app.use(ErrorController.onError);
+app.use(errorMiddleware);
 
 module.exports = app;
