@@ -1,8 +1,13 @@
+const {difference, isEmpty} = require('lodash');
+const fs = require('fs');
+const util = require('util');
 const sharp = require('sharp');
 const RoomModel = require('../models/RoomModel');
 const EventModel = require('../models/EventModel');
 const {catchAsync, getFieldsFromObject} = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
+
+const unlinkFile = util.promisify(fs.unlink);
 
 /**
  * Контроллер создания документа "Переговорная комната".
@@ -82,13 +87,29 @@ exports.getDetails = catchAsync(async function (req, res, next) {
  */
 exports.delete = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
+    const rooms = await RoomModel.find({_id: {$in: ids}});
 
     await RoomModel.deleteMany({
         _id: {$in: ids},
     });
 
+    const photos = rooms.reduce((arr, current) => {
+        arr =
+            current.photos && !isEmpty(current.photos)
+                ? arr.concat(current.photos)
+                : arr;
+
+        return arr;
+    }, []);
+
+    Promise.all(
+        photos.map((path) => unlinkFile(process.env.PUBLIC_PATH + path)),
+    )
+        .then((_) => console.log('Файлы удалены'))
+        .catch((err) => console.log(err));
+
     res.status(200).send({
-        data: ids,
+        data: rooms.map((item) => item._id),
     });
 });
 
@@ -97,7 +118,6 @@ exports.delete = catchAsync(async function (req, res) {
  */
 exports.update = catchAsync(async function (req, res) {
     const {_id} = req.body.data;
-
     const data = getFieldsFromObject(req.body.data, [
         'name',
         'description',
@@ -110,10 +130,25 @@ exports.update = catchAsync(async function (req, res) {
         'building',
         'photos',
     ]);
+    const room = await RoomModel.findById(_id);
+    const NEED_TO_DELETE_PHOTOS =
+        Array.isArray(room.photos) &&
+        !isEmpty(room.photos) &&
+        Array.isArray(data.photos);
 
     const updated = await RoomModel.findOneAndUpdate({_id: _id}, data, {
         new: true,
     });
+
+    if (NEED_TO_DELETE_PHOTOS) {
+        Promise.all(
+            difference(room.photos, data.photos).map((src) =>
+                unlinkFile(process.env.PUBLIC_PATH + src),
+            ),
+        )
+            .then((_) => console.log('Файлы удалены'))
+            .catch((err) => console.log(err));
+    }
 
     res.status(200).send({
         data: updated,
@@ -132,10 +167,11 @@ exports.getFavourites = catchAsync(async function (req, res) {
     });
 });
 
+//TODO: убрать URL.
 exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
     const filename = `room-${Date.now()}.jpeg`;
-    const path = `${process.env.PUBLIC_PATH}/img/rooms/${filename}`;
+    const path = `${process.env.PUBLIC_PATH}/img/${filename}`;
     const pathWithoutPublic = path.replace(process.env.PUBLIC_PATH, '');
 
     req.file.filename = filename;

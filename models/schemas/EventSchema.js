@@ -49,7 +49,7 @@ EventSchema.pre(/^find/, function () {
 
 EventSchema.pre(/^find/, function () {
     const currentFilter = this.getFilter();
-    console.log(currentFilter);
+
     if (
         !currentFilter.hasOwnProperty('canceled') &&
         !currentFilter.hasOwnProperty('_id')

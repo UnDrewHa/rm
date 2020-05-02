@@ -5,3 +5,4 @@ config.env
 */**/.jpg
 */**/.png
 /ui/public/img/
+/public/img/

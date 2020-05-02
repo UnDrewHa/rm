@@ -1,6 +1,5 @@
 import {Layout, Menu} from 'antd';
 import i18n from 'i18next';
-import {AdminLayoutPage} from 'Modules/admin/pages/AdminLayoutPage';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Link, Switch} from 'react-router-dom';
@@ -9,6 +8,7 @@ import {RouteWrap} from 'Core/components/RouteWrap';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {AdminLayoutPage} from 'Modules/admin/pages/AdminLayoutPage';
 import {EventDetailsPage} from 'Modules/events/pages/EventDetailsPage';
 import {EventEditPage} from 'Modules/events/pages/EventEditPage';
 import {UserEventsPage} from 'Modules/events/pages/UserEventsPage';
@@ -100,6 +100,10 @@ class MainLayout extends React.Component<TProps, IState> {
 
     render() {
         const {location, permissions, userInfo} = this.props;
+        const selectedKeys =
+            location.pathname.indexOf(ROUTER.MAIN.ADMIN.FULL_PATH) === 0
+                ? [ROUTER.MAIN.ADMIN.FULL_PATH]
+                : [location.pathname];
         if (this.state.isLoading) {
             return <LoadingOverlay />;
         }
@@ -111,7 +115,7 @@ class MainLayout extends React.Component<TProps, IState> {
                         theme="dark"
                         mode="horizontal"
                         defaultSelectedKeys={[ROUTER.MAIN.FULL_PATH]}
-                        selectedKeys={[location.pathname]}
+                        selectedKeys={selectedKeys}
                     >
                         {menuConfig.map((item) => {
                             if (

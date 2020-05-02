@@ -1,12 +1,6 @@
-import {
-    AppstoreOutlined,
-    HomeOutlined,
-    ScheduleOutlined,
-    UserOutlined,
-} from '@ant-design/icons';
+import {AppstoreOutlined, HomeOutlined, UserOutlined} from '@ant-design/icons';
 import {Col, Menu, PageHeader, Row} from 'antd';
 import i18n from 'i18next';
-import {RoomEdit} from 'Modules/admin/pages/rooms/RoomEdit';
 import React from 'react';
 import {withRouter, Link, Switch} from 'react-router-dom';
 import {RouteWrap} from 'Core/components/RouteWrap';
@@ -14,13 +8,14 @@ import {ROUTER} from 'Core/router/consts';
 import {BuildingsList} from 'Modules/admin/pages/buildings/BuildingsList';
 import {BuildingEdit} from 'Modules/admin/pages/buildings/BuildingEdit';
 import {RoomsList} from 'Modules/admin/pages/rooms/RoomsList';
+import {RoomEdit} from 'Modules/admin/pages/rooms/RoomEdit';
 import {UsersList} from 'Modules/admin/pages/users/UsersList';
 import {UserEdit} from 'Modules/admin/pages/users/UserEdit';
 import {AdminMainPage} from 'Modules/admin/pages/AdminMainPage';
 import {ERoles} from 'Modules/permissions/enums';
 import '../styles/adminTable.scss';
 
-const {FULL_PATH, BUILDINGS, USERS, EVENTS, ROOMS} = ROUTER.MAIN.ADMIN;
+const {FULL_PATH, BUILDINGS, USERS, ROOMS} = ROUTER.MAIN.ADMIN;
 
 const menuConfig = [
     {
@@ -77,24 +72,6 @@ const menuConfig = [
             },
             {
                 key: ROOMS.EDIT.FULL_PATH,
-                label: () => i18n.t('Admin:menu.common.create'),
-            },
-        ],
-    },
-    {
-        key: EVENTS.FULL_PATH,
-        title: () => (
-            <div>
-                <ScheduleOutlined /> {i18n.t('Admin:menu.events.title')}
-            </div>
-        ),
-        items: [
-            {
-                key: EVENTS.FULL_PATH,
-                label: () => i18n.t('Admin:menu.common.list'),
-            },
-            {
-                key: EVENTS.EDIT.FULL_PATH,
                 label: () => i18n.t('Admin:menu.common.create'),
             },
         ],
@@ -209,19 +186,6 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                                 path={ROUTER.MAIN.ADMIN.BUILDINGS.FULL_PATH}
                             >
                                 <BuildingsList />
-                            </RouteWrap>
-
-                            <RouteWrap
-                                role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.EVENTS.EDIT.FULL_PATH}
-                            >
-                                <AdminMainPage />
-                            </RouteWrap>
-                            <RouteWrap
-                                role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.EVENTS.FULL_PATH}
-                            >
-                                <AdminMainPage />
                             </RouteWrap>
 
                             <RouteWrap

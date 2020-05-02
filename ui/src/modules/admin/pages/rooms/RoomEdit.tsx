@@ -13,7 +13,6 @@ import {
     Upload,
 } from 'antd';
 import {FormInstance} from 'antd/lib/form';
-import {BASE_URL} from 'Core/axios';
 import i18n from 'i18next';
 import {isFunction} from 'lodash-es';
 import queryParser from 'query-string';
@@ -21,6 +20,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {uuid} from 'uuidv4';
+import {BASE_URL} from 'Core/axios';
 import {FormSkeleton} from 'Core/components/FormSkeleton';
 import {EPageMode, EUploadingStatus} from 'Core/enums';
 import {EStatusCodes} from 'Core/reducer/enums';
@@ -185,7 +185,6 @@ class RoomEdit extends React.Component<TProps, IState> {
     };
 
     handlePreview = (file) => {
-        console.log(file);
         this.setState({
             previewImage: file?.response?.data || file.url,
             previewVisible: true,

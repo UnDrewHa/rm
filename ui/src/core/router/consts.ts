@@ -61,14 +61,6 @@ export const ROUTER = {
                     PATH: '/admin/buildings/edit',
                 },
             },
-            EVENTS: {
-                FULL_PATH: '/admin/events',
-                PATH: '/admin/events',
-                EDIT: {
-                    FULL_PATH: '/admin/events/edit',
-                    PATH: '/admin/events/edit',
-                },
-            },
         },
     },
     AUTH: {

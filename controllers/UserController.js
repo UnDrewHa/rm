@@ -1,3 +1,5 @@
+const fs = require('fs');
+const util = require('util');
 const {get} = require('lodash');
 const sharp = require('sharp');
 const UserModel = require('../models/UserModel');
@@ -7,6 +9,8 @@ const {
     createAndSendToken,
 } = require('../utils/controllersUtils');
 const {AppError} = require('../utils/errorUtils');
+
+const unlinkFile = util.promisify(fs.unlink);
 
 /**
  * Middleware для проверки корректности введенного пароля перед изменением данных пользователя.
@@ -73,6 +77,14 @@ exports.updateMe = catchAsync(async function (req, res) {
         'newPassword',
         'login',
     ]);
+    const NEED_TO_DELETE_OLD_PHOTO =
+        user.photo && user.photo !== userData.photo;
+
+    if (NEED_TO_DELETE_OLD_PHOTO) {
+        unlinkFile(process.env.PUBLIC_PATH + user.photo)
+            .then((_) => console.log('Файл удален'))
+            .catch((err) => console.log(err));
+    }
 
     user.email = userData.email || user.email;
     user.phone = userData.phone || user.phone;
@@ -167,12 +179,22 @@ exports.find = catchAsync(async function (req, res) {
 exports.delete = catchAsync(async function (req, res) {
     const {ids} = req.body.data;
 
+    const users = await UserModel.find({_id: {$in: ids}});
+
     await UserModel.deleteMany({
         _id: {$in: ids},
     });
 
+    const usersPhoto = users.map((item) => item.photo).filter((item) => !!item);
+
+    Promise.all(
+        usersPhoto.map((path) => unlinkFile(process.env.PUBLIC_PATH + path)),
+    )
+        .then((_) => console.log('Файлы удалены'))
+        .catch((err) => console.log(err));
+
     res.status(200).send({
-        data: ids,
+        data: users.map((item) => item._id),
     });
 });
 
@@ -248,7 +270,7 @@ exports.toggleFavourite = catchAsync(async function (req, res, next) {
 exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
     const filename = `${res.locals.user._id}-${Date.now()}.jpeg`;
-    const path = `${process.env.PUBLIC_PATH}/img/users/${filename}`;
+    const path = `${process.env.PUBLIC_PATH}/img/${filename}`;
     const pathWithoutPublic = path.replace(process.env.PUBLIC_PATH, '');
 
     req.file.filename = filename;
