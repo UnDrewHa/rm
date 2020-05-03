@@ -22,6 +22,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {disabledDate} from 'Modules/events/utils';
@@ -184,6 +185,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                             <Skeleton active />
                         ) : (
                             <Form
+                                validateMessages={defaultValidateMessages}
                                 layout="vertical"
                                 initialValues={{
                                     ...initialValues,
@@ -194,14 +196,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                             >
                                 <Form.Item
                                     name="building"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: i18n.t(
-                                                'forms.requiredText',
-                                            ),
-                                        },
-                                    ]}
+                                    rules={validationConsts.common.required}
                                 >
                                     <BuildingsAutocomplete
                                         onSelect={this.handleBuildingSelect}
@@ -229,6 +224,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 <Form.Item
                                     name="date"
                                     label={i18n.t('Rooms:common.date')}
+                                    rules={validationConsts.event.date as any}
                                 >
                                     <DatePicker
                                         allowClear={false}
@@ -238,6 +234,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 <Form.Item
                                     name="from"
                                     label={i18n.t('Rooms:common.from')}
+                                    rules={validationConsts.event.from as any}
                                 >
                                     <TimePicker
                                         allowClear={false}
@@ -247,6 +244,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 <Form.Item
                                     name="to"
                                     label={i18n.t('Rooms:common.to')}
+                                    rules={validationConsts.event.to as any}
                                 >
                                     <TimePicker
                                         allowClear={false}

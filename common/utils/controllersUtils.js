@@ -1,7 +1,7 @@
 /**
  * Получить настройки для кук токена.
  */
-const getTokenCookieOptions = () => {
+exports.getTokenCookieOptions = () => {
     const cookieOptions = {
         expires: new Date(
             Date.now() +
@@ -46,20 +46,4 @@ exports.catchAsync = function (fn) {
     return (req, res, next) => {
         fn(req, res, next).catch(next);
     };
-};
-
-/**
- * Сформировать и отправит JWT Token.
- */
-exports.createAndSendToken = function (req, res) {
-    const {user} = res.locals;
-    const token = user.getToken();
-
-    res.cookie('token', token, getTokenCookieOptions());
-
-    user.password = undefined;
-
-    res.status(200).json({
-        data: user,
-    });
 };

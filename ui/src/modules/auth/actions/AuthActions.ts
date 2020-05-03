@@ -45,6 +45,22 @@ export class AuthActions {
     };
 
     /**
+     * Выйти из системы.
+     */
+    logout = () => {
+        this.service
+            .logout()
+            .then((_) => {
+                InterfaceAction.redirect(ROUTER.AUTH.LOGIN.FULL_PATH);
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Auth:logout.logoutError'),
+                );
+            });
+    };
+
+    /**
      * Зарегистрироваться.
      *
      * @param {ISignupData} data Данные для регистрации.

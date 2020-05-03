@@ -11,6 +11,7 @@ import {EPageMode} from 'Core/enums';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
@@ -97,6 +98,7 @@ class BuildingEdit extends React.Component<TProps, IState> {
 
         return (
             <Form
+                validateMessages={defaultValidateMessages}
                 ref={this.formRef}
                 className="admin-form"
                 initialValues={{
@@ -116,6 +118,7 @@ class BuildingEdit extends React.Component<TProps, IState> {
                 <Form.Item
                     name="address"
                     label={i18n.t('Buildings:edit.addressPlaceholder')}
+                    rules={validationConsts.building.address}
                 >
                     <Input />
                 </Form.Item>

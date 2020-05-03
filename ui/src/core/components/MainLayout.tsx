@@ -1,4 +1,5 @@
-import {Layout, Menu} from 'antd';
+import {LogoutOutlined} from '@ant-design/icons';
+import {Layout, Menu, Tooltip} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -9,6 +10,8 @@ import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
 import {AdminLayoutPage} from 'Modules/admin/pages/AdminLayoutPage';
+import {AuthActions} from 'Modules/auth/actions/AuthActions';
+import {AuthService} from 'Modules/auth/service/AuthService';
 import {EventDetailsPage} from 'Modules/events/pages/EventDetailsPage';
 import {EventEditPage} from 'Modules/events/pages/EventEditPage';
 import {UserEventsPage} from 'Modules/events/pages/UserEventsPage';
@@ -70,6 +73,7 @@ interface IStateProps {
 interface IDispatchProps {
     permissionActions: PermissionActions;
     userActions: UsersActions;
+    authActions: AuthActions;
 }
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
@@ -97,6 +101,10 @@ class MainLayout extends React.Component<TProps, IState> {
             });
         });
     }
+
+    handleLogout = () => {
+        this.props.authActions.logout();
+    };
 
     render() {
         const {location, permissions, userInfo} = this.props;
@@ -137,6 +145,14 @@ class MainLayout extends React.Component<TProps, IState> {
                             );
                         })}
                     </Menu>
+                    <div className="logout-button" onClick={this.handleLogout}>
+                        <Tooltip
+                            placement="bottom"
+                            title={i18n.t('Auth:logout.title')}
+                        >
+                            <LogoutOutlined />
+                        </Tooltip>
+                    </div>
                 </Layout.Header>
                 <Layout.Content className="main-layout__content">
                     <main className="main-layout__inner-content">
@@ -205,6 +221,7 @@ const mapStateToProps = (state: TAppStore): IStateProps => ({
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
     permissionActions: new PermissionActions(new PermissionService(), dispatch),
     userActions: new UsersActions(new UsersService(), dispatch),
+    authActions: new AuthActions(new AuthService(), dispatch),
 });
 
 /**

@@ -17,11 +17,16 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT} from 'Core/consts';
+import {
+    commonTableProps,
+    DEFAULT_DATE_FORMAT,
+    DEFAULT_TIME_FORMAT,
+} from 'Core/consts';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {EventsActions} from 'Modules/events/actions/EventsActions';
 import {columnsWithoutDescription} from 'Modules/events/components/utils';
 import {IEventModel} from 'Modules/events/models';
@@ -156,6 +161,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                     </Col>
                     <Col span={9} className="border-right">
                         <Form
+                            validateMessages={defaultValidateMessages}
                             className="event-form"
                             initialValues={this.state}
                             onFinish={this.handleFinish}
@@ -164,6 +170,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                             <Form.Item
                                 name="date"
                                 label={i18n.t('Rooms:common.date')}
+                                rules={validationConsts.event.date as any}
                             >
                                 <DatePicker
                                     allowClear={false}
@@ -175,6 +182,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                             <Form.Item
                                 name="from"
                                 label={i18n.t('Rooms:common.from')}
+                                rules={validationConsts.event.from as any}
                             >
                                 <TimePicker
                                     allowClear={false}
@@ -185,6 +193,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                             <Form.Item
                                 name="to"
                                 label={i18n.t('Rooms:common.to')}
+                                rules={validationConsts.event.to as any}
                             >
                                 <TimePicker
                                     allowClear={false}
@@ -195,12 +204,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                             <Form.Item
                                 name="title"
                                 label={i18n.t('words.title')}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: i18n.t('forms.requiredText'),
-                                    },
-                                ]}
+                                rules={validationConsts.event.title}
                             >
                                 <Input />
                             </Form.Item>
@@ -210,7 +214,6 @@ class EventEditPage extends React.Component<TProps, IState> {
                                 rules={[
                                     {
                                         required: true,
-                                        message: i18n.t('forms.requiredText'),
                                     },
                                 ]}
                             >
@@ -302,10 +305,9 @@ class EventEditPage extends React.Component<TProps, IState> {
                     </Col>
                     <Col span={11} className="border-right">
                         <Table
+                            {...commonTableProps}
                             columns={columnsWithoutDescription}
                             dataSource={events.data}
-                            pagination={false}
-                            rowKey="_id"
                             loading={eventsIsLoading}
                         />
                     </Col>

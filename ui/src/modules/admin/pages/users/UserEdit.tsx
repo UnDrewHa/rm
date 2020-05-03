@@ -11,6 +11,7 @@ import {EPageMode} from 'Core/enums';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {ERoles} from 'Modules/permissions/enums';
@@ -114,6 +115,7 @@ class UserEdit extends React.Component<TProps, IState> {
 
         return (
             <Form
+                validateMessages={defaultValidateMessages}
                 ref={this.formRef}
                 className="admin-form"
                 initialValues={{
@@ -127,35 +129,20 @@ class UserEdit extends React.Component<TProps, IState> {
                 <Form.Item
                     name="login"
                     label={i18n.t('Users:edit.loginPlaceholder')}
-                    rules={[
-                        {
-                            required: true,
-                            message: i18n.t('forms.requiredText'),
-                        },
-                    ]}
+                    rules={validationConsts.user.login}
                 >
                     <Input />
                 </Form.Item>
                 <Form.Item
                     name="email"
                     label={i18n.t('Users:edit.emailPlaceholder')}
-                    rules={[
-                        {
-                            required: true,
-                            message: i18n.t('forms.requiredText'),
-                        },
-                    ]}
+                    rules={validationConsts.user.email as any}
                 >
                     <Input type="email" />
                 </Form.Item>
                 <Form.Item
                     name="building"
-                    rules={[
-                        {
-                            required: true,
-                            message: i18n.t('forms.requiredText'),
-                        },
-                    ]}
+                    rules={validationConsts.common.required}
                 >
                     <BuildingsAutocomplete
                         onSelect={this.handleBuildingSelect}

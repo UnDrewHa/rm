@@ -5,7 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {DEFAULT_DATE_FORMAT} from 'Core/consts';
+import {commonTableProps, DEFAULT_DATE_FORMAT} from 'Core/consts';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
@@ -122,10 +122,9 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                     </Col>
                     <Col span={19}>
                         <Table
+                            {...commonTableProps}
                             columns={baseColumnsConfig}
                             dataSource={events.data}
-                            pagination={false}
-                            rowKey="_id"
                             loading={isLoading}
                         />
                     </Col>

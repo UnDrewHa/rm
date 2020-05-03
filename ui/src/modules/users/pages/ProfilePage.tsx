@@ -17,15 +17,16 @@ import {
     Typography,
     Upload,
 } from 'antd';
-import {BASE_URL} from 'Core/axios';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import {BASE_URL} from 'Core/axios';
 import {FormSkeleton} from 'Core/components/FormSkeleton';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {UsersActions} from 'Modules/users/actions/UsersActions';
@@ -145,6 +146,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                             <FormSkeleton fields={10} />
                         ) : (
                             <Form
+                                validateMessages={defaultValidateMessages}
                                 className="profile-form"
                                 initialValues={{
                                     ...getInitial(userInfo.data),
@@ -155,14 +157,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                             >
                                 <Form.Item
                                     name="login"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: i18n.t(
-                                                'forms.requiredText',
-                                            ),
-                                        },
-                                    ]}
+                                    rules={validationConsts.user.login}
                                     label={i18n.t(
                                         'Users:profile.loginPlaceholder',
                                     )}
@@ -175,14 +170,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                                 </Form.Item>
                                 <Form.Item
                                     name="email"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: i18n.t(
-                                                'forms.requiredText',
-                                            ),
-                                        },
-                                    ]}
+                                    rules={validationConsts.user.email as any}
                                     label={i18n.t(
                                         'Users:profile.emailPlaceholder',
                                     )}
@@ -210,14 +198,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                                 </Form.Item>
                                 <Form.Item
                                     name="building"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: i18n.t(
-                                                'forms.requiredText',
-                                            ),
-                                        },
-                                    ]}
+                                    rules={validationConsts.common.required}
                                     label={i18n.t(
                                         'Users:profile.buildingPlaceholder',
                                     )}
@@ -255,6 +236,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                                     label={i18n.t(
                                         'Users:profile.newPasswordPlaceholder',
                                     )}
+                                    rules={validationConsts.user.password}
                                 >
                                     <Input
                                         prefix={
@@ -265,14 +247,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                                 </Form.Item>
                                 <Form.Item
                                     name="password"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: i18n.t(
-                                                'forms.requiredText',
-                                            ),
-                                        },
-                                    ]}
+                                    rules={validationConsts.user.password}
                                     label={i18n.t(
                                         'Users:profile.passwordPlaceholder',
                                     )}
@@ -286,14 +261,9 @@ class ProfilePage extends React.Component<TProps, IState> {
                                 </Form.Item>
                                 <Form.Item
                                     name="passwordConfirm"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: i18n.t(
-                                                'forms.requiredText',
-                                            ),
-                                        },
-                                    ]}
+                                    rules={
+                                        validationConsts.user.passwordConfirm
+                                    }
                                     label={i18n.t(
                                         'Users:profile.passwordConfirmPlaceholder',
                                     )}

@@ -2,7 +2,10 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const UserModel = require('../users/UserModel');
 const {commonErrors, commonHTTPCodes} = require('../../common/errors');
-const {catchAsync} = require('../../common/utils/controllersUtils');
+const {
+    catchAsync,
+    getTokenCookieOptions,
+} = require('../../common/utils/controllersUtils');
 const {sendEmail} = require('../emails/EmailTransport');
 const {AppError} = require('../../common/errors');
 
@@ -10,7 +13,7 @@ const {AppError} = require('../../common/errors');
  * Контроллер регистрации пользователя.
  */
 exports.signup = catchAsync(async function (req, res, next) {
-    const user = await UserModel.create(
+    res.locals.user = await UserModel.create(
         getFieldsFromReqBody(req.body.data, [
             'login',
             'password',
@@ -20,7 +23,6 @@ exports.signup = catchAsync(async function (req, res, next) {
         ]),
     );
 
-    res.locals.user = user;
     next();
 });
 
@@ -175,3 +177,27 @@ exports.reset = catchAsync(async function (req, res, next) {
     res.locals.user = user;
     next();
 });
+
+/**
+ * Сформировать и отправит JWT Token.
+ */
+exports.createAndSendToken = function (req, res) {
+    const {user} = res.locals;
+    const token = user.getToken();
+
+    res.cookie('token', token, getTokenCookieOptions());
+
+    user.password = undefined;
+
+    res.status(200).json({
+        data: user,
+    });
+};
+
+exports.logout = (req, res) => {
+    res.cookie('token', '', getTokenCookieOptions());
+
+    res.status(200).json({
+        data: null,
+    });
+};

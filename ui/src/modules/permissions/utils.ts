@@ -7,5 +7,5 @@ export const checkAccess = (actions: string[], permissions: string[]) => {
 };
 
 export const checkRole = (role: ERoles, user: IUserModel) => {
-    return user.role === role;
+    return user?.role === role;
 };

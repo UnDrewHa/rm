@@ -7,7 +7,10 @@ export const handleUnauthorized = (error) => {
     const {data} = error.response;
     const text = data?.error?.message || i18n.t('error.401');
 
-    message.error(text);
+    message.error({
+        content: text,
+        key: 401,
+    });
     InterfaceAction.redirect(ROUTER.AUTH.LOGIN.FULL_PATH);
 
     return;

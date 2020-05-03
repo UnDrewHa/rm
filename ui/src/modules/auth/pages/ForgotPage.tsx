@@ -8,6 +8,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {AuthActions} from 'Modules/auth/actions/AuthActions';
 import {AuthService} from 'Modules/auth/service/AuthService';
 
@@ -65,18 +66,14 @@ class ForgotPage extends React.Component<TProps> {
                     {i18n.t('Auth:forgot.title')}
                 </Typography.Title>
                 <Form
+                    validateMessages={defaultValidateMessages}
                     className="auth-form"
                     initialValues={initialValues}
                     onFinish={this.handleFinish}
                 >
                     <Form.Item
                         name="email"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.email as any}
                     >
                         <Input
                             prefix={

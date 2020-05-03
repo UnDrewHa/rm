@@ -21,6 +21,11 @@ export class AuthService {
         axios.post(BASE_URL + 'login', {data});
 
     /**
+     * Выйти из системы.
+     */
+    logout = (): Promise<any> => axios.post(BASE_URL + 'logout');
+
+    /**
      * Зарегистрироваться.
      *
      * @param {ISignupData} data Данные для регистрации.

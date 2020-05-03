@@ -8,6 +8,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {AuthActions} from 'Modules/auth/actions/AuthActions';
 import {AuthService} from 'Modules/auth/service/AuthService';
 
@@ -57,18 +58,14 @@ class ResetPasswordPage extends React.Component<TProps> {
                     {i18n.t('Auth:reset.title')}
                 </Typography.Title>
                 <Form
+                    validateMessages={defaultValidateMessages}
                     className="auth-form"
                     initialValues={initialValues}
                     onFinish={this.handleFinish}
                 >
                     <Form.Item
                         name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.password}
                     >
                         <Input
                             prefix={
@@ -82,12 +79,7 @@ class ResetPasswordPage extends React.Component<TProps> {
                     </Form.Item>
                     <Form.Item
                         name="passwordConfirm"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.passwordConfirm}
                     >
                         <Input
                             prefix={

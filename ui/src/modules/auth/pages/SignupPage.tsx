@@ -8,6 +8,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {AuthActions} from 'Modules/auth/actions/AuthActions';
 import {AuthService} from 'Modules/auth/service/AuthService';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
@@ -71,19 +72,12 @@ class SignupPage extends React.Component<TProps, IState> {
                     {i18n.t('Auth:signup.title')}
                 </Typography.Title>
                 <Form
+                    validateMessages={defaultValidateMessages}
                     className="auth-form"
                     initialValues={initialValues}
                     onFinish={this.handleFinish}
                 >
-                    <Form.Item
-                        name="login"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
-                    >
+                    <Form.Item name="login" rules={validationConsts.user.login}>
                         <Input
                             prefix={
                                 <UserOutlined className="site-form-item-icon" />
@@ -93,12 +87,7 @@ class SignupPage extends React.Component<TProps, IState> {
                     </Form.Item>
                     <Form.Item
                         name="email"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.email as any}
                     >
                         <Input
                             type="email"
@@ -110,12 +99,7 @@ class SignupPage extends React.Component<TProps, IState> {
                     </Form.Item>
                     <Form.Item
                         name="building"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.common.required}
                     >
                         <BuildingsAutocomplete
                             onSelect={this.handleBuildingSelect}
@@ -123,12 +107,7 @@ class SignupPage extends React.Component<TProps, IState> {
                     </Form.Item>
                     <Form.Item
                         name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.password}
                     >
                         <Input
                             prefix={
@@ -142,12 +121,7 @@ class SignupPage extends React.Component<TProps, IState> {
                     </Form.Item>
                     <Form.Item
                         name="passwordConfirm"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.passwordConfirm}
                     >
                         <Input
                             prefix={

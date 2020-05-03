@@ -46,3 +46,26 @@
   border: 1px solid #91d5ff;
   opacity: .5;
 }
+
+.logout-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 64px;
+  width: 64px;
+  margin-left: auto;
+
+  &:hover {
+    svg {
+      fill: #fff;
+    }
+  }
+
+  svg {
+    width: 28px;
+    height: 28px;
+    fill: rgba(255, 255, 255, 0.65);
+    transition: fill .3s;
+  }
+}

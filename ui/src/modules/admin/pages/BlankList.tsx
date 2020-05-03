@@ -5,6 +5,7 @@ import {isEmpty} from 'lodash-es';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import {DeleteButton} from 'Core/components/DeleteButton';
+import {commonTableProps} from 'Core/consts';
 
 interface IState {
     selectedRowKeys: string[];
@@ -147,22 +148,16 @@ export class BlankList extends React.Component<IOwnProps, IState> {
 
         return (
             <Table
+                {...commonTableProps}
                 rowSelection={{
                     onChange: this.handleTableCheck,
                 }}
                 columns={getConfig(actions, this.getColumnSearchProps)}
                 dataSource={items}
-                pagination={{
-                    hideOnSinglePage: true,
-                    pageSize: 25,
-                    pageSizeOptions: ['25', '50', '100', '200'],
-                }}
-                rowKey="_id"
                 loading={isLoading}
                 title={title}
                 footer={this.renderFooter}
                 className="admin-table"
-                bordered
             />
         );
     }

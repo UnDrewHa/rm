@@ -5,6 +5,7 @@ import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import {commonTableProps} from 'Core/consts';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
@@ -170,11 +171,10 @@ class UserEventsPage extends React.Component<TProps, IState> {
                             />
                         </Tabs>
                         <Table
+                            {...commonTableProps}
                             rowSelection={rowSelection}
                             columns={columnsConfig}
                             dataSource={events.data}
-                            pagination={false}
-                            rowKey="_id"
                             loading={isLoading}
                             footer={() => footer}
                             className="events-table"

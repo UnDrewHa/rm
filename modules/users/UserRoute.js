@@ -2,7 +2,6 @@ const express = require('express');
 const UserController = require('./UserController');
 const AuthController = require('../auth/AuthController');
 const UploadController = require('../upload/UploadController');
-const {createAndSendToken} = require('../../common/utils/controllersUtils');
 
 const route = express.Router();
 
@@ -11,13 +10,13 @@ route
         '/change-password',
         UserController.createPasswordCheckMiddleware('_id'),
         UserController.changePassword,
-        createAndSendToken,
+        AuthController.createAndSendToken,
     )
     .patch(
         '/update-me',
         UserController.createPasswordCheckMiddleware('_id'),
         UserController.updateMe,
-        createAndSendToken,
+        AuthController.createAndSendToken,
     )
     .patch('/toggle-favourite', UserController.toggleFavourite)
     .delete(

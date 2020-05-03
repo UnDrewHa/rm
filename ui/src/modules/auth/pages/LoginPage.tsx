@@ -8,6 +8,7 @@ import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {ROUTER} from 'Core/router/consts';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {AuthActions} from 'Modules/auth/actions/AuthActions';
 import {AuthService} from 'Modules/auth/service/AuthService';
 import 'Modules/auth/styles/auth.scss';
@@ -31,6 +32,11 @@ const initialValues = {
 };
 
 class LoginPage extends React.Component<TProps> {
+    constructor(props: TProps) {
+        super(props);
+
+        props.actions.clear();
+    }
     handleFinish = (values) => {
         this.props.actions.login(values);
     };
@@ -44,19 +50,12 @@ class LoginPage extends React.Component<TProps> {
                 <Avatar size="large" icon={<UserOutlined />} />
                 <Title level={3}>{i18n.t('Auth:login.title')}</Title>
                 <Form
+                    validateMessages={defaultValidateMessages}
                     className="auth-form"
                     initialValues={initialValues}
                     onFinish={this.handleFinish}
                 >
-                    <Form.Item
-                        name="login"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
-                    >
+                    <Form.Item name="login" rules={validationConsts.user.login}>
                         <Input
                             prefix={
                                 <UserOutlined className="site-form-item-icon" />
@@ -66,12 +65,7 @@ class LoginPage extends React.Component<TProps> {
                     </Form.Item>
                     <Form.Item
                         name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: i18n.t('forms.requiredText'),
-                            },
-                        ]}
+                        rules={validationConsts.user.password}
                     >
                         <Input
                             prefix={

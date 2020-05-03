@@ -26,6 +26,7 @@ import {EPageMode, EUploadingStatus} from 'Core/enums';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
 import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
 import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'Modules/buildings/models';
 import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
@@ -225,6 +226,7 @@ class RoomEdit extends React.Component<TProps, IState> {
                         {i18n.t('Rooms:edit.title')}
                     </Typography.Title>
                     <Form
+                        validateMessages={defaultValidateMessages}
                         ref={this.formRef}
                         className="admin-form"
                         initialValues={{
@@ -237,12 +239,7 @@ class RoomEdit extends React.Component<TProps, IState> {
                     >
                         <Form.Item
                             name="building"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: i18n.t('forms.requiredText'),
-                                },
-                            ]}
+                            rules={validationConsts.common.required}
                             label={i18n.t('Rooms:edit.buildingPlaceholder')}
                         >
                             <BuildingsAutocomplete
@@ -252,12 +249,7 @@ class RoomEdit extends React.Component<TProps, IState> {
                         <Form.Item
                             name="name"
                             label={i18n.t('Rooms:edit.namePlaceholder')}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: i18n.t('forms.requiredText'),
-                                },
-                            ]}
+                            rules={validationConsts.room.name}
                         >
                             <Input />
                         </Form.Item>
@@ -270,12 +262,14 @@ class RoomEdit extends React.Component<TProps, IState> {
                         <Form.Item
                             name="seats"
                             label={i18n.t('Rooms:edit.seatsPlaceholder')}
+                            rules={validationConsts.room.seats}
                         >
                             <InputNumber />
                         </Form.Item>
                         <Form.Item
                             name="floor"
                             label={i18n.t('Rooms:edit.floorPlaceholder')}
+                            rules={validationConsts.room.floor}
                         >
                             <InputNumber />
                         </Form.Item>
