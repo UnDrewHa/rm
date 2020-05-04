@@ -1,6 +1,5 @@
 import {Col, PageHeader, Row, Skeleton, Typography} from 'antd';
 import i18n from 'i18next';
-import {find} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
@@ -15,12 +14,7 @@ import {EventsService} from 'Modules/events/service/EventsService';
 import {calculateTimeString} from 'Modules/events/utils';
 import {RoomTitle} from 'Modules/rooms/components/RoomTitle';
 
-interface IState {
-    eventData: IEventModel;
-}
-
 interface IStateProps {
-    events: IAsyncData<IEventModel[]>;
     details: IAsyncData<IEventModel>;
 }
 
@@ -34,27 +28,16 @@ interface IOwnProps {
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
-class EventDetailsPage extends React.Component<TProps, IState> {
+class EventDetailsPage extends React.Component<TProps> {
     constructor(props: TProps) {
         super(props);
 
         const {
-            events,
             match: {params},
             eventsActions,
         } = props;
-        const eventFromList = find(
-            events.data,
-            (event) => event._id === params.id,
-        );
 
-        if (!eventFromList) {
-            eventsActions.getById(params.id);
-        }
-
-        this.state = {
-            eventData: eventFromList,
-        };
+        eventsActions.getById(params.id);
     }
 
     handleBack = () => {
@@ -63,7 +46,7 @@ class EventDetailsPage extends React.Component<TProps, IState> {
 
     render() {
         const {details} = this.props;
-        const eventData = this.state.eventData || details.data;
+        const eventData = details.data;
         const isLoading =
             details.status !== EStatusCodes.SUCCESS &&
             details.status !== EStatusCodes.FAIL &&
@@ -143,7 +126,6 @@ class EventDetailsPage extends React.Component<TProps, IState> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    events: state.events.list,
     details: state.events.details,
 });
 

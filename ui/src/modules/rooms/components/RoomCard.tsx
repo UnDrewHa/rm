@@ -1,5 +1,4 @@
 import {Card, Skeleton} from 'antd';
-import {find} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
 import {EStatusCodes} from 'Core/reducer/enums';
@@ -9,7 +8,7 @@ import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
 import {RoomDescription} from 'Modules/rooms/components/RoomDescription';
 import {RoomImage} from 'Modules/rooms/components/RoomImage';
 import {RoomTitle} from 'Modules/rooms/components/RoomTitle';
-import {IRoomFullModel, IRoomModel} from 'Modules/rooms/models';
+import {IRoomFullModel} from 'Modules/rooms/models';
 import {RoomsService} from 'Modules/rooms/service/RoomsService';
 import '../styles/roomCard.scss';
 
@@ -18,7 +17,6 @@ interface IOwnProps {
 }
 
 interface IStateProps {
-    roomsList: IAsyncData<IRoomModel[]>;
     details: IAsyncData<IRoomFullModel>;
 }
 
@@ -28,29 +26,18 @@ interface IDispatchProps {
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
-interface IState {
-    roomData: IRoomFullModel;
-}
-
-class RoomCard extends React.Component<TProps, IState> {
+class RoomCard extends React.Component<TProps> {
     constructor(props) {
         super(props);
 
-        const {roomsList, id, roomsActions} = props;
-        const roomFromList = find(roomsList.data, (room) => room._id === id);
+        const {id, roomsActions} = props;
 
-        if (!roomFromList) {
-            roomsActions.getById(id);
-        }
-
-        this.state = {
-            roomData: roomFromList,
-        };
+        roomsActions.getById(id);
     }
 
     render() {
         const {details} = this.props;
-        const room = this.state.roomData || details.data;
+        const room = details.data;
         const isLoading =
             details.status !== EStatusCodes.SUCCESS &&
             details.status !== EStatusCodes.FAIL &&
@@ -76,7 +63,6 @@ class RoomCard extends React.Component<TProps, IState> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    roomsList: state.rooms.list,
     details: state.rooms.details,
 });
 

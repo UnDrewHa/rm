@@ -3,8 +3,11 @@ import {SUCCESS} from 'Core/actions/actionTypes';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'Core/reducer/model';
 import {createAsyncDataReducer} from 'Core/reducer/utils';
-import {CLEAR_AUTH_DATA} from 'Modules/auth/actions/actionTypes';
-import {DELETE_USERS, FIND_USERS} from 'Modules/users/actions/actionTypes';
+import {
+    CLEAR_USERS_DATA,
+    DELETE_USERS,
+    FIND_USERS,
+} from 'Modules/users/actions/actionTypes';
 import {IUserModel} from 'Modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel[]> => ({
@@ -37,7 +40,7 @@ export const usersListReducer = (
         };
     }
 
-    if (type === CLEAR_AUTH_DATA) {
+    if (type === CLEAR_USERS_DATA) {
         return getInitialState();
     }
 

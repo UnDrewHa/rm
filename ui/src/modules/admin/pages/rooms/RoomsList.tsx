@@ -69,9 +69,15 @@ interface IState {
 }
 
 class RoomsList extends React.Component<TProps, IState> {
-    state = {
-        building: null,
-    };
+    constructor(props: TProps) {
+        super(props);
+
+        this.state = {
+            building: null,
+        };
+
+        props.actions.clear();
+    }
 
     /**
      * Обработчик выбора здания.

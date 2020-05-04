@@ -224,7 +224,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 <Form.Item
                                     name="date"
                                     label={i18n.t('Rooms:common.date')}
-                                    rules={validationConsts.event.date as any}
+                                    rules={validationConsts.event.date}
                                 >
                                     <DatePicker
                                         allowClear={false}
@@ -234,7 +234,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 <Form.Item
                                     name="from"
                                     label={i18n.t('Rooms:common.from')}
-                                    rules={validationConsts.event.from as any}
+                                    rules={validationConsts.event.from}
                                 >
                                     <TimePicker
                                         allowClear={false}
@@ -244,7 +244,7 @@ class RoomsListPage extends React.Component<TProps, IState> {
                                 <Form.Item
                                     name="to"
                                     label={i18n.t('Rooms:common.to')}
-                                    rules={validationConsts.event.to as any}
+                                    rules={validationConsts.event.to}
                                 >
                                     <TimePicker
                                         allowClear={false}

@@ -1,5 +1,11 @@
 /* eslint-disable no-template-curly-in-string */
-const dateValidator = (_, value) => isNaN(new Date(value).getTime());
+const dateValidator = (_, value) => {
+    if (isNaN(new Date(value).getTime())) {
+        return Promise.resolve();
+    }
+
+    return Promise.reject();
+};
 const typeTemplate = 'Поле не соответствует типу ${type}';
 
 export const validationConsts = {
@@ -52,6 +58,12 @@ export const validationConsts = {
                     return Promise.reject('Пароли не совпадают');
                 },
             }),
+        ],
+        newPassword: [
+            {
+                min: 8,
+                whitespace: true,
+            },
         ],
     },
     room: {

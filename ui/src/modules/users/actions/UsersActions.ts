@@ -7,6 +7,7 @@ import {ROUTER} from 'Core/router/consts';
 import {ISignupData} from 'Modules/auth/models';
 import {
     CHANGE_OWN_PASSWORD,
+    CLEAR_USERS_DATA,
     CREATE_USER,
     DELETE_ME,
     DELETE_USERS,
@@ -188,4 +189,13 @@ export class UsersActions {
             this.service.toggleFavourite({roomId, type}),
         );
     };
+
+    /**
+     * Очистить стор.
+     */
+    clear() {
+        this.dispatch({
+            type: CLEAR_USERS_DATA,
+        });
+    }
 }

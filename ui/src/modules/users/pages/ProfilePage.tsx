@@ -236,7 +236,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                                     label={i18n.t(
                                         'Users:profile.newPasswordPlaceholder',
                                     )}
-                                    rules={validationConsts.user.password}
+                                    rules={validationConsts.user.newPassword}
                                 >
                                     <Input
                                         prefix={
