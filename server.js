@@ -25,3 +25,10 @@ const server = app.listen(process.env.PORT, () => {
 
 process.on('uncaughtException', handleUnhandled(server));
 process.on('unhandledRejection', handleUnhandled(server));
+process.on('SIGTERM', () => {
+    logger.info('SIGTERM RECEIVED! Shutting down...');
+
+    server.close(() => {
+        logger.info('Process terminated!');
+    });
+});
