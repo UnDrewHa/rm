@@ -6,3 +6,5 @@ config.env
 */**/.png
 /ui/public/img/
 /public/img/
+/combined.log
+/error.log

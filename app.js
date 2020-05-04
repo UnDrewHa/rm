@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const RouterMap = require('./router');
+const {createFolders} = require('./core/createFolders');
 const {getCorsSettings} = require('./core/cors');
 const {errorMiddleware} = require('./common/errors');
 
@@ -15,6 +16,8 @@ const IS_DEV_ENV = process.env.NODE_ENV === 'development';
 process.env.STATIC_PATH = IS_DEV_ENV
     ? process.env.PUBLIC_PATH
     : process.env.PUBLIC_PATH_PROD;
+
+createFolders();
 
 const app = express();
 
