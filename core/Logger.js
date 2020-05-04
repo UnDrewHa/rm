@@ -15,12 +15,12 @@ const logger = createLogger({
     ],
 });
 
-if (process.env.NODE_ENV !== 'production') {
-    logger.add(
-        new transports.Console({
-            format: combine(colorize(), timestamp(), customFormat),
-        }),
-    );
-}
+// if (process.env.NODE_ENV !== 'production') {
+logger.add(
+    new transports.Console({
+        format: combine(colorize(), timestamp(), customFormat),
+    }),
+);
+// }
 
 exports.logger = logger;

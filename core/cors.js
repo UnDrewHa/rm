@@ -7,7 +7,11 @@ exports.getCorsSettings = (isDevEnv, productionLocation) => {
               if (origin === productionLocation) {
                   callback(null, true);
               } else {
-                  logger.error('Not allowed by CORS, origin = ', origin);
+                  logger.error(
+                      'Not allowed by CORS, origin = ',
+                      origin,
+                      productionLocation,
+                  );
                   callback(new Error('Not allowed by CORS'));
               }
           };
