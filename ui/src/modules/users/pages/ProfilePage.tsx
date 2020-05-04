@@ -21,19 +21,16 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {FormSkeleton} from 'src/Core/components/FormSkeleton';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData} from 'src/Core/reducer/model';
-import {TAppStore} from 'src/Core/store/model';
-import {
-    defaultValidateMessages,
-    validationConsts,
-} from 'src/Core/validationConsts';
-import {BuildingsAutocomplete} from 'src/Modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'src/Modules/buildings/models';
-import {UsersActions} from 'src/Modules/users/actions/UsersActions';
-import {IUserModel} from 'src/Modules/users/models';
-import {UsersService} from 'src/Modules/users/service/UsersService';
+import {FormSkeleton} from 'Core/components/FormSkeleton';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
+import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {UsersActions} from 'Modules/users/actions/UsersActions';
+import {IUserModel} from 'Modules/users/models';
+import {UsersService} from 'Modules/users/service/UsersService';
 
 interface IState {
     building: IBuildingModel;

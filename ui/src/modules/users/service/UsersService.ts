@@ -1,11 +1,11 @@
-import {axios} from 'src/Core/axios';
-import {IDeleteMultipleItems, IFindBody} from 'src/Core/models';
-import {ISignupData} from 'src/Modules/auth/models';
+import {axios} from 'Core/axios';
+import {IDeleteMultipleItems, IFindBody} from 'Core/models';
+import {ISignupData} from 'Modules/auth/models';
 import {
     ICheckPasswordData,
     IUpdateUser,
     IUserFilterModel,
-} from 'src/Modules/users/models';
+} from 'Modules/users/models';
 
 /**
  * Сервис модуля Permissions.

@@ -1,9 +1,9 @@
 import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/Core/actions/utils';
-import {InterfaceAction} from 'src/Core/actions/InterfaceActions';
-import {ROUTER} from 'src/Core/router/consts';
+import {dispatchAsync} from 'Core/actions/utils';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {ROUTER} from 'Core/router/consts';
 import {
     CLEAR_ROOMS_DATA,
     CREATE_ROOM,
@@ -11,13 +11,13 @@ import {
     FIND_ROOMS,
     GET_ROOM_BY_ID,
     UPDATE_ROOM,
-} from 'src/Modules/rooms/actions/actionTypes';
+} from 'Modules/rooms/actions/actionTypes';
 import {
     IGetAllRoomsData,
     IRoomCreateModel,
     IRoomModel,
-} from 'src/Modules/rooms/models';
-import {RoomsService} from 'src/Modules/rooms/service/RoomsService';
+} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
 
 /**
  * Сервис модуля Events.

@@ -1,10 +1,10 @@
 import i18n from 'i18next';
-import AdminTranslations from 'src/Modules/admin/translations/ru/AdminTranslations';
-import AuthTranslations from 'src/Modules/auth/translations/ru/AuthTranslations';
-import BuildingsTranslations from 'src/Modules/buildings/translations/ru/BuildingsTranslations';
-import EventsTranslations from 'src/Modules/events/translations/ru/EventsTranslations';
-import RoomsTranslations from 'src/Modules/rooms/translations/ru/RoomsTranslations';
-import UsersTranslations from 'src/Modules/users/translations/ru/UsersTranslations';
+import AdminTranslations from 'Modules/admin/translations/ru/AdminTranslations';
+import AuthTranslations from 'Modules/auth/translations/ru/AuthTranslations';
+import BuildingsTranslations from 'Modules/buildings/translations/ru/BuildingsTranslations';
+import EventsTranslations from 'Modules/events/translations/ru/EventsTranslations';
+import RoomsTranslations from 'Modules/rooms/translations/ru/RoomsTranslations';
+import UsersTranslations from 'Modules/users/translations/ru/UsersTranslations';
 import CommonTranslations from './CommonTranslations';
 
 export function i18nInit(): Promise<Function> {

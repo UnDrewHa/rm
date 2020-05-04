@@ -21,7 +21,7 @@
     "noErrorTruncation": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "baseUrl": "./",
+    "baseUrl": "src",
     "isolatedModules": true
   },
   "rules": {

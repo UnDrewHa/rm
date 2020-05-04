@@ -3,14 +3,14 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData} from 'src/Core/reducer/model';
-import {ROUTER} from 'src/Core/router/consts';
-import {TAppStore} from 'src/Core/store/model';
-import {RoomsActions} from 'src/Modules/rooms/actions/RoomsActions';
-import {RoomsList} from 'src/Modules/rooms/components/RoomsList';
-import {IRoomModel} from 'src/Modules/rooms/models';
-import {RoomsService} from 'src/Modules/rooms/service/RoomsService';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
+import {TAppStore} from 'Core/store/model';
+import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
+import {RoomsList} from 'Modules/rooms/components/RoomsList';
+import {IRoomModel} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
 
 interface IStateProps {
     roomsList: IAsyncData<IRoomModel[]>;

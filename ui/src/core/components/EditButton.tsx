@@ -2,7 +2,7 @@ import {EditOutlined} from '@ant-design/icons';
 import i18n from 'i18next';
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {ROUTER} from 'src/Core/router/consts';
+import {ROUTER} from 'Core/router/consts';
 
 interface IOwnProps {
     id: string;

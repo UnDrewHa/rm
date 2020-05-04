@@ -1,4 +1,4 @@
-import {axios} from 'src/Core/axios';
+import {axios} from 'Core/axios';
 import {
     IForgotPasswordData,
     ILoginData,

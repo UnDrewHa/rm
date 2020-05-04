@@ -6,18 +6,15 @@ import queryParser from 'query-string';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {FormSkeleton} from 'src/Core/components/FormSkeleton';
-import {EPageMode} from 'src/Core/enums';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData} from 'src/Core/reducer/model';
-import {TAppStore} from 'src/Core/store/model';
-import {
-    defaultValidateMessages,
-    validationConsts,
-} from 'src/Core/validationConsts';
-import {BuildingsActions} from 'src/Modules/buildings/actions/BuildingsActions';
-import {IBuildingModel} from 'src/Modules/buildings/models';
-import {BuildingsService} from 'src/Modules/buildings/service/BuildingsService';
+import {FormSkeleton} from 'Core/components/FormSkeleton';
+import {EPageMode} from 'Core/enums';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
+import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
 
 interface IState {
     pageMode: EPageMode;

@@ -1,6 +1,6 @@
 import {isFunction} from 'lodash-es';
 import {Dispatch} from 'redux';
-import {BEGIN, FAIL, SUCCESS} from 'src/Core/actions/actionTypes';
+import {BEGIN, FAIL, SUCCESS} from 'Core/actions/actionTypes';
 
 /**
  * Обертка для асинхронных экшенов.

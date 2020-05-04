@@ -1,13 +1,10 @@
 import {includes} from 'lodash-es';
-import {SUCCESS} from 'src/Core/actions/actionTypes';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
-import {createAsyncDataReducer} from 'src/Core/reducer/utils';
-import {
-    DELETE_EVENTS,
-    FIND_EVENTS,
-} from 'src/Modules/events/actions/actionTypes';
-import {IEventModel} from 'src/Modules/events/models';
+import {SUCCESS} from 'Core/actions/actionTypes';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'Core/reducer/model';
+import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {DELETE_EVENTS, FIND_EVENTS} from 'Modules/events/actions/actionTypes';
+import {IEventModel} from 'Modules/events/models';
 
 const getInitialState = (): IAsyncData<IEventModel[]> => ({
     status: EStatusCodes.IDLE,

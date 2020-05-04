@@ -1,6 +1,6 @@
-import {BEGIN, FAIL, SUCCESS} from 'src/Core/actions/actionTypes';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
+import {BEGIN, FAIL, SUCCESS} from 'Core/actions/actionTypes';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'Core/reducer/model';
 
 interface IHandlersMap<S, A> {
     [actions: string]: (

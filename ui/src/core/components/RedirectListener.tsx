@@ -2,8 +2,8 @@ import {isEmpty} from 'lodash-es';
 import queryString from 'query-string';
 import React from 'react';
 import {useHistory} from 'react-router';
-import {EEventNames} from 'src/Core/EventEmitter/enums';
-import {EventEmiter} from 'src/Core/EventEmitter/EventEmitter';
+import {EEventNames} from 'Core/EventEmitter/enums';
+import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
 
 export interface IRedirectOptions {
     to: string;

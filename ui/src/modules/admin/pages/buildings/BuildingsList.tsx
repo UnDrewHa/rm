@@ -2,15 +2,15 @@ import {Divider} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
-import {DeleteButton} from 'src/Core/components/DeleteButton';
-import {EditButton} from 'src/Core/components/EditButton';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData} from 'src/Core/reducer/model';
-import {TAppStore} from 'src/Core/store/model';
-import {BlankList} from 'src/Modules/admin/pages/BlankList';
-import {BuildingsActions} from 'src/Modules/buildings/actions/BuildingsActions';
-import {IBuildingModel} from 'src/Modules/buildings/models';
-import {BuildingsService} from 'src/Modules/buildings/service/BuildingsService';
+import {DeleteButton} from 'Core/components/DeleteButton';
+import {EditButton} from 'Core/components/EditButton';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {BlankList} from 'Modules/admin/pages/BlankList';
+import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => [
     {

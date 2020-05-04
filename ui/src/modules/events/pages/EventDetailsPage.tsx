@@ -3,16 +3,16 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData} from 'src/Core/reducer/model';
-import {TAppStore} from 'src/Core/store/model';
-import {EventsActions} from 'src/Modules/events/actions/EventsActions';
-import {EventMembers} from 'src/Modules/events/components/EventMembers';
-import {EventOwner} from 'src/Modules/events/components/EventOwner';
-import {IEventModel} from 'src/Modules/events/models';
-import {EventsService} from 'src/Modules/events/service/EventsService';
-import {calculateTimeString} from 'src/Modules/events/utils';
-import {RoomTitle} from 'src/Modules/rooms/components/RoomTitle';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {TAppStore} from 'Core/store/model';
+import {EventsActions} from 'Modules/events/actions/EventsActions';
+import {EventMembers} from 'Modules/events/components/EventMembers';
+import {EventOwner} from 'Modules/events/components/EventOwner';
+import {IEventModel} from 'Modules/events/models';
+import {EventsService} from 'Modules/events/service/EventsService';
+import {calculateTimeString} from 'Modules/events/utils';
+import {RoomTitle} from 'Modules/rooms/components/RoomTitle';
 
 interface IStateProps {
     details: IAsyncData<IEventModel>;

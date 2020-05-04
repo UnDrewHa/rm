@@ -1,10 +1,10 @@
-import {axios} from 'src/Core/axios';
-import {IDataResponse, IDeleteMultipleItems} from 'src/Core/models';
+import {axios} from 'Core/axios';
+import {IDataResponse, IDeleteMultipleItems} from 'Core/models';
 import {
     IEventCreateModel,
     IEventModel,
     IGetAllEventsData,
-} from 'src/Modules/events/models';
+} from 'Modules/events/models';
 
 /**
  * Сервис модуля Events.

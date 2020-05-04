@@ -1,9 +1,9 @@
 import {List, Skeleton} from 'antd';
 import React from 'react';
-import {RoomDescription} from 'src/Modules/rooms/components/RoomDescription';
-import {RoomImage} from 'src/Modules/rooms/components/RoomImage';
-import {RoomTitle} from 'src/Modules/rooms/components/RoomTitle';
-import {IRoomModel} from 'src/Modules/rooms/models';
+import {RoomDescription} from 'Modules/rooms/components/RoomDescription';
+import {RoomImage} from 'Modules/rooms/components/RoomImage';
+import {RoomTitle} from 'Modules/rooms/components/RoomTitle';
+import {IRoomModel} from 'Modules/rooms/models';
 import '../styles/roomsList.scss';
 
 interface IOwnProps {

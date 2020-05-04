@@ -17,23 +17,20 @@ import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT} from 'src/Core/consts';
-import {EStatusCodes} from 'src/Core/reducer/enums';
-import {IAsyncData} from 'src/Core/reducer/model';
-import {ROUTER} from 'src/Core/router/consts';
-import {TAppStore} from 'src/Core/store/model';
-import {
-    defaultValidateMessages,
-    validationConsts,
-} from 'src/Core/validationConsts';
-import {BuildingsAutocomplete} from 'src/Modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'src/Modules/buildings/models';
-import {disabledDate} from 'src/Modules/events/utils';
-import {RoomsActions} from 'src/Modules/rooms/actions/RoomsActions';
-import {RoomsList} from 'src/Modules/rooms/components/RoomsList';
-import {IRoomModel} from 'src/Modules/rooms/models';
-import {RoomsService} from 'src/Modules/rooms/service/RoomsService';
-import {changeOnlyDate, formatTime} from 'src/Modules/rooms/utils';
+import {DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT} from 'Core/consts';
+import {EStatusCodes} from 'Core/reducer/enums';
+import {IAsyncData} from 'Core/reducer/model';
+import {ROUTER} from 'Core/router/consts';
+import {TAppStore} from 'Core/store/model';
+import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
+import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'Modules/buildings/models';
+import {disabledDate} from 'Modules/events/utils';
+import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
+import {RoomsList} from 'Modules/rooms/components/RoomsList';
+import {IRoomModel} from 'Modules/rooms/models';
+import {RoomsService} from 'Modules/rooms/service/RoomsService';
+import {changeOnlyDate, formatTime} from 'Modules/rooms/utils';
 
 interface IState {
     building: IBuildingModel;

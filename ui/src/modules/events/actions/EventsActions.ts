@@ -1,22 +1,22 @@
 import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'src/Core/actions/utils';
-import {InterfaceAction} from 'src/Core/actions/InterfaceActions';
-import {ROUTER} from 'src/Core/router/consts';
+import {dispatchAsync} from 'Core/actions/utils';
+import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {ROUTER} from 'Core/router/consts';
 import {
     CREATE_EVENT,
     DELETE_EVENTS,
     FIND_EVENTS,
     GET_EVENT_BY_ID,
     UPDATE_EVENT,
-} from 'src/Modules/events/actions/actionTypes';
+} from 'Modules/events/actions/actionTypes';
 import {
     IEventCreateModel,
     IEventModel,
     IGetAllEventsData,
-} from 'src/Modules/events/models';
-import {EventsService} from 'src/Modules/events/service/EventsService';
+} from 'Modules/events/models';
+import {EventsService} from 'Modules/events/service/EventsService';
 
 /**
  * Сервис модуля Events.

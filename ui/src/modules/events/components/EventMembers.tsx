@@ -1,6 +1,6 @@
 import {Tag, Typography} from 'antd';
 import React from 'react';
-import {IEventModel} from 'src/Modules/events/models';
+import {IEventModel} from 'Modules/events/models';
 
 interface IOwnProps {
     event: IEventModel;
