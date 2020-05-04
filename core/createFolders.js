@@ -1,25 +1,19 @@
-const fs = require('fs');
-const util = require('util');
+const path = require('path');
+const mkdirp = require('mkdirp');
 const {logger} = require('./Logger');
 
-const getPathStat = util.promisify(fs.stat);
-const mkDirAsync = util.promisify(fs.mkdir);
 const folderNames = ['img'];
 
 exports.createFolders = () => {
-    Promise.all(
-        folderNames.map((folderName) => {
-            const fullPath = `${process.cwd()}/${
-                process.env.STATIC_PATH
-            }/${folderName}`;
+    folderNames.map((folderName) => {
+        const fullPath = path.normalize(
+            `${process.cwd()}/${process.env.STATIC_PATH}/${folderName}`,
+        );
 
-            return getPathStat(fullPath).catch((err) => {
-                if (err && err.code === 'ENOENT') {
-                    return mkDirAsync(fullPath);
-                }
+        const result = mkdirp.sync(fullPath);
 
-                logger.error('Ошибка получения данных папки', err);
-            });
-        }),
-    ).catch((err) => logger.error('Ошибка создания папок', err));
+        logger.info(
+            'Результат создания папок: ' + (result || 'Ничего не создано'),
+        );
+    });
 };
