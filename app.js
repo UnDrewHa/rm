@@ -42,7 +42,7 @@ app.use(express.urlencoded({extended: true, limit: '10kb'}));
 
 app.use(
     express.static(`${__dirname}/${process.env.STATIC_PATH}`, {
-        maxAge: 60000,
+        maxAge: 2592000000, //1 month
     }),
 );
 app.use(cookieParser());

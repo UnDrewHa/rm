@@ -1,10 +1,9 @@
 import {AppstoreOutlined, HomeOutlined, UserOutlined} from '@ant-design/icons';
 import {Col, Menu, PageHeader, Row} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {withRouter, Link, Switch} from 'react-router-dom';
 import {RouteWrap} from 'core/components/RouteWrap';
+import {getErrorPage} from 'core/pages/404';
 import {ROUTER} from 'core/router/consts';
+import i18n from 'i18next';
 import {BuildingsList} from 'modules/admin/pages/buildings/BuildingsList';
 import {BuildingEdit} from 'modules/admin/pages/buildings/BuildingEdit';
 import {RoomsList} from 'modules/admin/pages/rooms/RoomsList';
@@ -13,6 +12,8 @@ import {UsersList} from 'modules/admin/pages/users/UsersList';
 import {UserEdit} from 'modules/admin/pages/users/UserEdit';
 import {AdminMainPage} from 'modules/admin/pages/AdminMainPage';
 import {ERoles} from 'modules/permissions/enums';
+import React from 'react';
+import {withRouter, Link, Route, Switch} from 'react-router-dom';
 import '../styles/adminTable.scss';
 
 const {FULL_PATH, BUILDINGS, USERS, ROOMS} = ROUTER.MAIN.ADMIN;
@@ -149,51 +150,51 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                         <Switch>
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.USERS.EDIT.FULL_PATH}
+                                path={USERS.EDIT.FULL_PATH}
                             >
                                 <UserEdit />
                             </RouteWrap>
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.USERS.FULL_PATH}
+                                path={USERS.FULL_PATH}
                             >
                                 <UsersList />
                             </RouteWrap>
 
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.ROOMS.EDIT.FULL_PATH}
+                                path={ROOMS.EDIT.FULL_PATH}
                             >
                                 <RoomEdit />
                             </RouteWrap>
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.ROOMS.FULL_PATH}
+                                path={ROOMS.FULL_PATH}
                             >
                                 <RoomsList />
                             </RouteWrap>
 
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={
-                                    ROUTER.MAIN.ADMIN.BUILDINGS.EDIT.FULL_PATH
-                                }
+                                path={BUILDINGS.EDIT.FULL_PATH}
                             >
                                 <BuildingEdit />
                             </RouteWrap>
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.BUILDINGS.FULL_PATH}
+                                path={BUILDINGS.FULL_PATH}
                             >
                                 <BuildingsList />
                             </RouteWrap>
 
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.FULL_PATH}
+                                path={FULL_PATH}
+                                exact
                             >
                                 <AdminMainPage />
                             </RouteWrap>
+                            <Route component={getErrorPage(FULL_PATH, 404)} />
                         </Switch>
                     </Col>
                 </Row>

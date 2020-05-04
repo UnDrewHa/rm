@@ -1,6 +1,3 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {Route} from 'react-router-dom';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
 import {PermissionActions} from 'modules/permissions/actions/PermissionActions';
@@ -11,6 +8,11 @@ import {checkAccess, checkRole} from 'modules/permissions/utils';
 import {UsersActions} from 'modules/users/actions/UsersActions';
 import {IUserModel} from 'modules/users/models';
 import {UsersService} from 'modules/users/service/UsersService';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Route} from 'react-router-dom';
+import {getErrorPage} from 'core/pages/404';
+import {ROUTER} from 'core/router/consts';
 
 interface IOwnProps {
     role?: ERoles;
@@ -54,7 +56,7 @@ const RouteWrap = (props: TProps) => {
         return content;
     }
 
-    return null;
+    return <Route component={getErrorPage(ROUTER.MAIN.FULL_PATH, 403)} />;
 };
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({

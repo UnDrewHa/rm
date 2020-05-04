@@ -1,14 +1,12 @@
 import {LogoutOutlined} from '@ant-design/icons';
 import {Layout, Menu, Tooltip} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Link, Switch} from 'react-router-dom';
 import {LoadingOverlay} from 'core/components/LoadingOverlay';
 import {RouteWrap} from 'core/components/RouteWrap';
+import {getErrorPage} from 'core/pages/404';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
 import {AdminLayoutPage} from 'modules/admin/pages/AdminLayoutPage';
 import {AuthActions} from 'modules/auth/actions/AuthActions';
 import {AuthService} from 'modules/auth/service/AuthService';
@@ -32,30 +30,35 @@ import {UsersActions} from 'modules/users/actions/UsersActions';
 import {IUserModel} from 'modules/users/models';
 import {ProfilePage} from 'modules/users/pages/ProfilePage';
 import {UsersService} from 'modules/users/service/UsersService';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter, Link, Route, Switch} from 'react-router-dom';
+
+const {FULL_PATH, EVENTS, ADMIN, PROFILE, ROOMS} = ROUTER.MAIN;
 
 const menuConfig = [
     {
-        key: ROUTER.MAIN.FULL_PATH,
+        key: FULL_PATH,
         label: () => i18n.t('menu.list'),
         accessActions: [ERoomsActions.GET_ALL],
     },
     {
-        key: ROUTER.MAIN.EVENTS.USER_EVENTS.FULL_PATH,
+        key: EVENTS.USER_EVENTS.FULL_PATH,
         label: () => i18n.t('menu.ownEvents'),
         accessActions: [EEventsActions.GET_ALL],
     },
     {
-        key: ROUTER.MAIN.ROOMS.FAVOURITES.FULL_PATH,
+        key: ROOMS.FAVOURITES.FULL_PATH,
         label: () => i18n.t('menu.favourites'),
         accessActions: [ERoomsActions.GET_ALL],
     },
     {
-        key: ROUTER.MAIN.PROFILE.FULL_PATH,
+        key: PROFILE.FULL_PATH,
         label: () => i18n.t('menu.profile'),
         accessActions: [EUsersActions.UPDATE_ME],
     },
     {
-        key: ROUTER.MAIN.ADMIN.FULL_PATH,
+        key: ADMIN.FULL_PATH,
         label: () => i18n.t('menu.admin'),
         role: ERoles.ADMIN,
     },
@@ -80,6 +83,7 @@ type TProps = IOwnProps & IStateProps & IDispatchProps;
 
 interface IState {
     isLoading: boolean;
+    hasErrors: boolean;
 }
 
 class MainLayout extends React.Component<TProps, IState> {
@@ -90,16 +94,24 @@ class MainLayout extends React.Component<TProps, IState> {
 
         this.state = {
             isLoading: true,
+            hasErrors: false,
         };
 
         let promises = [permissionActions.getAll()];
         !userInfo.data && promises.push(userActions.getUserInfo());
 
-        Promise.all(promises).then(() => {
-            this.setState({
-                isLoading: false,
+        Promise.all(promises)
+            .then(() => {
+                this.setState({
+                    isLoading: false,
+                });
+            })
+            .catch((_) => {
+                this.setState({
+                    isLoading: false,
+                    hasErrors: true,
+                });
             });
-        });
     }
 
     handleLogout = () => {
@@ -107,13 +119,19 @@ class MainLayout extends React.Component<TProps, IState> {
     };
 
     render() {
+        const {hasErrors, isLoading} = this.state;
         const {location, permissions, userInfo} = this.props;
         const selectedKeys =
-            location.pathname.indexOf(ROUTER.MAIN.ADMIN.FULL_PATH) === 0
-                ? [ROUTER.MAIN.ADMIN.FULL_PATH]
+            location.pathname.indexOf(ADMIN.FULL_PATH) === 0
+                ? [ADMIN.FULL_PATH]
                 : [location.pathname];
-        if (this.state.isLoading) {
+        if (isLoading) {
             return <LoadingOverlay />;
+        }
+
+        if (hasErrors) {
+            const ErrorData = getErrorPage(null, 500);
+            return <ErrorData />;
         }
 
         return (
@@ -122,7 +140,7 @@ class MainLayout extends React.Component<TProps, IState> {
                     <Menu
                         theme="dark"
                         mode="horizontal"
-                        defaultSelectedKeys={[ROUTER.MAIN.FULL_PATH]}
+                        defaultSelectedKeys={[FULL_PATH]}
                         selectedKeys={selectedKeys}
                     >
                         {menuConfig.map((item) => {
@@ -159,52 +177,54 @@ class MainLayout extends React.Component<TProps, IState> {
                         <Switch>
                             <RouteWrap
                                 role={ERoles.ADMIN}
-                                path={ROUTER.MAIN.ADMIN.FULL_PATH}
+                                path={ADMIN.FULL_PATH}
                             >
                                 <AdminLayoutPage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[ERoomsActions.GET_ALL]}
-                                path={ROUTER.MAIN.ROOMS.FAVOURITES.FULL_PATH}
+                                path={ROOMS.FAVOURITES.FULL_PATH}
                             >
                                 <FavouritesRoomsPage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[EUsersActions.UPDATE_ME]}
-                                path={ROUTER.MAIN.PROFILE.FULL_PATH}
+                                path={PROFILE.FULL_PATH}
                             >
                                 <ProfilePage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[EEventsActions.GET_ALL]}
-                                path={ROUTER.MAIN.EVENTS.USER_EVENTS.FULL_PATH}
+                                path={EVENTS.USER_EVENTS.FULL_PATH}
                             >
                                 <UserEventsPage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[EEventsActions.CREATE]}
-                                path={ROUTER.MAIN.EVENTS.CREATE.FULL_PATH}
+                                path={EVENTS.CREATE.FULL_PATH}
                             >
                                 <EventEditPage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[EEventsActions.GET_BY_ID]}
-                                path={ROUTER.MAIN.EVENTS.DETAILS.FULL_PATH}
+                                path={EVENTS.DETAILS.FULL_PATH}
                             >
                                 <EventDetailsPage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[ERoomsActions.GET_BY_ID]}
-                                path={ROUTER.MAIN.ROOMS.DETAILS.FULL_PATH}
+                                path={ROOMS.DETAILS.FULL_PATH}
                             >
                                 <RoomSchedulePage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[ERoomsActions.GET_ALL]}
-                                path={ROUTER.MAIN.FULL_PATH}
+                                path={FULL_PATH}
+                                exact
                             >
                                 <RoomsListPage />
                             </RouteWrap>
+                            <Route component={getErrorPage(FULL_PATH, 404)} />
                         </Switch>
                     </main>
                 </Layout.Content>
