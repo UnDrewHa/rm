@@ -1,6 +1,6 @@
 const {AppError} = require('./AppError');
 const {errorHandler} = require('../../core/ErrorHandler');
-const {commonHTTPCodes, commonErrors} = require('./index');
+const {commonHTTPCodes, commonErrors} = require('./maps');
 
 /**
  * Сформировать текст ошибки обязательного заполнения поля.
