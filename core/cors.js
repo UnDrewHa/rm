@@ -1,3 +1,5 @@
+const {logger} = require('./Logger');
+
 exports.getCorsSettings = (isDevEnv, productionLocation) => {
     const origin = isDevEnv
         ? true
@@ -5,6 +7,7 @@ exports.getCorsSettings = (isDevEnv, productionLocation) => {
               if (origin === productionLocation) {
                   callback(null, true);
               } else {
+                  logger.error('Not allowed by CORS, origin = ', origin);
                   callback(new Error('Not allowed by CORS'));
               }
           };
