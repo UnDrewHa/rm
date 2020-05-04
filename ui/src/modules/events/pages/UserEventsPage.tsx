@@ -5,19 +5,19 @@ import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {commonTableProps} from 'Core/consts';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
+import {commonTableProps} from 'src/Core/consts';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData} from 'src/Core/reducer/model';
+import {TAppStore} from 'src/Core/store/model';
+import {EventsActions} from 'src/Modules/events/actions/EventsActions';
 import {
     columnsWithoutOwner,
     columnsWithActions,
-} from 'Modules/events/components/utils';
-import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
-import {IEventModel, IUserEventsFilter} from 'Modules/events/models';
-import {EventsService} from 'Modules/events/service/EventsService';
-import {IUserModel} from 'Modules/users/models';
+} from 'src/Modules/events/components/utils';
+import {EventDeleteButton} from 'src/Modules/events/components/EventDeleteButton';
+import {IEventModel, IUserEventsFilter} from 'src/Modules/events/models';
+import {EventsService} from 'src/Modules/events/service/EventsService';
+import {IUserModel} from 'src/Modules/users/models';
 
 enum ETabNames {
     ACTIVE = 'ACTIVE',

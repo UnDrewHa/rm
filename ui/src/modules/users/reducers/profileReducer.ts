@@ -1,19 +1,19 @@
-import {SUCCESS} from 'Core/actions/actionTypes';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {SUCCESS} from 'src/Core/actions/actionTypes';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
+import {createAsyncDataReducer} from 'src/Core/reducer/utils';
 import {
     CLEAR_AUTH_DATA,
     LOGIN,
     LOGOUT,
     SIGNUP,
-} from 'Modules/auth/actions/actionTypes';
+} from 'src/Modules/auth/actions/actionTypes';
 import {
     GET_USER_INFO,
     TOGGLE_FAVOURITE,
     UPDATE_ME,
-} from 'Modules/users/actions/actionTypes';
-import {IUserModel} from 'Modules/users/models';
+} from 'src/Modules/users/actions/actionTypes';
+import {IUserModel} from 'src/Modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel> => ({
     status: EStatusCodes.IDLE,

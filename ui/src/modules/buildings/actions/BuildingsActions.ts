@@ -1,9 +1,9 @@
 import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'Core/actions/utils';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {ROUTER} from 'Core/router/consts';
+import {dispatchAsync} from 'src/Core/actions/utils';
+import {InterfaceAction} from 'src/Core/actions/InterfaceActions';
+import {ROUTER} from 'src/Core/router/consts';
 import {
     CLEAR_BUILDINGS_DATA,
     CREATE_BUILDING,
@@ -11,8 +11,8 @@ import {
     GET_BUILDING_BY_ID,
     GET_BUILDINGS,
     UPDATE_BUILDING,
-} from 'Modules/buildings/actions/actionTypes';
-import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
+} from 'src/Modules/buildings/actions/actionTypes';
+import {BuildingsService} from 'src/Modules/buildings/service/BuildingsService';
 import {IBuildingCreateModel, IBuildingModel} from '../models';
 
 /**

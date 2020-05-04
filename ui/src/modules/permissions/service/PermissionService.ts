@@ -1,4 +1,4 @@
-import {axios} from 'Core/axios';
+import {axios} from 'src/Core/axios';
 
 const BASE_URL = '/permissions';
 

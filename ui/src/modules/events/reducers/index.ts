@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
-import {eventsListReducer} from 'Modules/events/reducers/eventsListReducer';
-import {eventDetailsReducer} from 'Modules/events/reducers/eventDetailsReducer';
+import {eventsListReducer} from 'src/Modules/events/reducers/eventsListReducer';
+import {eventDetailsReducer} from 'src/Modules/events/reducers/eventDetailsReducer';
 
 export const eventsRootReducer = combineReducers({
     list: eventsListReducer,

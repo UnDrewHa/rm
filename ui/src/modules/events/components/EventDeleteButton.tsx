@@ -3,8 +3,8 @@ import {Button, Popconfirm} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {EventsService} from 'Modules/events/service/EventsService';
+import {EventsActions} from 'src/Modules/events/actions/EventsActions';
+import {EventsService} from 'src/Modules/events/service/EventsService';
 
 interface IOwnProps {
     ids: string[];

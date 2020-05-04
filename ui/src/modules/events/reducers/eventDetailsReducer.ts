@@ -1,11 +1,11 @@
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
+import {createAsyncDataReducer} from 'src/Core/reducer/utils';
 import {
     CREATE_EVENT,
     GET_EVENT_BY_ID,
-} from 'Modules/events/actions/actionTypes';
-import {IEventModel} from 'Modules/events/models';
+} from 'src/Modules/events/actions/actionTypes';
+import {IEventModel} from 'src/Modules/events/models';
 
 const getInitialState = (): IAsyncData<IEventModel> => ({
     status: EStatusCodes.IDLE,

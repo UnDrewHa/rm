@@ -1,10 +1,10 @@
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
+import {createAsyncDataReducer} from 'src/Core/reducer/utils';
 import {
     CLEAR_AUTH_DATA,
     RESET_PASSWORD,
-} from 'Modules/auth/actions/actionTypes';
+} from 'src/Modules/auth/actions/actionTypes';
 
 export const getInitialState = (): IAsyncData<null> => ({
     status: EStatusCodes.IDLE,

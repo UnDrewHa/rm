@@ -4,13 +4,16 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Link} from 'react-router-dom';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
-import {AuthActions} from 'Modules/auth/actions/AuthActions';
-import {AuthService} from 'Modules/auth/service/AuthService';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData} from 'src/Core/reducer/model';
+import {ROUTER} from 'src/Core/router/consts';
+import {TAppStore} from 'src/Core/store/model';
+import {
+    defaultValidateMessages,
+    validationConsts,
+} from 'src/Core/validationConsts';
+import {AuthActions} from 'src/Modules/auth/actions/AuthActions';
+import {AuthService} from 'src/Modules/auth/service/AuthService';
 
 interface IProps {
     match: any;

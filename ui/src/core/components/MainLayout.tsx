@@ -4,34 +4,34 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Link, Switch} from 'react-router-dom';
-import {LoadingOverlay} from 'Core/components/LoadingOverlay';
-import {RouteWrap} from 'Core/components/RouteWrap';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {AdminLayoutPage} from 'Modules/admin/pages/AdminLayoutPage';
-import {AuthActions} from 'Modules/auth/actions/AuthActions';
-import {AuthService} from 'Modules/auth/service/AuthService';
-import {EventDetailsPage} from 'Modules/events/pages/EventDetailsPage';
-import {EventEditPage} from 'Modules/events/pages/EventEditPage';
-import {UserEventsPage} from 'Modules/events/pages/UserEventsPage';
-import {PermissionActions} from 'Modules/permissions/actions/PermissionActions';
+import {LoadingOverlay} from 'src/Core/components/LoadingOverlay';
+import {RouteWrap} from 'src/Core/components/RouteWrap';
+import {IAsyncData} from 'src/Core/reducer/model';
+import {ROUTER} from 'src/Core/router/consts';
+import {TAppStore} from 'src/Core/store/model';
+import {AdminLayoutPage} from 'src/Modules/admin/pages/AdminLayoutPage';
+import {AuthActions} from 'src/Modules/auth/actions/AuthActions';
+import {AuthService} from 'src/Modules/auth/service/AuthService';
+import {EventDetailsPage} from 'src/Modules/events/pages/EventDetailsPage';
+import {EventEditPage} from 'src/Modules/events/pages/EventEditPage';
+import {UserEventsPage} from 'src/Modules/events/pages/UserEventsPage';
+import {PermissionActions} from 'src/Modules/permissions/actions/PermissionActions';
 import {
     EEventsActions,
     ERoles,
     ERoomsActions,
     EUsersActions,
-} from 'Modules/permissions/enums';
-import {TPermissionsList} from 'Modules/permissions/models';
-import {PermissionService} from 'Modules/permissions/service/PermissionService';
-import {checkAccess, checkRole} from 'Modules/permissions/utils';
-import {FavouritesRoomsPage} from 'Modules/rooms/pages/FavouritesRoomsPage';
-import {RoomsListPage} from 'Modules/rooms/pages/RoomsListPage';
-import {RoomSchedulePage} from 'Modules/rooms/pages/RoomSchedulePage';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {IUserModel} from 'Modules/users/models';
-import {ProfilePage} from 'Modules/users/pages/ProfilePage';
-import {UsersService} from 'Modules/users/service/UsersService';
+} from 'src/Modules/permissions/enums';
+import {TPermissionsList} from 'src/Modules/permissions/models';
+import {PermissionService} from 'src/Modules/permissions/service/PermissionService';
+import {checkAccess, checkRole} from 'src/Modules/permissions/utils';
+import {FavouritesRoomsPage} from 'src/Modules/rooms/pages/FavouritesRoomsPage';
+import {RoomsListPage} from 'src/Modules/rooms/pages/RoomsListPage';
+import {RoomSchedulePage} from 'src/Modules/rooms/pages/RoomSchedulePage';
+import {UsersActions} from 'src/Modules/users/actions/UsersActions';
+import {IUserModel} from 'src/Modules/users/models';
+import {ProfilePage} from 'src/Modules/users/pages/ProfilePage';
+import {UsersService} from 'src/Modules/users/service/UsersService';
 
 const menuConfig = [
     {

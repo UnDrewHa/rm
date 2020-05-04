@@ -4,9 +4,9 @@ import i18n from 'i18next';
 import {find} from 'lodash-es';
 import React from 'react';
 import {connect} from 'react-redux';
-import {TAppStore} from 'Core/store/model';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {UsersService} from 'Modules/users/service/UsersService';
+import {TAppStore} from 'src/Core/store/model';
+import {UsersActions} from 'src/Modules/users/actions/UsersActions';
+import {UsersService} from 'src/Modules/users/service/UsersService';
 
 interface IOwnProps {
     roomId: string;

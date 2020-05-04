@@ -1,10 +1,10 @@
 import {message} from 'antd';
 import i18n from 'i18next';
 import {Dispatch} from 'redux';
-import {dispatchAsync} from 'Core/actions/utils';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {ROUTER} from 'Core/router/consts';
-import {ISignupData} from 'Modules/auth/models';
+import {dispatchAsync} from 'src/Core/actions/utils';
+import {InterfaceAction} from 'src/Core/actions/InterfaceActions';
+import {ROUTER} from 'src/Core/router/consts';
+import {ISignupData} from 'src/Modules/auth/models';
 import {
     CHANGE_OWN_PASSWORD,
     CLEAR_USERS_DATA,
@@ -17,13 +17,13 @@ import {
     TOGGLE_FAVOURITE,
     UPDATE_ME,
     UPDATE_USER,
-} from 'Modules/users/actions/actionTypes';
+} from 'src/Modules/users/actions/actionTypes';
 import {
     ICheckPasswordData,
     IUpdateUser,
     IUserFilterModel,
-} from 'Modules/users/models';
-import {UsersService} from 'Modules/users/service/UsersService';
+} from 'src/Modules/users/models';
+import {UsersService} from 'src/Modules/users/service/UsersService';
 
 /**
  * Сервис модуля Users.

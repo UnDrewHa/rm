@@ -6,7 +6,7 @@ import {
 import {Typography} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
-import {IRoomProp} from 'Modules/rooms/models';
+import {IRoomProp} from 'src/Modules/rooms/models';
 
 export const RoomDescription = ({item}: IRoomProp) => {
     return (

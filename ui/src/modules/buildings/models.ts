@@ -1,4 +1,4 @@
-import {IAsyncData} from 'Core/reducer/model';
+import {IAsyncData} from 'src/Core/reducer/model';
 
 /**
  * Интерфейс здания.
@@ -16,5 +16,5 @@ export interface IMappedBuildingsStore {
     buildings: {
         list: IAsyncData<IBuildingModel[]>;
         details: IAsyncData<IBuildingModel>;
-    }
+    };
 }

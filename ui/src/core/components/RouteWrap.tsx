@@ -1,16 +1,16 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Route} from 'react-router-dom';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {PermissionActions} from 'Modules/permissions/actions/PermissionActions';
-import {ERoles} from 'Modules/permissions/enums';
-import {TPermissionsList} from 'Modules/permissions/models';
-import {PermissionService} from 'Modules/permissions/service/PermissionService';
-import {checkAccess, checkRole} from 'Modules/permissions/utils';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {IUserModel} from 'Modules/users/models';
-import {UsersService} from 'Modules/users/service/UsersService';
+import {IAsyncData} from 'src/Core/reducer/model';
+import {TAppStore} from 'src/Core/store/model';
+import {PermissionActions} from 'src/Modules/permissions/actions/PermissionActions';
+import {ERoles} from 'src/Modules/permissions/enums';
+import {TPermissionsList} from 'src/Modules/permissions/models';
+import {PermissionService} from 'src/Modules/permissions/service/PermissionService';
+import {checkAccess, checkRole} from 'src/Modules/permissions/utils';
+import {UsersActions} from 'src/Modules/users/actions/UsersActions';
+import {IUserModel} from 'src/Modules/users/models';
+import {UsersService} from 'src/Modules/users/service/UsersService';
 
 interface IOwnProps {
     role?: ERoles;

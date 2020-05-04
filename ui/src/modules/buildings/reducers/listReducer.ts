@@ -1,14 +1,14 @@
 import {filter, includes} from 'lodash-es';
-import {SUCCESS} from 'Core/actions/actionTypes';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {SUCCESS} from 'src/Core/actions/actionTypes';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
+import {createAsyncDataReducer} from 'src/Core/reducer/utils';
 import {
     CLEAR_BUILDINGS_DATA,
     DELETE_BUILDINGS,
     GET_BUILDINGS,
-} from 'Modules/buildings/actions/actionTypes';
-import {IBuildingModel} from 'Modules/buildings/models';
+} from 'src/Modules/buildings/actions/actionTypes';
+import {IBuildingModel} from 'src/Modules/buildings/models';
 
 export const getInitialState = (): IAsyncData<IBuildingModel[]> => ({
     status: EStatusCodes.IDLE,

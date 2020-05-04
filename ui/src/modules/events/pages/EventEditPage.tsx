@@ -16,25 +16,28 @@ import queryParser from 'query-string';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {InterfaceAction} from 'src/Core/actions/InterfaceActions';
 import {
     commonTableProps,
     DEFAULT_DATE_FORMAT,
     DEFAULT_TIME_FORMAT,
-} from 'Core/consts';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {columnsWithoutDescription} from 'Modules/events/components/utils';
-import {IEventModel} from 'Modules/events/models';
-import {EventsService} from 'Modules/events/service/EventsService';
-import {disabledDate} from 'Modules/events/utils';
-import {RoomCard} from 'Modules/rooms/components/RoomCard';
-import {changeOnlyDate, formatTime} from 'Modules/rooms/utils';
-import {IUserModel} from 'Modules/users/models';
+} from 'src/Core/consts';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData} from 'src/Core/reducer/model';
+import {ROUTER} from 'src/Core/router/consts';
+import {TAppStore} from 'src/Core/store/model';
+import {
+    defaultValidateMessages,
+    validationConsts,
+} from 'src/Core/validationConsts';
+import {EventsActions} from 'src/Modules/events/actions/EventsActions';
+import {columnsWithoutDescription} from 'src/Modules/events/components/utils';
+import {IEventModel} from 'src/Modules/events/models';
+import {EventsService} from 'src/Modules/events/service/EventsService';
+import {disabledDate} from 'src/Modules/events/utils';
+import {RoomCard} from 'src/Modules/rooms/components/RoomCard';
+import {changeOnlyDate, formatTime} from 'src/Modules/rooms/utils';
+import {IUserModel} from 'src/Modules/users/models';
 import '../styles/events.scss';
 
 interface IState {

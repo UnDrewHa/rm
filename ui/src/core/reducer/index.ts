@@ -1,11 +1,11 @@
 import {combineReducers} from 'redux';
-import {TAppStore} from 'Core/store/model';
-import {resetPasswordReducer} from 'Modules/auth/reducers/resetPasswordReducer';
-import {buildingsRootReducer} from 'Modules/buildings/reducers';
-import {eventsRootReducer} from 'Modules/events/reducers';
-import {permissionsReducer} from 'Modules/permissions/reducers';
-import {roomsRootReducer} from 'Modules/rooms/reducers';
-import {usersRootReducer} from 'Modules/users/reducers';
+import {TAppStore} from 'src/Core/store/model';
+import {resetPasswordReducer} from 'src/Modules/auth/reducers/resetPasswordReducer';
+import {buildingsRootReducer} from 'src/Modules/buildings/reducers';
+import {eventsRootReducer} from 'src/Modules/events/reducers';
+import {permissionsReducer} from 'src/Modules/permissions/reducers';
+import {roomsRootReducer} from 'src/Modules/rooms/reducers';
+import {usersRootReducer} from 'src/Modules/users/reducers';
 
 /**
  * Корневой редюсер приложения.

@@ -3,17 +3,17 @@ import {Button, Divider, Tooltip} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
-import {DeleteButton} from 'Core/components/DeleteButton';
-import {EditButton} from 'Core/components/EditButton';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {BlankList} from 'Modules/admin/pages/BlankList';
-import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'Modules/buildings/models';
-import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
-import {IRoomModel} from 'Modules/rooms/models';
-import {RoomsService} from 'Modules/rooms/service/RoomsService';
+import {DeleteButton} from 'src/Core/components/DeleteButton';
+import {EditButton} from 'src/Core/components/EditButton';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData} from 'src/Core/reducer/model';
+import {TAppStore} from 'src/Core/store/model';
+import {BlankList} from 'src/Modules/admin/pages/BlankList';
+import {BuildingsAutocomplete} from 'src/Modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'src/Modules/buildings/models';
+import {RoomsActions} from 'src/Modules/rooms/actions/RoomsActions';
+import {IRoomModel} from 'src/Modules/rooms/models';
+import {RoomsService} from 'src/Modules/rooms/service/RoomsService';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => [
     {

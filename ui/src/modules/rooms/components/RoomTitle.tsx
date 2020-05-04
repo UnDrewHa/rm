@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {ROUTER} from 'Core/router/consts';
-import {FavouriteRoomIcon} from 'Modules/rooms/components/FavouriteRoomIcon';
-import {IRoomProp} from 'Modules/rooms/models';
+import {ROUTER} from 'src/Core/router/consts';
+import {FavouriteRoomIcon} from 'src/Modules/rooms/components/FavouriteRoomIcon';
+import {IRoomProp} from 'src/Modules/rooms/models';
 
 interface ITitleProps extends IRoomProp {
     addLink?: boolean;
@@ -10,9 +10,7 @@ interface ITitleProps extends IRoomProp {
 
 export const RoomTitle = ({item, addLink}: ITitleProps) => {
     const text = addLink ? (
-        <Link to={ROUTER.MAIN.ROOMS.DETAILS.PATH + item._id}>
-            {item.name}
-        </Link>
+        <Link to={ROUTER.MAIN.ROOMS.DETAILS.PATH + item._id}>{item.name}</Link>
     ) : (
         item.name
     );

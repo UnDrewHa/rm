@@ -1,8 +1,8 @@
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
-import {GET_ROOM_BY_ID} from 'Modules/rooms/actions/actionTypes';
-import {IRoomFullModel} from 'Modules/rooms/models';
+import {EStatusCodes} from 'src/Core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'src/Core/reducer/model';
+import {createAsyncDataReducer} from 'src/Core/reducer/utils';
+import {GET_ROOM_BY_ID} from 'src/Modules/rooms/actions/actionTypes';
+import {IRoomFullModel} from 'src/Modules/rooms/models';
 
 const getInitialState = (): IAsyncData<IRoomFullModel> => ({
     status: EStatusCodes.IDLE,
