@@ -1,11 +1,11 @@
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'core/reducer/model';
+import {createAsyncDataReducer} from 'core/reducer/utils';
 import {
     CLEAR_PERMISSIONS,
     GET_PERMISSIONS,
-} from 'Modules/permissions/actions/actionTypes';
-import {TPermissionsList} from 'Modules/permissions/models';
+} from 'modules/permissions/actions/actionTypes';
+import {TPermissionsList} from 'modules/permissions/models';
 
 export const getInitialState = (): IAsyncData<TPermissionsList> => ({
     status: EStatusCodes.IDLE,

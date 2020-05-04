@@ -3,16 +3,16 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {EventMembers} from 'Modules/events/components/EventMembers';
-import {EventOwner} from 'Modules/events/components/EventOwner';
-import {IEventModel} from 'Modules/events/models';
-import {EventsService} from 'Modules/events/service/EventsService';
-import {calculateTimeString} from 'Modules/events/utils';
-import {RoomTitle} from 'Modules/rooms/components/RoomTitle';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {TAppStore} from 'core/store/model';
+import {EventsActions} from 'modules/events/actions/EventsActions';
+import {EventMembers} from 'modules/events/components/EventMembers';
+import {EventOwner} from 'modules/events/components/EventOwner';
+import {IEventModel} from 'modules/events/models';
+import {EventsService} from 'modules/events/service/EventsService';
+import {calculateTimeString} from 'modules/events/utils';
+import {RoomTitle} from 'modules/rooms/components/RoomTitle';
 
 interface IStateProps {
     details: IAsyncData<IEventModel>;

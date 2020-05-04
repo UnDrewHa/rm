@@ -1,13 +1,13 @@
 import {connect} from 'react-redux';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {PermissionActions} from 'Modules/permissions/actions/PermissionActions';
-import {TPermissionsList} from 'Modules/permissions/models';
-import {PermissionService} from 'Modules/permissions/service/PermissionService';
-import {checkAccess, checkRole} from 'Modules/permissions/utils';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {IUserModel} from 'Modules/users/models';
-import {UsersService} from 'Modules/users/service/UsersService';
+import {IAsyncData} from 'core/reducer/model';
+import {TAppStore} from 'core/store/model';
+import {PermissionActions} from 'modules/permissions/actions/PermissionActions';
+import {TPermissionsList} from 'modules/permissions/models';
+import {PermissionService} from 'modules/permissions/service/PermissionService';
+import {checkAccess, checkRole} from 'modules/permissions/utils';
+import {UsersActions} from 'modules/users/actions/UsersActions';
+import {IUserModel} from 'modules/users/models';
+import {UsersService} from 'modules/users/service/UsersService';
 import {ERoles} from '../enums';
 
 interface IOwnProps {

@@ -4,17 +4,17 @@ import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {commonTableProps, DEFAULT_DATE_FORMAT} from 'Core/consts';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {baseColumnsConfig} from 'Modules/events/components/utils';
-import {IEventModel} from 'Modules/events/models';
-import {EventsService} from 'Modules/events/service/EventsService';
-import {RoomCard} from 'Modules/rooms/components/RoomCard';
+import {InterfaceAction} from 'core/actions/InterfaceActions';
+import {commonTableProps, DEFAULT_DATE_FORMAT} from 'core/consts';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
+import {TAppStore} from 'core/store/model';
+import {EventsActions} from 'modules/events/actions/EventsActions';
+import {baseColumnsConfig} from 'modules/events/components/utils';
+import {IEventModel} from 'modules/events/models';
+import {EventsService} from 'modules/events/service/EventsService';
+import {RoomCard} from 'modules/rooms/components/RoomCard';
 import '../styles/schedule.scss';
 
 interface IState {

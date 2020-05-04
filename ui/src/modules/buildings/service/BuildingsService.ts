@@ -1,6 +1,6 @@
-import {axios} from 'Core/axios';
-import {IDataResponse, IDeleteMultipleItems} from 'Core/models';
-import {IBuildingCreateModel, IBuildingModel} from 'Modules/buildings/models';
+import {axios} from 'core/axios';
+import {IDataResponse, IDeleteMultipleItems} from 'core/models';
+import {IBuildingCreateModel, IBuildingModel} from 'modules/buildings/models';
 
 /**
  * Сервис модуля Buildings.

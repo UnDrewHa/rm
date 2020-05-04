@@ -1,14 +1,14 @@
 import {filter, includes} from 'lodash-es';
-import {SUCCESS} from 'Core/actions/actionTypes';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {SUCCESS} from 'core/actions/actionTypes';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'core/reducer/model';
+import {createAsyncDataReducer} from 'core/reducer/utils';
 import {
     CLEAR_USERS_DATA,
     DELETE_USERS,
     FIND_USERS,
-} from 'Modules/users/actions/actionTypes';
-import {IUserModel} from 'Modules/users/models';
+} from 'modules/users/actions/actionTypes';
+import {IUserModel} from 'modules/users/models';
 
 export const getInitialState = (): IAsyncData<IUserModel[]> => ({
     status: EStatusCodes.IDLE,

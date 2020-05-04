@@ -1,9 +1,9 @@
-import {IMappedResetPasswordStore} from 'Modules/auth/models';
-import {IMappedBuildingsStore} from 'Modules/buildings/models';
-import {IMappedEventsStore} from 'Modules/events/models';
-import {IMappedPermissionsStore} from 'Modules/permissions/models';
-import {IMappedRoomsStore} from 'Modules/rooms/models';
-import {IMappedUserStore} from 'Modules/users/models';
+import {IMappedResetPasswordStore} from 'modules/auth/models';
+import {IMappedBuildingsStore} from 'modules/buildings/models';
+import {IMappedEventsStore} from 'modules/events/models';
+import {IMappedPermissionsStore} from 'modules/permissions/models';
+import {IMappedRoomsStore} from 'modules/rooms/models';
+import {IMappedUserStore} from 'modules/users/models';
 
 /**
  * Интерфейс хранилища приложения.

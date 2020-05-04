@@ -5,19 +5,19 @@ import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {commonTableProps} from 'Core/consts';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
+import {commonTableProps} from 'core/consts';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {TAppStore} from 'core/store/model';
+import {EventsActions} from 'modules/events/actions/EventsActions';
 import {
     columnsWithoutOwner,
     columnsWithActions,
-} from 'Modules/events/components/utils';
-import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
-import {IEventModel, IUserEventsFilter} from 'Modules/events/models';
-import {EventsService} from 'Modules/events/service/EventsService';
-import {IUserModel} from 'Modules/users/models';
+} from 'modules/events/components/utils';
+import {EventDeleteButton} from 'modules/events/components/EventDeleteButton';
+import {IEventModel, IUserEventsFilter} from 'modules/events/models';
+import {EventsService} from 'modules/events/service/EventsService';
+import {IUserModel} from 'modules/users/models';
 
 enum ETabNames {
     ACTIVE = 'ACTIVE',

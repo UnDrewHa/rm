@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
-import {profileReducer} from 'Modules/users/reducers/profileReducer';
-import {usersListReducer} from 'Modules/users/reducers/usersListReducer';
-import {userReducer} from 'Modules/users/reducers/userReducer';
+import {profileReducer} from 'modules/users/reducers/profileReducer';
+import {usersListReducer} from 'modules/users/reducers/usersListReducer';
+import {userReducer} from 'modules/users/reducers/userReducer';
 
 export const usersRootReducer = combineReducers({
     list: usersListReducer,

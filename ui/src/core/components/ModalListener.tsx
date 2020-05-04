@@ -1,7 +1,7 @@
 import {Modal} from 'antd';
 import React from 'react';
-import {EEventNames} from 'Core/EventEmitter/enums';
-import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
+import {EEventNames} from 'core/EventEmitter/enums';
+import {EventEmiter} from 'core/EventEmitter/EventEmitter';
 
 export interface IModalProps {
     title: () => JSX.Element;

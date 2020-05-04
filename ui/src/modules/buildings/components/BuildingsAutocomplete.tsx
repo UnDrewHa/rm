@@ -3,13 +3,13 @@ import {AutoComplete, Input} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {BuildingsActions} from 'Modules/buildings/actions/BuildingsActions';
-import {IBuildingModel} from 'Modules/buildings/models';
-import {BuildingsService} from 'Modules/buildings/service/BuildingsService';
-import {IUserModel} from 'Modules/users/models';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {TAppStore} from 'core/store/model';
+import {BuildingsActions} from 'modules/buildings/actions/BuildingsActions';
+import {IBuildingModel} from 'modules/buildings/models';
+import {BuildingsService} from 'modules/buildings/service/BuildingsService';
+import {IUserModel} from 'modules/users/models';
 
 interface IOwnProps {
     onSelect: (value, option) => void;

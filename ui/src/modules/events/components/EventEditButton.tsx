@@ -3,8 +3,8 @@ import i18n from 'i18next';
 import moment from 'moment';
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {ROUTER} from 'Core/router/consts';
-import {IEventModel} from 'Modules/events/models';
+import {ROUTER} from 'core/router/consts';
+import {IEventModel} from 'modules/events/models';
 
 interface IOwnProps {
     event: IEventModel;

@@ -1,5 +1,5 @@
-import {IAsyncData} from 'Core/reducer/model';
-import {IUserModel} from 'Modules/users/models';
+import {IAsyncData} from 'core/reducer/model';
+import {IUserModel} from 'modules/users/models';
 
 export interface IGetAllEventsData {
     filter: IUserEventsFilter;

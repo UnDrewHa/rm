@@ -3,16 +3,16 @@ import i18n from 'i18next';
 import {filter, memoize} from 'lodash-es';
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {ROUTER} from 'Core/router/consts';
-import {EEventNames} from 'Core/EventEmitter/enums';
-import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
-import {EventDeleteButton} from 'Modules/events/components/EventDeleteButton';
-import {EventEditButton} from 'Modules/events/components/EventEditButton';
-import {EventMembers} from 'Modules/events/components/EventMembers';
-import {EventOwner} from 'Modules/events/components/EventOwner';
-import {IEventModel} from 'Modules/events/models';
-import {calculateTimeString} from 'Modules/events/utils';
-import {IUserModel} from 'Modules/users/models';
+import {ROUTER} from 'core/router/consts';
+import {EEventNames} from 'core/EventEmitter/enums';
+import {EventEmiter} from 'core/EventEmitter/EventEmitter';
+import {EventDeleteButton} from 'modules/events/components/EventDeleteButton';
+import {EventEditButton} from 'modules/events/components/EventEditButton';
+import {EventMembers} from 'modules/events/components/EventMembers';
+import {EventOwner} from 'modules/events/components/EventOwner';
+import {IEventModel} from 'modules/events/models';
+import {calculateTimeString} from 'modules/events/utils';
+import {IUserModel} from 'modules/users/models';
 
 const getOwnerName = (owner: IUserModel) => {
     let ownerString = owner.email;

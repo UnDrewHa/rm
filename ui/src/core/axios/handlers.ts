@@ -1,7 +1,7 @@
 import {message} from 'antd';
 import i18n from 'i18next';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
-import {ROUTER} from 'Core/router/consts';
+import {InterfaceAction} from 'core/actions/InterfaceActions';
+import {ROUTER} from 'core/router/consts';
 
 export const handleUnauthorized = (error) => {
     const {data} = error.response;

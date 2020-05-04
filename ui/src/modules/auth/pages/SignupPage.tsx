@@ -4,16 +4,16 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link as RouteLink} from 'react-router-dom';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
-import {AuthActions} from 'Modules/auth/actions/AuthActions';
-import {AuthService} from 'Modules/auth/service/AuthService';
-import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'Modules/buildings/models';
-import {IUserModel} from 'Modules/users/models';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
+import {TAppStore} from 'core/store/model';
+import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import {AuthActions} from 'modules/auth/actions/AuthActions';
+import {AuthService} from 'modules/auth/service/AuthService';
+import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'modules/buildings/models';
+import {IUserModel} from 'modules/users/models';
 
 interface IStateProps {
     userData: IAsyncData<IUserModel>;

@@ -16,25 +16,25 @@ import queryParser from 'query-string';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {InterfaceAction} from 'Core/actions/InterfaceActions';
+import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {
     commonTableProps,
     DEFAULT_DATE_FORMAT,
     DEFAULT_TIME_FORMAT,
-} from 'Core/consts';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
-import {EventsActions} from 'Modules/events/actions/EventsActions';
-import {columnsWithoutDescription} from 'Modules/events/components/utils';
-import {IEventModel} from 'Modules/events/models';
-import {EventsService} from 'Modules/events/service/EventsService';
-import {disabledDate} from 'Modules/events/utils';
-import {RoomCard} from 'Modules/rooms/components/RoomCard';
-import {changeOnlyDate, formatTime} from 'Modules/rooms/utils';
-import {IUserModel} from 'Modules/users/models';
+} from 'core/consts';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
+import {TAppStore} from 'core/store/model';
+import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import {EventsActions} from 'modules/events/actions/EventsActions';
+import {columnsWithoutDescription} from 'modules/events/components/utils';
+import {IEventModel} from 'modules/events/models';
+import {EventsService} from 'modules/events/service/EventsService';
+import {disabledDate} from 'modules/events/utils';
+import {RoomCard} from 'modules/rooms/components/RoomCard';
+import {changeOnlyDate, formatTime} from 'modules/rooms/utils';
+import {IUserModel} from 'modules/users/models';
 import '../styles/events.scss';
 
 interface IState {

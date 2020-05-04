@@ -1,5 +1,5 @@
-import {IAsyncData} from 'Core/reducer/model';
-import {IBuildingModel} from 'Modules/buildings/models';
+import {IAsyncData} from 'core/reducer/model';
+import {IBuildingModel} from 'modules/buildings/models';
 
 export interface IGetAllRoomsData {
     filter: {

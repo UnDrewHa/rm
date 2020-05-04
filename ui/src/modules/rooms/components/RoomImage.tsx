@@ -1,8 +1,8 @@
 import {Carousel} from 'antd';
 import {filter, isEmpty} from 'lodash-es';
 import React from 'react';
-import {PlaceholderImage} from 'Core/components/PlaceholderImage';
-import {IRoomProp} from 'Modules/rooms/models';
+import {PlaceholderImage} from 'core/components/PlaceholderImage';
+import {IRoomProp} from 'modules/rooms/models';
 
 export const RoomImage = ({item}: IRoomProp) => {
     let content = null;

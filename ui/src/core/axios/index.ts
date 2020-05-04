@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import {handleNetworkError, handleUnauthorized} from 'Core/axios/handlers';
+import {handleNetworkError, handleUnauthorized} from 'core/axios/handlers';
 
 const axios = Axios.create({
     timeout: 60000,

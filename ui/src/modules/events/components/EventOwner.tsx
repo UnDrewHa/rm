@@ -1,7 +1,7 @@
 import {Typography} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
-import {IUserModel} from 'Modules/users/models';
+import {IUserModel} from 'modules/users/models';
 
 interface IOwnProps {
     owner: IUserModel;

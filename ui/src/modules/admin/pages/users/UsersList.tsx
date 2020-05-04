@@ -3,18 +3,18 @@ import {Button, Checkbox, Divider, Tooltip} from 'antd';
 import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
-import {DeleteButton} from 'Core/components/DeleteButton';
-import {EditButton} from 'Core/components/EditButton';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {BlankList} from 'Modules/admin/pages/BlankList';
-import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'Modules/buildings/models';
-import {ERoles} from 'Modules/permissions/enums';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {IUserModel} from 'Modules/users/models';
-import {UsersService} from 'Modules/users/service/UsersService';
+import {DeleteButton} from 'core/components/DeleteButton';
+import {EditButton} from 'core/components/EditButton';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {TAppStore} from 'core/store/model';
+import {BlankList} from 'modules/admin/pages/BlankList';
+import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'modules/buildings/models';
+import {ERoles} from 'modules/permissions/enums';
+import {UsersActions} from 'modules/users/actions/UsersActions';
+import {IUserModel} from 'modules/users/models';
+import {UsersService} from 'modules/users/service/UsersService';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => [
     {

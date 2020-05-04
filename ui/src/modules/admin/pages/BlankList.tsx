@@ -4,8 +4,8 @@ import i18n from 'i18next';
 import {isEmpty} from 'lodash-es';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import {DeleteButton} from 'Core/components/DeleteButton';
-import {commonTableProps} from 'Core/consts';
+import {DeleteButton} from 'core/components/DeleteButton';
+import {commonTableProps} from 'core/consts';
 
 interface IState {
     selectedRowKeys: string[];

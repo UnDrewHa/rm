@@ -2,11 +2,11 @@ import {Col, Layout, Row} from 'antd';
 import 'antd/dist/antd.css';
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
-import {ROUTER} from 'Core/router/consts';
-import {ForgotPage} from 'Modules/auth/pages/ForgotPage';
-import {LoginPage} from 'Modules/auth/pages/LoginPage';
-import {ResetPasswordPage} from 'Modules/auth/pages/ResetPasswordPage';
-import {SignupPage} from 'Modules/auth/pages/SignupPage';
+import {ROUTER} from 'core/router/consts';
+import {ForgotPage} from 'modules/auth/pages/ForgotPage';
+import {LoginPage} from 'modules/auth/pages/LoginPage';
+import {ResetPasswordPage} from 'modules/auth/pages/ResetPasswordPage';
+import {SignupPage} from 'modules/auth/pages/SignupPage';
 
 const {Content} = Layout;
 

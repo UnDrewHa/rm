@@ -20,17 +20,17 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {uuid} from 'uuidv4';
-import {FormSkeleton} from 'Core/components/FormSkeleton';
-import {EPageMode, EUploadingStatus} from 'Core/enums';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData} from 'Core/reducer/model';
-import {TAppStore} from 'Core/store/model';
-import {defaultValidateMessages, validationConsts} from 'Core/validationConsts';
-import {BuildingsAutocomplete} from 'Modules/buildings/components/BuildingsAutocomplete';
-import {IBuildingModel} from 'Modules/buildings/models';
-import {RoomsActions} from 'Modules/rooms/actions/RoomsActions';
-import {IRoomFullModel} from 'Modules/rooms/models';
-import {RoomsService} from 'Modules/rooms/service/RoomsService';
+import {FormSkeleton} from 'core/components/FormSkeleton';
+import {EPageMode, EUploadingStatus} from 'core/enums';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData} from 'core/reducer/model';
+import {TAppStore} from 'core/store/model';
+import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
+import {IBuildingModel} from 'modules/buildings/models';
+import {RoomsActions} from 'modules/rooms/actions/RoomsActions';
+import {IRoomFullModel} from 'modules/rooms/models';
+import {RoomsService} from 'modules/rooms/service/RoomsService';
 
 interface IState {
     pageMode: EPageMode;

@@ -1,14 +1,14 @@
 import {filter, includes} from 'lodash-es';
-import {SUCCESS} from 'Core/actions/actionTypes';
-import {EStatusCodes} from 'Core/reducer/enums';
-import {IAsyncData, IReduxAction} from 'Core/reducer/model';
-import {createAsyncDataReducer} from 'Core/reducer/utils';
+import {SUCCESS} from 'core/actions/actionTypes';
+import {EStatusCodes} from 'core/reducer/enums';
+import {IAsyncData, IReduxAction} from 'core/reducer/model';
+import {createAsyncDataReducer} from 'core/reducer/utils';
 import {
     CLEAR_ROOMS_DATA,
     DELETE_ROOMS,
     FIND_ROOMS,
-} from 'Modules/rooms/actions/actionTypes';
-import {IRoomModel} from 'Modules/rooms/models';
+} from 'modules/rooms/actions/actionTypes';
+import {IRoomModel} from 'modules/rooms/models';
 
 const getInitialState = (): IAsyncData<IRoomModel[]> => ({
     status: EStatusCodes.IDLE,

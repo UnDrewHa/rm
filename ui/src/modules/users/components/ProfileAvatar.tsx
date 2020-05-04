@@ -5,13 +5,13 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {Dispatch} from 'redux';
-import {END_STATUSES} from 'Core/consts';
-import {IAsyncData} from 'Core/reducer/model';
-import {ROUTER} from 'Core/router/consts';
-import {TAppStore} from 'Core/store/model';
-import {UsersActions} from 'Modules/users/actions/UsersActions';
-import {IUserModel} from 'Modules/users/models';
-import {UsersService} from 'Modules/users/service/UsersService';
+import {END_STATUSES} from 'core/consts';
+import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
+import {TAppStore} from 'core/store/model';
+import {UsersActions} from 'modules/users/actions/UsersActions';
+import {IUserModel} from 'modules/users/models';
+import {UsersService} from 'modules/users/service/UsersService';
 import '../styles/profileAvatar.scss';
 
 interface IStateProps {

@@ -1,6 +1,6 @@
-import {IRedirectOptions} from 'Core/components/RedirectListener';
-import {EEventNames} from 'Core/EventEmitter/enums';
-import {EventEmiter} from 'Core/EventEmitter/EventEmitter';
+import {IRedirectOptions} from 'core/components/RedirectListener';
+import {EEventNames} from 'core/EventEmitter/enums';
+import {EventEmiter} from 'core/EventEmitter/EventEmitter';
 
 const InterfaceAction = {
     /**

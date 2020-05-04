@@ -1,4 +1,4 @@
-import {IAsyncData} from 'Core/reducer/model';
+import {IAsyncData} from 'core/reducer/model';
 
 /**
  * Интерфейс здания.
