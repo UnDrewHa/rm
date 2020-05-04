@@ -1,12 +1,14 @@
 const express = require('express');
 const AuthController = require('./AuthController');
 const UserController = require('../users/UserController');
+const {rateLimitMiddleware} = require('../../core/rateLimiter');
 
 const route = express.Router();
 
 route.post('/signup', AuthController.signup, AuthController.createAndSendToken);
 route.post(
     '/login',
+    rateLimitMiddleware,
     UserController.createPasswordCheckMiddleware('login'),
     AuthController.login,
     AuthController.createAndSendToken,

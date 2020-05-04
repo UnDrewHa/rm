@@ -2,18 +2,20 @@ const path = require('path');
 const mkdirp = require('mkdirp');
 const {logger} = require('./Logger');
 
-const folderNames = ['img'];
-
+/**
+ * Функция, создающая папки, необходимые для работы приложения.
+ */
 exports.createFolders = () => {
-    folderNames.map((folderName) => {
-        const fullPath = path.normalize(
-            `${process.cwd()}/${process.env.STATIC_PATH}/${folderName}`,
-        );
+    const cwd = process.cwd();
+    const folderNames = [`${cwd}/${process.env.STATIC_PATH}/img`];
 
-        const result = mkdirp.sync(fullPath);
+    folderNames.map((folderName) => {
+        const normalizedPath = path.normalize(folderName);
+
+        const result = mkdirp.sync(normalizedPath);
 
         logger.info(
-            'Результат создания папок: ' + (result || 'Ничего не создано'),
+            'Результат создания папки: ' + (result || 'Ничего не создано'),
         );
     });
 };
