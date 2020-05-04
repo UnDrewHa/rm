@@ -9,7 +9,7 @@
     "start:prod": "NODE_ENV=production nodemon server.js",
     "start:local": "nodemon server.js -- localdb",
     "debug": "ndb server.js",
-    "heroku-postbuild": "cd ui && npm install && npm run build"
+    "heroku-postbuild": "NODE_MODULES_CACHE=false cd ui && npm install && npm run build"
   },
   "repository": {
     "type": "git",
