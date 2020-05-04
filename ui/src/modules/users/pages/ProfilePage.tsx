@@ -21,7 +21,6 @@ import i18n from 'i18next';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
-import {BASE_URL} from 'Core/axios';
 import {FormSkeleton} from 'Core/components/FormSkeleton';
 import {EStatusCodes} from 'Core/reducer/enums';
 import {IAsyncData} from 'Core/reducer/model';
@@ -295,7 +294,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                         />
                         <Typography.Paragraph>
                             <Upload
-                                action={`${BASE_URL}/users/upload`}
+                                action="users/upload"
                                 withCredentials
                                 name="photo"
                                 beforeUpload={this.handleBeforeUpload}

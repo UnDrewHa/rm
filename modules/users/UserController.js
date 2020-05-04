@@ -90,7 +90,7 @@ exports.updateMe = catchAsync(async function (req, res, next) {
         user.photo && user.photo !== userData.photo;
 
     if (NEED_TO_DELETE_OLD_PHOTO) {
-        unlinkFile(process.env.PUBLIC_PATH + user.photo)
+        unlinkFile(process.env.STATIC_PATH + user.photo)
             .then((_) => logger.info('Фото профиля успешно удалены'))
             .catch((err) => logger.error('Ошибка удаления фото профиля', err));
     }
@@ -199,7 +199,7 @@ exports.delete = catchAsync(async function (req, res) {
     const usersPhoto = users.map((item) => item.photo).filter((item) => !!item);
 
     Promise.all(
-        usersPhoto.map((path) => unlinkFile(process.env.PUBLIC_PATH + path)),
+        usersPhoto.map((path) => unlinkFile(process.env.STATIC_PATH + path)),
     )
         .then((_) => logger.info('Фото профиля успешно удалены'))
         .catch((err) => logger.error('Ошибка удаления фото профиля', err));
@@ -286,8 +286,8 @@ exports.toggleFavourite = catchAsync(async function (req, res, next) {
 exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
     const filename = `${res.locals.user._id}-${Date.now()}.jpeg`;
-    const path = `${process.env.PUBLIC_PATH}/img/${filename}`;
-    const pathWithoutPublic = path.replace(process.env.PUBLIC_PATH, '');
+    const path = `${process.env.STATIC_PATH}/img/${filename}`;
+    const pathWithoutPublic = path.replace(process.env.STATIC_PATH, '');
 
     req.file.filename = filename;
 

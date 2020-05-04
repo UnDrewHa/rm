@@ -110,7 +110,7 @@ exports.delete = catchAsync(async function (req, res) {
     }, []);
 
     Promise.all(
-        photos.map((path) => unlinkFile(process.env.PUBLIC_PATH + path)),
+        photos.map((path) => unlinkFile(process.env.STATIC_PATH + path)),
     )
         .then((_) => logger.info('Файлы удалены'))
         .catch((err) => logger.error('Ошибка удаления файлов', err));
@@ -150,7 +150,7 @@ exports.update = catchAsync(async function (req, res) {
     if (NEED_TO_DELETE_PHOTOS) {
         Promise.all(
             difference(room.photos, data.photos).map((src) =>
-                unlinkFile(process.env.PUBLIC_PATH + src),
+                unlinkFile(process.env.STATIC_PATH + src),
             ),
         )
             .then((_) => logger.info('Фото комнаты успешно удалены'))
@@ -178,8 +178,8 @@ exports.getFavourites = catchAsync(async function (req, res) {
 exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
     const filename = `room-${Date.now()}.jpeg`;
-    const path = `${process.env.PUBLIC_PATH}/img/${filename}`;
-    const pathWithoutPublic = path.replace(process.env.PUBLIC_PATH, '');
+    const path = `${process.env.STATIC_PATH}/img/${filename}`;
+    const pathWithoutPublic = path.replace(process.env.STATIC_PATH, '');
 
     req.file.filename = filename;
 

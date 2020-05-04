@@ -1,3 +1,4 @@
+const {AppError} = require('./AppError');
 const {errorHandler} = require('../../core/ErrorHandler');
 const {commonHTTPCodes, commonErrors} = require('./index');
 

@@ -20,7 +20,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {uuid} from 'uuidv4';
-import {BASE_URL} from 'Core/axios';
 import {FormSkeleton} from 'Core/components/FormSkeleton';
 import {EPageMode, EUploadingStatus} from 'Core/enums';
 import {EStatusCodes} from 'Core/reducer/enums';
@@ -307,7 +306,7 @@ class RoomEdit extends React.Component<TProps, IState> {
                         {i18n.t('Rooms:edit.photoTitle')}
                     </Typography.Title>
                     <Upload
-                        action={`${BASE_URL}/rooms/upload`}
+                        action="rooms/upload"
                         withCredentials
                         name="photo"
                         beforeUpload={this.handleBeforeUpload}
