@@ -13,24 +13,24 @@ import {
     Upload,
 } from 'antd';
 import {FormInstance} from 'antd/lib/form';
-import i18n from 'i18next';
-import {isFunction} from 'lodash-es';
-import queryParser from 'query-string';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {uuid} from 'uuidv4';
 import {FormSkeleton} from 'core/components/FormSkeleton';
 import {EPageMode, EUploadingStatus} from 'core/enums';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
+import {isFunction} from 'lodash-es';
 import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'modules/buildings/models';
 import {RoomsActions} from 'modules/rooms/actions/RoomsActions';
 import {IRoomFullModel} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
+import queryParser from 'query-string';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import {uuid} from 'uuidv4';
 
 interface IState {
     pageMode: EPageMode;
@@ -98,6 +98,13 @@ class RoomEdit extends React.Component<TProps, IState> {
     formRef = React.createRef<FormInstance>();
 
     resetForm = () => {
+        this.setState({
+            uploadingStatus: EUploadingStatus.NONE,
+            fileList: [],
+            previewVisible: false,
+            previewImage: '',
+        });
+
         isFunction(this?.formRef?.current?.resetFields) &&
             this.formRef.current.resetFields();
     };
@@ -135,13 +142,24 @@ class RoomEdit extends React.Component<TProps, IState> {
             this.state.pageMode === EPageMode.CREATE
                 ? actions.create
                 : actions.update;
-
-        method({
+        const fullData = {
             _id: queryParams.id as string,
             ...values,
             building: building?._id || item.data.building._id,
-            photos: fileList.map((file) => file?.response?.data || file.url),
-        }).then(this.resetForm);
+        };
+
+        const formData = new FormData();
+
+        fileList.forEach((file) => {
+            const key = file.url ? 'uploadedFiles' : 'files';
+            formData.append(key, file.url || file);
+        });
+
+        Object.keys(fullData).forEach((key) => {
+            formData.set(key, fullData[key]);
+        });
+
+        method(formData).then(this.resetForm);
     };
 
     handleBeforeUpload = (file) => {
@@ -155,38 +173,31 @@ class RoomEdit extends React.Component<TProps, IState> {
             message.error('Размер загружаемого файла не должен превышать 1Мб');
         }
 
-        return isJpgOrPng && isLt2M;
-    };
-
-    handleUploadChange = (info) => {
-        if (info.file.status === 'uploading') {
-            this.setState((prev) => ({
-                uploadingStatus: EUploadingStatus.UPLOADING,
+        if (isJpgOrPng && isLt2M) {
+            this.setState((state) => ({
+                fileList: [...state.fileList, file],
             }));
-        } else if (info.file.status === 'done') {
-            this.setState(
-                (prev) => ({
-                    uploadingStatus: EUploadingStatus.DONE,
-                }),
-                () => {
-                    message.success(i18n.t('Users:upload.success'));
-                },
-            );
-        } else if (info.file.status === 'error') {
-            this.setState({
-                uploadingStatus: EUploadingStatus.ERROR,
-            });
-            message.error(i18n.t('Users:upload.error'));
         }
 
-        this.setState({
-            fileList: info.fileList,
+        return false;
+    };
+
+    handleRemove = (file) => {
+        this.setState((state) => {
+            const index = state.fileList.indexOf(file);
+            const newFileList = state.fileList.slice();
+
+            newFileList.splice(index, 1);
+
+            return {
+                fileList: newFileList,
+            };
         });
     };
 
     handlePreview = (file) => {
         this.setState({
-            previewImage: file?.response?.data || file.url,
+            previewImage: file.url,
             previewVisible: true,
         });
     };
@@ -306,11 +317,8 @@ class RoomEdit extends React.Component<TProps, IState> {
                         {i18n.t('Rooms:edit.photoTitle')}
                     </Typography.Title>
                     <Upload
-                        action="rooms/upload"
-                        withCredentials
-                        name="photo"
-                        beforeUpload={this.handleBeforeUpload}
-                        onChange={this.handleUploadChange}
+                        beforeUpload={this.handleBeforeUpload as any}
+                        onRemove={this.handleRemove}
                         onPreview={this.handlePreview}
                         fileList={fileList}
                         listType="picture-card"

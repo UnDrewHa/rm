@@ -18,20 +18,24 @@ const unlinkFile = util.promisify(fs.unlink);
  * Контроллер создания документа "Переговорная комната".
  */
 exports.create = catchAsync(async function (req, res) {
-    const room = await RoomModel.create(
-        getFieldsFromObject(req.body.data, [
-            'name',
-            'description',
-            'seats',
-            'floor',
-            'tv',
-            'projector',
-            'whiteboard',
-            'flipchart',
-            'building',
-            'photos',
-        ]),
-    );
+    const {files} = res.locals;
+    const data = getFieldsFromObject(req.body, [
+        'name',
+        'description',
+        'seats',
+        'floor',
+        'tv',
+        'projector',
+        'whiteboard',
+        'flipchart',
+        'building',
+    ]);
+
+    if (photos && photos.length > 0) {
+        data.photos = files;
+    }
+
+    const room = await RoomModel.create(data);
 
     res.status(201).send({
         data: room,
@@ -124,19 +128,25 @@ exports.delete = catchAsync(async function (req, res) {
  * Контроллер обновление документа "Переговорная комната".
  */
 exports.update = catchAsync(async function (req, res) {
-    const {_id} = req.body.data;
-    const data = getFieldsFromObject(req.body.data, [
-        'name',
-        'description',
-        'seats',
-        'floor',
-        'tv',
-        'projector',
-        'whiteboard',
-        'flipchart',
-        'building',
-        'photos',
-    ]);
+    const {files} = res.locals;
+    const {_id, uploadedFiles} = req.body;
+    const data = {
+        ...getFieldsFromObject(req.body, [
+            'name',
+            'description',
+            'seats',
+            'floor',
+            'tv',
+            'projector',
+            'whiteboard',
+            'flipchart',
+            'building',
+        ]),
+        photos: [
+            ...files,
+            ...(Array.isArray(uploadedFiles) ? uploadedFiles : [uploadedFiles]),
+        ].filter((item) => !!item),
+    };
     const room = await RoomModel.findById(_id);
     const NEED_TO_DELETE_PHOTOS =
         Array.isArray(room.photos) &&
@@ -174,22 +184,32 @@ exports.getFavourites = catchAsync(async function (req, res) {
     });
 });
 
-//TODO: убрать URL.
 exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
-    if (!req.file) return next();
-    const filename = `room-${Date.now()}.jpeg`;
-    const path = `${process.env.STATIC_PATH}/img/${filename}`;
-    const pathWithoutPublic = path.replace(process.env.STATIC_PATH, '');
+    res.locals.files = [];
 
-    req.file.filename = filename;
+    if (!req.files) {
+        return next();
+    }
 
-    await sharp(req.file.buffer)
-        .resize(800, 450)
-        .toFormat('jpeg')
-        .jpeg({quality: 90})
-        .toFile(path);
+    await Promise.all(
+        req.files.map((file) => {
+            const filename = `room-${Date.now()}.jpeg`;
+            const path = `${process.env.STATIC_PATH}/img/${filename}`;
+            const pathWithoutPublic = path.replace(process.env.STATIC_PATH, '');
 
-    res.status(200).json({
-        data: pathWithoutPublic,
-    });
+            file.filename = filename;
+
+            return sharp(file.buffer)
+                .resize(800, 450)
+                .toFormat('jpeg')
+                .jpeg({quality: 90})
+                .toFile(path)
+                .then((result) => {
+                    res.locals.files.push(pathWithoutPublic);
+                    return result;
+                });
+        }),
+    );
+
+    next();
 });

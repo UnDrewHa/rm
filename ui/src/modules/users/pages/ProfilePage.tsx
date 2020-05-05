@@ -85,7 +85,6 @@ class ProfilePage extends React.Component<TProps, IState> {
             ...values,
             _id: userInfo.data._id,
             building,
-            photo: this.state.photo,
         });
     };
 
@@ -296,10 +295,11 @@ class ProfilePage extends React.Component<TProps, IState> {
                             <Upload
                                 action="users/upload"
                                 withCredentials
-                                name="photo"
+                                name="file"
                                 beforeUpload={this.handleBeforeUpload}
                                 onChange={this.handleUploadChange}
                                 showUploadList={false}
+                                data={{id: 'test'}}
                             >
                                 <Button>
                                     <UploadOutlined />{' '}

@@ -78,7 +78,6 @@ exports.updateMe = catchAsync(async function (req, res, next) {
         'email',
         'phone',
         'building',
-        'photo',
         'name',
         'surname',
         'patronymic',
@@ -86,19 +85,10 @@ exports.updateMe = catchAsync(async function (req, res, next) {
         'newPassword',
         'login',
     ]);
-    const NEED_TO_DELETE_OLD_PHOTO =
-        user.photo && user.photo !== userData.photo;
-
-    if (NEED_TO_DELETE_OLD_PHOTO) {
-        unlinkFile(process.env.STATIC_PATH + user.photo)
-            .then((_) => logger.info('Фото профиля успешно удалены'))
-            .catch((err) => logger.error('Ошибка удаления фото профиля', err));
-    }
 
     user.email = userData.email || user.email;
     user.phone = userData.phone || user.phone;
     user.building = userData.building || user.building;
-    user.photo = userData.photo || user.photo;
     user.name = userData.name || user.name;
     user.surname = userData.surname || user.surname;
     user.patronymic = userData.patronymic || user.patronymic;
@@ -285,7 +275,9 @@ exports.toggleFavourite = catchAsync(async function (req, res, next) {
 
 exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
     if (!req.file) return next();
-    const filename = `${res.locals.user._id}-${Date.now()}.jpeg`;
+    const {user} = res.locals;
+    const oldPhoto = user.photo;
+    const filename = `${user._id}-${Date.now()}.jpeg`;
     const path = `${process.env.STATIC_PATH}/img/${filename}`;
     const pathWithoutPublic = path.replace(process.env.STATIC_PATH, '');
 
@@ -296,6 +288,14 @@ exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
         .toFormat('jpeg')
         .jpeg({quality: 90})
         .toFile(path);
+
+    await UserModel.update({_id: user._id}, {photo: pathWithoutPublic});
+
+    if (oldPhoto) {
+        unlinkFile(process.env.STATIC_PATH + oldPhoto)
+            .then((_) => logger.info('Фото профиля успешно удалены'))
+            .catch((err) => logger.error('Ошибка удаления фото профиля', err));
+    }
 
     res.status(200).json({
         data: pathWithoutPublic,

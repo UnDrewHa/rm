@@ -46,8 +46,13 @@ export class RoomsService {
      *
      * @param {IRoomCreateModel} data Данные для создания.
      */
-    create(data: IRoomCreateModel) {
-        return axios.post(this.baseUrl, {data});
+    create(data: any) {
+        return axios({
+            method: 'post',
+            url: this.baseUrl,
+            data: data,
+            headers: {'Content-Type': 'multipart/form-data'},
+        });
     }
 
     /**
@@ -55,8 +60,13 @@ export class RoomsService {
      *
      * @param {IRoomModel} data Данные для обновления.
      */
-    update(data: IRoomModel) {
-        return axios.patch(this.baseUrl, {data});
+    update(data: any) {
+        return axios({
+            method: 'patch',
+            url: this.baseUrl,
+            data: data,
+            headers: {'Content-Type': 'multipart/form-data'},
+        });
     }
 
     /**

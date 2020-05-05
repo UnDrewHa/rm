@@ -12,8 +12,18 @@ router
 
 router
     .route('/')
-    .post(AuthController.restrictedTo(['admin']), RoomController.create)
-    .patch(AuthController.restrictedTo(['admin']), RoomController.update)
+    .post(
+        AuthController.restrictedTo(['admin']),
+        UploadController.uploadMultiple,
+        RoomController.resizeAndSavePhoto,
+        RoomController.create,
+    )
+    .patch(
+        AuthController.restrictedTo(['admin']),
+        UploadController.uploadMultiple,
+        RoomController.resizeAndSavePhoto,
+        RoomController.update,
+    )
     .delete(AuthController.restrictedTo(['admin']), RoomController.delete);
 
 router.post(

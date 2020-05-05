@@ -22,7 +22,8 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "baseUrl": "./src",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "downlevelIteration": true
   },
   "rules": {
     "ordered-imports": [

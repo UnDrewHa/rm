@@ -70,7 +70,7 @@ export class RoomsActions {
      *
      * @param {IRoomCreateModel} data Данные для создания.
      */
-    create = (data: IRoomCreateModel) => {
+    create = (data: any) => {
         return dispatchAsync(
             this.dispatch,
             CREATE_ROOM,
@@ -91,7 +91,7 @@ export class RoomsActions {
      *
      * @param {IRoomModel} data Данные для обновления.
      */
-    update = (data: IRoomModel) => {
+    update = (data: any) => {
         return dispatchAsync(
             this.dispatch,
             UPDATE_ROOM,

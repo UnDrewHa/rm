@@ -49,7 +49,6 @@ export interface IUpdateUser extends ICheckPasswordData {
     active?: boolean;
     phone?: string;
     favouriteRooms?: string[];
-    photo?: string;
     name?: string;
     surname?: string;
     patronymic?: string;
