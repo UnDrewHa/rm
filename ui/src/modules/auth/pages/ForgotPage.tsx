@@ -1,16 +1,16 @@
 import {UserOutlined} from '@ant-design/icons';
-import {Avatar, Button, Col, Form, Input, Row, Typography} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {Link as RouteLink} from 'react-router-dom';
+import {Avatar, Button, Col, Form, Input, Result, Row, Typography} from 'antd';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
 import {AuthActions} from 'modules/auth/actions/AuthActions';
 import {AuthService} from 'modules/auth/service/AuthService';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Link as RouteLink} from 'react-router-dom';
 
 interface IStateProps {
     resetPasswordData: IAsyncData<null>;
@@ -47,15 +47,11 @@ class ForgotPage extends React.Component<TProps> {
 
         if (resetPasswordData.status === EStatusCodes.SUCCESS) {
             return (
-                <React.Fragment>
-                    <Avatar size="large" icon={<UserOutlined />} />
-                    <Typography.Title level={3}>
-                        {i18n.t('Auth:forgot.title')}
-                    </Typography.Title>
-                    <Typography.Text>
-                        {i18n.t('Auth:forgot.text')}
-                    </Typography.Text>
-                </React.Fragment>
+                <Result
+                    status="success"
+                    title={i18n.t('Auth:forgot.checkMail')}
+                    subTitle={i18n.t('Auth:forgot.text')}
+                />
             );
         }
 

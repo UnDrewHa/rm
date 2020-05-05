@@ -5,8 +5,9 @@ const {commonErrors, commonHTTPCodes} = require('../../common/errors');
 const {
     catchAsync,
     getTokenCookieOptions,
+    getFieldsFromObject,
 } = require('../../common/utils/controllersUtils');
-const {sendEmail} = require('../emails/EmailTransport');
+const {sendMailWithResetToken} = require('../../core/emails/EmailTransport');
 const {AppError} = require('../../common/errors');
 
 /**
@@ -14,7 +15,7 @@ const {AppError} = require('../../common/errors');
  */
 exports.signup = catchAsync(async function (req, res, next) {
     res.locals.user = await UserModel.create(
-        getFieldsFromReqBody(req.body.data, [
+        getFieldsFromObject(req.body.data, [
             'login',
             'password',
             'passwordConfirm',
@@ -123,11 +124,7 @@ exports.forgot = catchAsync(async function (req, res, next) {
     await user.setTokensInfo(resetToken).save({validateBeforeSave: false});
 
     try {
-        await sendEmail({
-            to: email,
-            subject: 'Password reset',
-            text: `Your reset token - ${resetToken}`,
-        });
+        await sendMailWithResetToken(email, resetToken);
     } catch (e) {
         await user
             .clearTokensInfo(resetToken)

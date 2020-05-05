@@ -54,16 +54,30 @@ exports.create = catchAsync(async function (req, res, next) {
  */
 exports.getAll = catchAsync(async function (req, res) {
     const {filter} = req.body.data;
-    const events = await EventModel.find(
-        getFieldsFromObject(filter, [
-            'room',
-            'date',
-            'owner',
-            'canceled',
-            'to',
-            'from',
-        ]),
-    );
+    let filterData = getFieldsFromObject(filter, [
+        'room',
+        'date',
+        'owner',
+        'canceled',
+        'to',
+        'from',
+    ]);
+
+    if (filter.tab === 'ACTIVE') {
+        filterData.to = {$gt: filter.now};
+        filterData.canceled = {$ne: true};
+    }
+
+    if (filter.tab === 'COMPLETED') {
+        filterData.to = {$lte: filter.now};
+        filterData.canceled = {$ne: true};
+    }
+
+    if (filter.tab === 'CANCELED') {
+        filterData.canceled = true;
+    }
+
+    const events = await EventModel.find(filterData);
 
     if (filter.populateOwner) {
         await EventModel.populate(events, {path: 'owner'});

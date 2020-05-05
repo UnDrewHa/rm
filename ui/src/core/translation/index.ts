@@ -10,7 +10,7 @@ import CommonTranslations from './CommonTranslations';
 export function i18nInit(): Promise<Function> {
     return i18n.init({
         lng: 'ru',
-        debug: true,
+        debug: process.env.NODE_ENV !== 'production',
         resources: {
             ru: {
                 ...CommonTranslations,

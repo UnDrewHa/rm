@@ -178,7 +178,8 @@ UserSchema.methods.setTokensInfo = function (token) {
         .update(token)
         .digest('hex');
 
-    this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+    this.passwordResetExpires =
+        Date.now() + parseInt(process.env.RESET_TOKEN_EXPIRES_IN_MS, 10);
 
     return this;
 };

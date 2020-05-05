@@ -1,14 +1,10 @@
 import {Col, PageHeader, Row, Table, Tabs} from 'antd';
-import i18n from 'i18next';
-import {isEmpty} from 'lodash-es';
-import moment from 'moment';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 import {commonTableProps} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
+import {isEmpty} from 'lodash-es';
 import {EventsActions} from 'modules/events/actions/EventsActions';
 import {
     columnsWithoutOwner,
@@ -18,6 +14,10 @@ import {EventDeleteButton} from 'modules/events/components/EventDeleteButton';
 import {IEventModel, IUserEventsFilter} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {IUserModel} from 'modules/users/models';
+import moment from 'moment';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 
 enum ETabNames {
     ACTIVE = 'ACTIVE',
@@ -92,31 +92,10 @@ class UserEventsPage extends React.Component<TProps, IState> {
     };
 
     getEventsFilterByTab(tab: ETabNames, user: IUserModel): IUserEventsFilter {
-        if (tab === ETabNames.ACTIVE) {
-            return {
-                owner: user._id,
-                to: {$gt: moment().utc().format()},
-                canceled: {$ne: true},
-            };
-        }
-
-        if (tab === ETabNames.COMPLETED) {
-            return {
-                owner: user._id,
-                to: {$lte: moment().utc().format()},
-                canceled: {$ne: true},
-            };
-        }
-
-        if (tab === ETabNames.CANCELED) {
-            return {
-                owner: user._id,
-                canceled: true,
-            };
-        }
-
         return {
             owner: user._id,
+            tab,
+            now: moment().utc().format(),
         };
     }
 

@@ -12,6 +12,8 @@ export interface IUserEventsFilter {
     date?: string;
     room?: string;
     populateOwner?: boolean;
+    tab?: string;
+    now?: string;
 }
 
 export interface IEventModel {
