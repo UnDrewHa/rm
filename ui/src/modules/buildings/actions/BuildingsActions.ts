@@ -1,19 +1,27 @@
 import {message} from 'antd';
-import i18n from 'i18next';
-import {Dispatch} from 'redux';
 import {dispatchAsync} from 'core/actions/utils';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {ROUTER} from 'core/router/consts';
+import i18n from 'i18next';
 import {
     CLEAR_BUILDINGS_DATA,
     CREATE_BUILDING,
     DELETE_BUILDINGS,
     GET_BUILDING_BY_ID,
     GET_BUILDINGS,
+    GET_FLOOR_DATA,
     UPDATE_BUILDING,
+    UPDATE_FLOOR_DATA,
+    UPLOAD_FLOOR_PLAN,
 } from 'modules/buildings/actions/actionTypes';
 import {BuildingsService} from 'modules/buildings/service/BuildingsService';
-import {IBuildingCreateModel, IBuildingModel} from '../models';
+import {Dispatch} from 'redux';
+import {
+    IBuildingCreateModel,
+    IBuildingModel,
+    IGetFloorDataFilter,
+    IUpdateFloorDataFilter,
+} from '../models';
 
 /**
  * Действия модуля Buildings.
@@ -107,6 +115,47 @@ export class BuildingsActions {
                 message.error(
                     error?.error?.message ||
                         i18n.t('Buildings:delete.deleteError'),
+                );
+            });
+    };
+
+    getFloorData = (data: IGetFloorDataFilter) => {
+        return dispatchAsync(
+            this.dispatch,
+            GET_FLOOR_DATA,
+            this.service.getFloorData(data),
+        );
+    };
+
+    uploadPlan = (data: FormData) => {
+        return dispatchAsync(
+            this.dispatch,
+            UPLOAD_FLOOR_PLAN,
+            this.service.uploadPlan(data),
+        )
+            .then((res) => {
+                message.success(i18n.t('Buildings:upload.success'));
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Buildings:upload.error'),
+                );
+            });
+    };
+
+    updateFloorData = (data: IUpdateFloorDataFilter) => {
+        return dispatchAsync(
+            this.dispatch,
+            UPDATE_FLOOR_DATA,
+            this.service.updateFloorData(data),
+        )
+            .then((res) => {
+                message.success(i18n.t('Buildings:updateFloor.success'));
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message ||
+                        i18n.t('Buildings:updateFloor.error'),
                 );
             });
     };

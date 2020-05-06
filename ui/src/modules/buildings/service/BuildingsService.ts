@@ -1,6 +1,11 @@
 import {axios} from 'core/axios';
 import {IDataResponse, IDeleteMultipleItems} from 'core/models';
-import {IBuildingCreateModel, IBuildingModel} from 'modules/buildings/models';
+import {
+    IBuildingCreateModel,
+    IBuildingModel,
+    IGetFloorDataFilter,
+    IUpdateFloorDataFilter,
+} from 'modules/buildings/models';
 
 /**
  * Сервис модуля Buildings.
@@ -44,6 +49,23 @@ export class BuildingsService {
      */
     update(data: IBuildingModel) {
         return axios.patch(this.baseUrl, {data});
+    }
+
+    getFloorData(data: IGetFloorDataFilter) {
+        return axios.post(this.baseUrl + '/floor-data', {data});
+    }
+
+    uploadPlan(data: FormData) {
+        return axios({
+            method: 'post',
+            url: this.baseUrl + '/upload',
+            data: data,
+            headers: {'Content-Type': 'multipart/form-data'},
+        });
+    }
+
+    updateFloorData(data: IUpdateFloorDataFilter) {
+        return axios.post(this.baseUrl + '/update-floor', {data});
     }
 
     /**

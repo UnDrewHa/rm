@@ -1,10 +1,6 @@
 import {axios} from 'core/axios';
 import {IDeleteMultipleItems} from 'core/models';
-import {
-    IGetAllRoomsData,
-    IRoomCreateModel,
-    IRoomModel,
-} from 'modules/rooms/models';
+import {IGetAllRoomsData} from 'modules/rooms/models';
 
 /**
  * Сервис модуля Rooms.
@@ -44,9 +40,9 @@ export class RoomsService {
     /**
      * Создать переговорную комнату.
      *
-     * @param {IRoomCreateModel} data Данные для создания.
+     * @param {FormData} data Данные для создания.
      */
-    create(data: any) {
+    create(data: FormData) {
         return axios({
             method: 'post',
             url: this.baseUrl,
@@ -58,9 +54,9 @@ export class RoomsService {
     /**
      * Обновить переговорную комнату.
      *
-     * @param {IRoomModel} data Данные для обновления.
+     * @param {FormData} data Данные для обновления.
      */
-    update(data: any) {
+    update(data: FormData) {
         return axios({
             method: 'patch',
             url: this.baseUrl,

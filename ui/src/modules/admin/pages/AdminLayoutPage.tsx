@@ -6,6 +6,7 @@ import {ROUTER} from 'core/router/consts';
 import i18n from 'i18next';
 import {BuildingsList} from 'modules/admin/pages/buildings/BuildingsList';
 import {BuildingEdit} from 'modules/admin/pages/buildings/BuildingEdit';
+import {BuildingFloorEdit} from 'modules/admin/pages/buildings/BuildingFloorEdit';
 import {RoomsList} from 'modules/admin/pages/rooms/RoomsList';
 import {RoomEdit} from 'modules/admin/pages/rooms/RoomEdit';
 import {UsersList} from 'modules/admin/pages/users/UsersList';
@@ -56,6 +57,10 @@ const menuConfig = [
             {
                 key: BUILDINGS.EDIT.FULL_PATH,
                 label: () => i18n.t('Admin:menu.common.create'),
+            },
+            {
+                key: BUILDINGS.FLOOR.FULL_PATH,
+                label: () => i18n.t('Admin:menu.floor.title'),
             },
         ],
     },
@@ -174,6 +179,12 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                                 <RoomsList />
                             </RouteWrap>
 
+                            <RouteWrap
+                                role={ERoles.ADMIN}
+                                path={BUILDINGS.FLOOR.FULL_PATH}
+                            >
+                                <BuildingFloorEdit />
+                            </RouteWrap>
                             <RouteWrap
                                 role={ERoles.ADMIN}
                                 path={BUILDINGS.EDIT.FULL_PATH}

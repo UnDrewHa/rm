@@ -1,9 +1,8 @@
 import {message} from 'antd';
-import i18n from 'i18next';
-import {Dispatch} from 'redux';
 import {dispatchAsync} from 'core/actions/utils';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {ROUTER} from 'core/router/consts';
+import i18n from 'i18next';
 import {
     CLEAR_ROOMS_DATA,
     CREATE_ROOM,
@@ -14,10 +13,9 @@ import {
 } from 'modules/rooms/actions/actionTypes';
 import {
     IGetAllRoomsData,
-    IRoomCreateModel,
-    IRoomModel,
 } from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
+import {Dispatch} from 'redux';
 
 /**
  * Сервис модуля Events.
@@ -68,13 +66,14 @@ export class RoomsActions {
     /**
      * Создать бронирование.
      *
-     * @param {IRoomCreateModel} data Данные для создания.
+     * @param {FormData} data Данные для создания.
      */
-    create = (data: any) => {
+    create = (data: FormData, onSuccess?) => {
         return dispatchAsync(
             this.dispatch,
             CREATE_ROOM,
             this.service.create(data),
+            {onSuccess},
         )
             .then((res) => {
                 message.success(i18n.t('Rooms:edit.createSuccess'));
@@ -89,9 +88,9 @@ export class RoomsActions {
     /**
      * Обновить бронирование.
      *
-     * @param {IRoomModel} data Данные для обновления.
+     * @param {FormData} data Данные для обновления.
      */
-    update = (data: any) => {
+    update = (data: FormData) => {
         return dispatchAsync(
             this.dispatch,
             UPDATE_ROOM,

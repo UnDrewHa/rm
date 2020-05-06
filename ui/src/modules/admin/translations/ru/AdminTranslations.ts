@@ -24,6 +24,9 @@ export default {
             events: {
                 title: 'Мероприятия',
             },
+            floor: {
+                title: 'План этажа',
+            },
         },
     },
 };

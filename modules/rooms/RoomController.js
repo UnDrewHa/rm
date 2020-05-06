@@ -31,7 +31,7 @@ exports.create = catchAsync(async function (req, res) {
         'building',
     ]);
 
-    if (photos && photos.length > 0) {
+    if (files && files.length > 0) {
         data.photos = files;
     }
 

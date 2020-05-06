@@ -60,6 +60,10 @@ export const ROUTER = {
                     FULL_PATH: '/admin/buildings/edit',
                     PATH: '/admin/buildings/edit',
                 },
+                FLOOR: {
+                    FULL_PATH: '/admin/buildings/floor',
+                    PATH: '/admin/buildings/floor',
+                },
             },
         },
     },

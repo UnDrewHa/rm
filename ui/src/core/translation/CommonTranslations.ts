@@ -23,6 +23,7 @@ export default {
             cancel: 'Отменить',
             search: 'Найти',
             reset: 'Сбросить',
+            show: 'Показать',
         },
         forms: {
             requiredText: 'Поле обязательно для заполнения',

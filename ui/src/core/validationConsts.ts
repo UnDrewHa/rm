@@ -13,7 +13,6 @@ export const validationConsts = {
         required: [
             {
                 required: true,
-                whitespace: true,
             },
         ],
     },
