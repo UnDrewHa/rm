@@ -5,11 +5,11 @@ import {ROUTER} from 'core/router/consts';
 import i18n from 'i18next';
 import {
     CLEAR_ROOMS_DATA,
+    CLEAR_ROOMS_DETAILS,
     CREATE_ROOM,
     DELETE_ROOMS,
     FIND_ROOMS,
-    GET_ROOM_BY_ID,
-    UPDATE_ROOM,
+    GET_ROOM_BY_ID, UPDATE_ROOM,
 } from 'modules/rooms/actions/actionTypes';
 import {
     IGetAllRoomsData,
@@ -134,6 +134,15 @@ export class RoomsActions {
     clear() {
         this.dispatch({
             type: CLEAR_ROOMS_DATA,
+        });
+    }
+
+    /**
+     * Очистить стор.
+     */
+    clearDetails() {
+        this.dispatch({
+            type: CLEAR_ROOMS_DETAILS,
         });
     }
 }

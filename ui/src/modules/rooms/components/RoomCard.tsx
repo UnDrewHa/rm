@@ -1,6 +1,4 @@
 import {Card, Skeleton} from 'antd';
-import React from 'react';
-import {connect} from 'react-redux';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
@@ -10,10 +8,13 @@ import {RoomImage} from 'modules/rooms/components/RoomImage';
 import {RoomTitle} from 'modules/rooms/components/RoomTitle';
 import {IRoomFullModel} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
+import React from 'react';
+import {connect} from 'react-redux';
 import '../styles/roomCard.scss';
 
 interface IOwnProps {
     id: string;
+    bordered?: boolean;
 }
 
 interface IStateProps {
@@ -27,16 +28,17 @@ interface IDispatchProps {
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
 class RoomCard extends React.Component<TProps> {
-    constructor(props) {
+    constructor(props: TProps) {
         super(props);
 
         const {id, roomsActions} = props;
 
+        roomsActions.clearDetails();
         roomsActions.getById(id);
     }
 
     render() {
-        const {details} = this.props;
+        const {details, bordered = true} = this.props;
         const room = details.data;
         const isLoading =
             details.status !== EStatusCodes.SUCCESS &&
@@ -45,14 +47,18 @@ class RoomCard extends React.Component<TProps> {
 
         if (isLoading || !room) {
             return (
-                <Card className="room-card">
+                <Card className="room-card" bordered={bordered}>
                     <Skeleton active />
                 </Card>
             );
         }
 
         return (
-            <Card cover={<RoomImage item={room} />} className="room-card">
+            <Card
+                bordered={bordered}
+                cover={<RoomImage item={room} />}
+                className="room-card"
+            >
                 <Card.Meta
                     title={<RoomTitle item={room} />}
                     description={<RoomDescription item={room} />}

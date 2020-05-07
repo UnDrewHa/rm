@@ -1,20 +1,20 @@
 import {Button, Calendar, Col, PageHeader, Row, Table} from 'antd';
-import i18n from 'i18next';
-import moment, {Moment} from 'moment';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {commonTableProps, DEFAULT_DATE_FORMAT} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
 import {EventsActions} from 'modules/events/actions/EventsActions';
 import {baseColumnsConfig} from 'modules/events/components/utils';
 import {IEventModel} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {RoomCard} from 'modules/rooms/components/RoomCard';
+import moment, {Moment} from 'moment';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import '../styles/schedule.scss';
 
 interface IState {
@@ -85,7 +85,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
     };
 
     handleBack = () => {
-        InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
+        window.history.back();
     };
 
     render() {

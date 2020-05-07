@@ -8,6 +8,7 @@ export interface IBuildingModel {
     name?: string;
     address: string;
     floors: number;
+    floorsData: IFloorData;
 }
 
 export interface IGetFloorDataFilter {

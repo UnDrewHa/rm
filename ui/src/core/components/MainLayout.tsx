@@ -33,13 +33,19 @@ import {UsersService} from 'modules/users/service/UsersService';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, Link, Route, Switch} from 'react-router-dom';
+import {RoomsMapPage} from 'modules/rooms/pages/RoomsMapPage';
 
-const {FULL_PATH, EVENTS, ADMIN, PROFILE, ROOMS} = ROUTER.MAIN;
+const {FULL_PATH, MAP, EVENTS, ADMIN, PROFILE, ROOMS} = ROUTER.MAIN;
 
 const menuConfig = [
     {
         key: FULL_PATH,
         label: () => i18n.t('menu.list'),
+        accessActions: [ERoomsActions.GET_ALL],
+    },
+    {
+        key: MAP.FULL_PATH,
+        label: () => i18n.t('menu.map'),
         accessActions: [ERoomsActions.GET_ALL],
     },
     {
@@ -216,6 +222,12 @@ class MainLayout extends React.Component<TProps, IState> {
                                 path={ROOMS.DETAILS.FULL_PATH}
                             >
                                 <RoomSchedulePage />
+                            </RouteWrap>
+                            <RouteWrap
+                                actionsAccess={[ERoomsActions.GET_ALL]}
+                                path={MAP.FULL_PATH}
+                            >
+                                <RoomsMapPage />
                             </RouteWrap>
                             <RouteWrap
                                 actionsAccess={[ERoomsActions.GET_ALL]}

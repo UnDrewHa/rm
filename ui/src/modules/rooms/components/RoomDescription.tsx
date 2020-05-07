@@ -5,12 +5,17 @@ import {
 } from '@ant-design/icons';
 import {Typography} from 'antd';
 import i18n from 'i18next';
-import React from 'react';
 import {IRoomProp} from 'modules/rooms/models';
+import React from 'react';
 
 export const RoomDescription = ({item}: IRoomProp) => {
     return (
         <React.Fragment>
+            <Typography.Paragraph className="room-options">
+                {item.building.address}
+                {' - '}
+                {i18n.t('Buildings:floor', {n: item.floor})}
+            </Typography.Paragraph>
             <Typography.Paragraph className="room-description">
                 {item.description}
             </Typography.Paragraph>

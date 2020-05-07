@@ -31,6 +31,7 @@ export default {
         },
         menu: {
             list: 'Список комнат',
+            map: 'Карта переговорок',
             ownEvents: 'Мои мероприятия',
             favourites: 'Избранные комнаты',
             profile: 'Профиль',

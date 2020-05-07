@@ -1,11 +1,11 @@
 import {UploadOutlined} from '@ant-design/icons';
-import {Button, Modal, Upload} from 'antd';
+import {Button, Upload} from 'antd';
 import i18n from 'i18next';
 import {isEmpty} from 'lodash-es';
 import {RoomModal} from 'modules/admin/pages/buildings/RoomModal';
 import {BuildingsActions} from 'modules/buildings/actions/BuildingsActions';
 import {IFloorData} from 'modules/buildings/models';
-import {RoomCard} from 'modules/rooms/components/RoomCard';
+import {RoomDetailsModal} from 'modules/rooms/components/RoomDetailsModal';
 import React from 'react';
 import './floorMap.scss';
 require('leaflet/dist/leaflet.css');
@@ -104,11 +104,8 @@ export class FloorPlan extends React.Component<IOwnProps, IState> {
             this.handleCreated(event);
         });
 
-        map.on(L.Draw.Event.EDITED, (event) => {
-            this.handleEdited(event);
-        });
-
         map.on(L.Draw.Event.DELETED, (event) => {
+            drawnItems.removeLayer(event.layer);
             this.handleDeleted(event);
         });
 
@@ -119,21 +116,11 @@ export class FloorPlan extends React.Component<IOwnProps, IState> {
 
     handleCreated = (event) => {
         const {layer} = event;
-        //layer._latlngs - Точки фигуры: Array<{lat: number, lng: number}>
-        //layer._leaflet_id - id фигуры: number
 
         layer.bindPopup(this.renderPopupContent(layer));
 
         layer.on('popupopen', this.handlePopupOpen);
         layer.on('popupclose', this.handlePopupClose);
-    };
-
-    handleEdited = (event) => {
-        const {
-            layers: {_layers},
-        } = event;
-        //layers._layers[_leaflet_id]._latlngs - Точки фигуры: Array<{lat: number, lng: number}>
-        //layers._layers[_leaflet_id]._leaflet_id - id фигуры: number
     };
 
     handleDeleted = (event) => {
@@ -206,7 +193,6 @@ export class FloorPlan extends React.Component<IOwnProps, IState> {
                 const {selectedLayer} = this.state;
                 selectedLayer
                     .bindTooltip('Переговорка привязана', {
-                        permanent: true,
                         opacity: 0.75,
                         direction: 'bottom',
                     })
@@ -290,8 +276,12 @@ export class FloorPlan extends React.Component<IOwnProps, IState> {
             roomsData.forEach((item) => {
                 const poly = L.polygon(item.coords);
 
+                poly.setStyle({
+                    color: '#1890ff',
+                    fillColor: '#1890ff',
+                });
+
                 poly.bindTooltip('Переговорка привязана', {
-                    permanent: true,
                     opacity: 0.75,
                     direction: 'bottom',
                 }).openTooltip();
@@ -352,14 +342,11 @@ export class FloorPlan extends React.Component<IOwnProps, IState> {
                     floor={data.floorNumber}
                 />
                 {selectedRoomId && (
-                    <Modal
-                        title={i18n.t('Rooms:modal.detailsTitle')}
+                    <RoomDetailsModal
                         visible={roomDetailsModalVisible}
                         onCancel={this.handleHideRoomModal}
-                        footer={null}
-                    >
-                        <RoomCard id={selectedRoomId} />
-                    </Modal>
+                        roomId={selectedRoomId}
+                    />
                 )}
             </React.Fragment>
         );

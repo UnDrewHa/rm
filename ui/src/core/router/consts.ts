@@ -2,6 +2,10 @@ export const ROUTER = {
     MAIN: {
         FULL_PATH: '/',
         PATH: '/',
+        MAP: {
+            FULL_PATH: '/map',
+            PATH: '/map',
+        },
         ROOMS: {
             DETAILS: {
                 FULL_PATH: '/rooms/:id',
