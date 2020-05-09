@@ -13,3 +13,5 @@ export const commonTableProps = {
     rowKey: '_id',
     bordered: true,
 };
+
+export const rowGutters = {xs: 8, sm: 16, md: 24};

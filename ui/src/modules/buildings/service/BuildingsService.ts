@@ -20,7 +20,7 @@ export class BuildingsService {
     /**
      * Получить список всех зданий.
      */
-    getAll = (): Promise<any> => axios.get(this.baseUrl);
+    getAll = () => axios.get(this.baseUrl);
 
     /**
      * Получить детальную информацию.

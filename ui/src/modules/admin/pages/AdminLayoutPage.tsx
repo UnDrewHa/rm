@@ -14,7 +14,13 @@ import {UserEdit} from 'modules/admin/pages/users/UserEdit';
 import {AdminMainPage} from 'modules/admin/pages/AdminMainPage';
 import {ERoles} from 'modules/permissions/enums';
 import React from 'react';
-import {withRouter, Link, Route, Switch} from 'react-router-dom';
+import {
+    withRouter,
+    Link,
+    Route,
+    RouteChildrenProps,
+    Switch,
+} from 'react-router-dom';
 import '../styles/adminTable.scss';
 
 const {FULL_PATH, BUILDINGS, USERS, ROOMS} = ROUTER.MAIN.ADMIN;
@@ -92,11 +98,7 @@ const getOpenKeys = (pathname) => {
     return pathname;
 };
 
-interface IProps {
-    history: any;
-    location: any;
-    match: any;
-}
+interface IProps extends RouteChildrenProps {}
 
 interface IState {
     titleKey: string;

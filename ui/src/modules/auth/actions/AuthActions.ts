@@ -1,15 +1,15 @@
 import {message} from 'antd';
-import i18n from 'i18next';
-import {Dispatch} from 'redux';
 import {dispatchAsync} from 'core/actions/utils';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {ROUTER} from 'core/router/consts';
+import i18n from 'i18next';
 import {
     CLEAR_AUTH_DATA,
     LOGIN,
     RESET_PASSWORD,
     SIGNUP,
 } from 'modules/auth/actions/actionTypes';
+import {Dispatch} from 'redux';
 import {
     IForgotPasswordData,
     ILoginData,

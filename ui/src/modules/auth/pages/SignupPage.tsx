@@ -1,54 +1,74 @@
 import {LockOutlined, MailOutlined, UserOutlined} from '@ant-design/icons';
 import {Avatar, Button, Col, Form, Input, Row, Typography} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {Link as RouteLink} from 'react-router-dom';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
 import {AuthActions} from 'modules/auth/actions/AuthActions';
+import {ISignupData} from 'modules/auth/models';
 import {AuthService} from 'modules/auth/service/AuthService';
 import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'modules/buildings/models';
 import {IUserModel} from 'modules/users/models';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Link as RouteLink} from 'react-router-dom';
 
+/**
+ * Пропсы из stateToProps.
+ *
+ * @prop {IAsyncData<IUserModel>} profile Данные профиля.
+ * @prop {IAsyncData<IBuildingModel[]>} buildingsData Данные списка зданий.
+ */
 interface IStateProps {
-    userData: IAsyncData<IUserModel>;
+    profile: IAsyncData<IUserModel>;
     buildingsData: IAsyncData<IBuildingModel[]>;
 }
 
+/**
+ * Пропсы из dispatchToProps.
+ *
+ * @prop {AuthActions} authActions Экшены.
+ */
 interface IDispatchProps {
-    actions: AuthActions;
+    authActions: AuthActions;
 }
 
 type TProps = IStateProps & IDispatchProps;
 
+/**
+ * Состояние компонента.
+ *
+ * @prop {string} buildingId Идентификатор здания.
+ */
 interface IState {
-    building: string;
+    buildingId: string;
 }
 
-const initialValues = {
+const initialValues: ISignupData = {
     login: '',
     password: '',
     passwordConfirm: '',
     email: '',
+    building: '',
 };
 
 class SignupPage extends React.Component<TProps, IState> {
     state: IState = {
-        building: '',
+        buildingId: '',
     };
 
     /**
-     * Обработчик отправки формы.
+     * Отправка заполненной формы.
+     *
+     * @param {ISignupData} values Значения элементов формы.
      */
-    handleFinish = (values) => {
-        this.props.actions.signUp({
+    handleFinish = (values: ISignupData) => {
+        this.props.authActions.signUp({
             ...values,
-            building: this.state.building,
+            building: this.state.buildingId,
         });
     };
 
@@ -57,13 +77,13 @@ class SignupPage extends React.Component<TProps, IState> {
      */
     handleBuildingSelect = (value, option) => {
         this.setState({
-            building: option._id,
+            buildingId: option._id,
         });
     };
 
     render() {
-        const {userData} = this.props;
-        const isPending = userData.status === EStatusCodes.PENDING;
+        const {profile} = this.props;
+        const isPending = profile.status === EStatusCodes.PENDING;
 
         return (
             <React.Fragment>
@@ -159,12 +179,12 @@ class SignupPage extends React.Component<TProps, IState> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    userData: state.users.profile,
+    profile: state.users.profile,
     buildingsData: state.buildings.list,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
-    actions: new AuthActions(new AuthService(), dispatch),
+    authActions: new AuthActions(new AuthService(), dispatch),
 });
 
 /**

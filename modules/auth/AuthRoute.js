@@ -5,7 +5,7 @@ const {rateLimitMiddleware} = require('../../core/rateLimiter');
 
 const route = express.Router();
 
-route.post('/signup', AuthController.signup, AuthController.createAndSendToken);
+route.post('/signup', AuthController.signup);
 route.post(
     '/login',
     rateLimitMiddleware,
@@ -14,11 +14,7 @@ route.post(
     AuthController.createAndSendToken,
 );
 route.post('/forgot', AuthController.forgot);
-route.patch(
-    '/reset/:token',
-    AuthController.reset,
-    AuthController.createAndSendToken,
-);
+route.patch('/reset/:token', AuthController.reset);
 route.post('/logout', AuthController.logout);
 
 module.exports = route;

@@ -14,7 +14,7 @@ import {RoomCard} from 'modules/rooms/components/RoomCard';
 import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {withRouter, RouteChildrenProps} from 'react-router-dom';
 import '../styles/schedule.scss';
 
 interface IState {
@@ -29,9 +29,7 @@ interface IDispatchProps {
     eventsActions: EventsActions;
 }
 
-interface IOwnProps {
-    match: any;
-}
+interface IOwnProps extends RouteChildrenProps<{id: string}> {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
@@ -74,7 +72,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
     handleReserve = (e) => {
         e.preventDefault();
         const {match} = this.props;
-        const {id} = match?.params || '';
+        const {id} = match?.params || {};
 
         InterfaceAction.redirect({
             to: ROUTER.MAIN.EVENTS.CREATE.FULL_PATH,
@@ -91,7 +89,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
     render() {
         const {date} = this.state;
         const {events, match} = this.props;
-        const {id} = match?.params || '';
+        const {id} = match?.params || {};
         const isLoading = events.status === EStatusCodes.PENDING;
 
         return (

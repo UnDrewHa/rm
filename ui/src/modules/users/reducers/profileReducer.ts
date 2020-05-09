@@ -2,12 +2,7 @@ import {SUCCESS} from 'core/actions/actionTypes';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'core/reducer/model';
 import {createAsyncDataReducer} from 'core/reducer/utils';
-import {
-    CLEAR_AUTH_DATA,
-    LOGIN,
-    LOGOUT,
-    SIGNUP,
-} from 'modules/auth/actions/actionTypes';
+import {CLEAR_AUTH_DATA, LOGIN, LOGOUT} from 'modules/auth/actions/actionTypes';
 import {
     GET_USER_INFO,
     TOGGLE_FAVOURITE,
@@ -21,7 +16,7 @@ export const getInitialState = (): IAsyncData<IUserModel> => ({
     error: null,
 });
 
-const asyncActions = [LOGIN, SIGNUP, GET_USER_INFO, UPDATE_ME];
+const asyncActions = [LOGIN, GET_USER_INFO, UPDATE_ME];
 const toInitialStateActions = [LOGOUT, CLEAR_AUTH_DATA];
 
 export const profileReducer = (

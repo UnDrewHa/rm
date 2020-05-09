@@ -9,5 +9,5 @@ export class PermissionService {
     /**
      * Загрузить данные доступов.
      */
-    getAll = (): Promise<any> => axios.get(BASE_URL);
+    getAll = () => axios.get(BASE_URL);
 }

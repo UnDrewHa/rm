@@ -21,7 +21,6 @@ import {IRoomFullModel, IRoomModel} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 enum ERoomTabs {
     SELECT = 'SELECT',
@@ -58,9 +57,6 @@ interface IOwnProps {
     visible: boolean;
     building: string;
     floor: number;
-    location: any;
-    match: any;
-    history: any;
 }
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
@@ -287,11 +283,9 @@ const mapDispatchToProps = (dispatch): IDispatchProps => ({
     actions: new RoomsActions(new RoomsService(), dispatch),
 });
 
-const connected = withRouter(
-    connect<IStateProps, IDispatchProps, IOwnProps>(
-        mapStateToProps,
-        mapDispatchToProps,
-    )(RoomModal),
-);
+const connected = connect<IStateProps, IDispatchProps, IOwnProps>(
+    mapStateToProps,
+    mapDispatchToProps,
+)(RoomModal);
 
 export {connected as RoomModal};

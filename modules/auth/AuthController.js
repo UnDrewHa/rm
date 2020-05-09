@@ -14,7 +14,7 @@ const {AppError} = require('../../common/errors');
  * Контроллер регистрации пользователя.
  */
 exports.signup = catchAsync(async function (req, res, next) {
-    res.locals.user = await UserModel.create(
+    const user = await UserModel.create(
         getFieldsFromObject(req.body.data, [
             'login',
             'password',
@@ -24,7 +24,9 @@ exports.signup = catchAsync(async function (req, res, next) {
         ]),
     );
 
-    next();
+    res.status(201).json({
+        data: null,
+    });
 });
 
 /**
@@ -138,7 +140,9 @@ exports.forgot = catchAsync(async function (req, res, next) {
         );
     }
 
-    res.status(200).send();
+    res.status(200).json({
+        data: null,
+    });
 });
 
 /**
@@ -171,8 +175,9 @@ exports.reset = catchAsync(async function (req, res, next) {
 
     await user.save();
 
-    res.locals.user = user;
-    next();
+    res.status(200).json({
+        data: null,
+    });
 });
 
 /**
@@ -183,8 +188,6 @@ exports.createAndSendToken = function (req, res) {
     const token = user.getToken();
 
     res.cookie('token', token, getTokenCookieOptions());
-
-    user.password = undefined;
 
     res.status(200).json({
         data: user,

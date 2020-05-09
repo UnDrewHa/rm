@@ -7,38 +7,48 @@ import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
 import i18n from 'i18next';
 import {AuthActions} from 'modules/auth/actions/AuthActions';
+import {IForgotPasswordData} from 'modules/auth/models';
 import {AuthService} from 'modules/auth/service/AuthService';
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link as RouteLink} from 'react-router-dom';
 
+/**
+ * Пропсы из stateToProps.
+ *
+ * @prop {IAsyncData<null>} resetPasswordData Данные сброса пароля.
+ */
 interface IStateProps {
     resetPasswordData: IAsyncData<null>;
 }
 
+/**
+ * Пропсы из dispatchToProps.
+ *
+ * @prop {AuthActions} authActions Экшены.
+ */
 interface IDispatchProps {
-    actions: AuthActions;
+    authActions: AuthActions;
 }
 
 type TProps = IStateProps & IDispatchProps;
 
-const initialValues = {
+const initialValues: IForgotPasswordData = {
     email: '',
 };
 
-/**
- * Страница запроса отправки ссылки на страницу сброса пароля.
- */
 class ForgotPage extends React.Component<TProps> {
     componentWillUnmount() {
-        this.props.actions.clear();
+        this.props.authActions.clear();
     }
 
     /**
-     * Обработчик отправки формы.
+     * Отправка заполненной формы.
+     *
+     * @param {IForgotPasswordData} values Значения элементов формы.
      */
-    handleFinish = (values) => {
-        this.props.actions.forgot(values);
+    handleFinish = (values: IForgotPasswordData) => {
+        this.props.authActions.forgot(values);
     };
 
     render() {
@@ -113,7 +123,7 @@ const mapStateToProps = (state: TAppStore): IStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
-    actions: new AuthActions(new AuthService(), dispatch),
+    authActions: new AuthActions(new AuthService(), dispatch),
 });
 
 /**

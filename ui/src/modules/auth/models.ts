@@ -2,6 +2,9 @@ import {IAsyncData} from 'core/reducer/model';
 
 /**
  * Данные для входа.
+ *
+ * @prop {string} login.
+ * @prop {string} password.
  */
 export interface ILoginData {
     login: string;
@@ -21,6 +24,8 @@ export interface ISignupData {
 
 /**
  * Данные для получения токена на сброс пароля.
+ *
+ * @prop {string} email.
  */
 export interface IForgotPasswordData {
     email: string;

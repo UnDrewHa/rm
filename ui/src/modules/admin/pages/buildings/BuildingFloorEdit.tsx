@@ -14,7 +14,6 @@ import {IBuildingModel, IFloorData} from 'modules/buildings/models';
 import {BuildingsService} from 'modules/buildings/service/BuildingsService';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 
 interface IState {
     building: IBuildingModel;
@@ -29,11 +28,7 @@ interface IDispatchProps {
     actions: BuildingsActions;
 }
 
-interface IOwnProps {
-    location: any;
-    match: any;
-    history: any;
-}
+interface IOwnProps {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 
@@ -223,11 +218,9 @@ const mapDispatchToProps = (dispatch): IDispatchProps => ({
     actions: new BuildingsActions(new BuildingsService(), dispatch),
 });
 
-const connected = withRouter(
-    connect<IStateProps, IDispatchProps, IOwnProps>(
-        mapStateToProps,
-        mapDispatchToProps,
-    )(BuildingFloorEdit),
-);
+const connected = connect<IStateProps, IDispatchProps, IOwnProps>(
+    mapStateToProps,
+    mapDispatchToProps,
+)(BuildingFloorEdit);
 
 export {connected as BuildingFloorEdit};

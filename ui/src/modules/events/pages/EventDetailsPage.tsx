@@ -1,11 +1,8 @@
 import {Col, PageHeader, Row, Skeleton, Typography} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
 import {EventsActions} from 'modules/events/actions/EventsActions';
 import {EventMembers} from 'modules/events/components/EventMembers';
 import {EventOwner} from 'modules/events/components/EventOwner';
@@ -13,6 +10,9 @@ import {IEventModel} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {calculateTimeString} from 'modules/events/utils';
 import {RoomTitle} from 'modules/rooms/components/RoomTitle';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter, RouteChildrenProps} from 'react-router-dom';
 
 interface IStateProps {
     details: IAsyncData<IEventModel>;
@@ -22,9 +22,7 @@ interface IDispatchProps {
     eventsActions: EventsActions;
 }
 
-interface IOwnProps {
-    match: any;
-}
+interface IOwnProps extends RouteChildrenProps<{id: string}> {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 

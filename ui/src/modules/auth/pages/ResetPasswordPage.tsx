@@ -1,32 +1,44 @@
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {Avatar, Button, Col, Form, Input, Row, Typography} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Link} from 'react-router-dom';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
 import {AuthActions} from 'modules/auth/actions/AuthActions';
+import {IResetPasswordData} from 'modules/auth/models';
 import {AuthService} from 'modules/auth/service/AuthService';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter, Link, RouteChildrenProps} from 'react-router-dom';
 
-interface IProps {
-    match: any;
-}
+/**
+ * Собственные свойства компонента.
+ */
+interface IProps extends RouteChildrenProps<{token: string}> {}
 
+/**
+ * Пропсы из stateToProps.
+ *
+ * @prop {IAsyncData<null>} resetPasswordData Данные сброса пароля.
+ */
 interface IStateProps {
     resetPasswordData: IAsyncData<null>;
 }
 
+/**
+ * Пропсы из dispatchToProps.
+ *
+ * @prop {AuthActions} authActions Экшены.
+ */
 interface IDispatchProps {
-    actions: AuthActions;
+    authActions: AuthActions;
 }
 
 type TProps = IProps & IStateProps & IDispatchProps;
 
-const initialValues = {
+const initialValues: IResetPasswordData = {
     password: '',
     passwordConfirm: '',
 };
@@ -35,16 +47,18 @@ class ResetPasswordPage extends React.Component<TProps> {
     constructor(props) {
         super(props);
 
-        this.props.actions.clear();
+        this.props.authActions.clear();
     }
 
     /**
-     * Обработчик отправки формы.
+     * Отправка заполненной формы.
+     *
+     * @param {IResetPasswordData} values Значения элементов формы.
      */
-    handleFinish = (values) => {
+    handleFinish = (values: IResetPasswordData) => {
         const {match} = this.props;
 
-        this.props.actions.reset(match.params.token, values);
+        this.props.authActions.reset(match.params.token, values);
     };
 
     render() {
@@ -121,7 +135,7 @@ const mapStateToProps = (state: TAppStore): IStateProps => ({
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
-    actions: new AuthActions(new AuthService(), dispatch),
+    authActions: new AuthActions(new AuthService(), dispatch),
 });
 
 /**

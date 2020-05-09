@@ -1,9 +1,9 @@
-import React from 'react';
-import {HashRouter as Router, Route, Switch} from 'react-router-dom';
-import {AuthLayout} from 'core/components/AuthLayout';
 import {MainLayout} from 'core/components/MainLayout';
 import {RedirectListener} from 'core/components/RedirectListener';
 import {ROUTER} from 'core/router/consts';
+import {AuthLayout} from 'modules/auth/pages/AuthLayout';
+import React from 'react';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
 export function RouterData() {
     return (

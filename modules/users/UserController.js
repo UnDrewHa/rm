@@ -46,8 +46,6 @@ exports.createPasswordCheckMiddleware = function (key) {
             );
         }
 
-        user.password = undefined;
-
         res.locals.user = user;
 
         next();
@@ -99,7 +97,6 @@ exports.updateMe = catchAsync(async function (req, res, next) {
         user.passwordConfirm = userData.newPassword;
 
         await user.save();
-        await UserModel.populate(user, {path: 'building'});
 
         res.locals.user = user;
         next();
@@ -110,8 +107,6 @@ exports.updateMe = catchAsync(async function (req, res, next) {
         userData,
         {new: true},
     );
-
-    await UserModel.populate(updated, {path: 'building'});
 
     res.status(200).send({
         data: updated,
@@ -137,15 +132,13 @@ exports.deleteMe = catchAsync(async function (req, res) {
 /**
  * Контроллер удаления пользователя.
  */
-exports.getUserInfo = catchAsync(async function (req, res) {
+exports.getUserInfo = function (req, res) {
     const {user} = res.locals;
-
-    await UserModel.populate(user, {path: 'building'});
 
     res.status(200).json({
         data: user,
     });
-});
+};
 
 /**
  * Контроллер удаления пользователя.
@@ -153,8 +146,6 @@ exports.getUserInfo = catchAsync(async function (req, res) {
 exports.getById = catchAsync(async function (req, res) {
     const {id} = req.params;
     const user = await UserModel.findById(id);
-
-    await UserModel.populate(user, {path: 'building'});
 
     res.status(200).json({
         data: user,
@@ -265,8 +256,6 @@ exports.toggleFavourite = catchAsync(async function (req, res, next) {
     const updated = await UserModel.findOneAndUpdate({_id: user._id}, action, {
         new: true,
     });
-
-    await UserModel.populate(updated, {path: 'building'});
 
     res.status(200).send({
         data: updated,

@@ -25,6 +25,7 @@ import {PermissionService} from 'modules/permissions/service/PermissionService';
 import {checkAccess, checkRole} from 'modules/permissions/utils';
 import {FavouritesRoomsPage} from 'modules/rooms/pages/FavouritesRoomsPage';
 import {RoomsListPage} from 'modules/rooms/pages/RoomsListPage';
+import {RoomsMapPage} from 'modules/rooms/pages/RoomsMapPage';
 import {RoomSchedulePage} from 'modules/rooms/pages/RoomSchedulePage';
 import {UsersActions} from 'modules/users/actions/UsersActions';
 import {IUserModel} from 'modules/users/models';
@@ -32,8 +33,7 @@ import {ProfilePage} from 'modules/users/pages/ProfilePage';
 import {UsersService} from 'modules/users/service/UsersService';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter, Link, Route, Switch} from 'react-router-dom';
-import {RoomsMapPage} from 'modules/rooms/pages/RoomsMapPage';
+import {withRouter, Link, Route, RouteChildrenProps, Switch} from 'react-router-dom';
 
 const {FULL_PATH, MAP, EVENTS, ADMIN, PROFILE, ROOMS} = ROUTER.MAIN;
 
@@ -70,9 +70,7 @@ const menuConfig = [
     },
 ];
 
-interface IOwnProps {
-    location: any;
-}
+interface IOwnProps extends RouteChildrenProps {}
 
 interface IStateProps {
     permissions: IAsyncData<TPermissionsList>;

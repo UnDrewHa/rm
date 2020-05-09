@@ -1,23 +1,23 @@
 import {Button, Checkbox, Form, Input, Select} from 'antd';
 import {FormInstance} from 'antd/lib/form';
-import i18n from 'i18next';
-import {isFunction} from 'lodash-es';
-import queryParser from 'query-string';
-import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
 import {FormSkeleton} from 'core/components/FormSkeleton';
 import {EPageMode} from 'core/enums';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
+import {isFunction} from 'lodash-es';
 import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'modules/buildings/models';
 import {ERoles} from 'modules/permissions/enums';
 import {UsersActions} from 'modules/users/actions/UsersActions';
 import {IUserModel} from 'modules/users/models';
 import {UsersService} from 'modules/users/service/UsersService';
+import queryParser from 'query-string';
+import React from 'react';
+import {connect} from 'react-redux';
+import {withRouter, RouteChildrenProps} from 'react-router-dom';
 
 interface IState {
     pageMode: EPageMode;
@@ -32,11 +32,7 @@ interface IDispatchProps {
     actions: UsersActions;
 }
 
-interface IOwnProps {
-    location: any;
-    match: any;
-    history: any;
-}
+interface IOwnProps extends RouteChildrenProps {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 

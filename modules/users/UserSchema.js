@@ -85,7 +85,14 @@ const UserSchema = new Schema(
     },
     {
         toObject: {virtuals: true},
-        toJSON: {virtuals: true},
+        toJSON: {
+            virtuals: true,
+            transform: (doc, ret, options) => {
+                ret.password = undefined;
+
+                return ret;
+            },
+        },
     },
 );
 
@@ -97,6 +104,20 @@ UserSchema.virtual('fullName').get(function () {
     }
 
     return fullName.replace(/undefined/gi, '').trim();
+});
+
+UserSchema.pre(/^find/, function (next) {
+    this.populate('building');
+
+    next();
+});
+
+UserSchema.post('save', function (doc, next) {
+    doc.populate('building')
+        .execPopulate()
+        .then(() => {
+            next();
+        });
 });
 
 UserSchema.pre('save', async function (next) {

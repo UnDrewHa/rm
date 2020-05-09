@@ -29,7 +29,7 @@ import {RoomsService} from 'modules/rooms/service/RoomsService';
 import queryParser from 'query-string';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {withRouter, RouteChildrenProps} from 'react-router-dom';
 import {uuid} from 'uuidv4';
 
 interface IState {
@@ -49,11 +49,7 @@ interface IDispatchProps {
     actions: RoomsActions;
 }
 
-interface IOwnProps {
-    location: any;
-    match: any;
-    history: any;
-}
+interface IOwnProps extends RouteChildrenProps {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 

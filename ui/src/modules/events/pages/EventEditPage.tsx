@@ -32,7 +32,7 @@ import moment, {Moment} from 'moment';
 import queryParser from 'query-string';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {withRouter, RouteChildrenProps} from 'react-router-dom';
 import '../styles/events.scss';
 
 interface IState {
@@ -57,10 +57,17 @@ interface IDispatchProps {
     eventsActions: EventsActions;
 }
 
-interface IOwnProps {
-    match: any;
-    location: any;
+interface ILocationState {
+    id?: string;
+    title?: string;
+    date?: Moment;
+    from?: Moment;
+    to?: Moment;
+    description?: string;
+    members?: string[];
 }
+
+interface IOwnProps extends RouteChildrenProps<{}, ILocationState> {}
 
 type TProps = IOwnProps & IStateProps & IDispatchProps;
 

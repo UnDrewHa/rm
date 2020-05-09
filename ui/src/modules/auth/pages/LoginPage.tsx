@@ -1,32 +1,40 @@
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {Avatar, Button, Col, Form, Input, Row, Typography} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {Link as RouteLink} from 'react-router-dom';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
 import {AuthActions} from 'modules/auth/actions/AuthActions';
+import {ILoginData} from 'modules/auth/models';
 import {AuthService} from 'modules/auth/service/AuthService';
-import 'modules/auth/styles/auth.scss';
 import {IUserModel} from 'modules/users/models';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Link as RouteLink} from 'react-router-dom';
 
-const {Title} = Typography;
-
+/**
+ * Пропсы из stateToProps.
+ *
+ * @prop {IAsyncData<IUserModel>} profile Данные профиля.
+ */
 interface IStateProps {
-    userData: IAsyncData<IUserModel>;
+    profile: IAsyncData<IUserModel>;
 }
 
+/**
+ * Пропсы из dispatchToProps.
+ *
+ * @prop {AuthActions} authActions Экшены.
+ */
 interface IDispatchProps {
-    actions: AuthActions;
+    authActions: AuthActions;
 }
 
 type TProps = IStateProps & IDispatchProps;
 
-const initialValues = {
+const initialValues: ILoginData = {
     login: '',
     password: '',
 };
@@ -35,20 +43,28 @@ class LoginPage extends React.Component<TProps> {
     constructor(props: TProps) {
         super(props);
 
-        props.actions.clear();
+        props.authActions.clear();
     }
-    handleFinish = (values) => {
-        this.props.actions.login(values);
+
+    /**
+     * Отправка заполненной формы.
+     *
+     * @param {ILoginData} values Значения элементов формы.
+     */
+    handleFinish = (values: ILoginData) => {
+        this.props.authActions.login(values);
     };
 
     render() {
-        const {userData} = this.props;
-        const isPending = userData.status === EStatusCodes.PENDING;
+        const {profile} = this.props;
+        const isPending = profile.status === EStatusCodes.PENDING;
 
         return (
             <React.Fragment>
                 <Avatar size="large" icon={<UserOutlined />} />
-                <Title level={3}>{i18n.t('Auth:login.title')}</Title>
+                <Typography.Title level={3}>
+                    {i18n.t('Auth:login.title')}
+                </Typography.Title>
                 <Form
                     validateMessages={defaultValidateMessages}
                     className="auth-form"
@@ -108,11 +124,11 @@ class LoginPage extends React.Component<TProps> {
 }
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
-    userData: state.users.profile,
+    profile: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
-    actions: new AuthActions(new AuthService(), dispatch),
+    authActions: new AuthActions(new AuthService(), dispatch),
 });
 
 /**
