@@ -42,6 +42,7 @@ exports.sendMailWithResetToken = catchAsync(async (email, token) => {
         )));
 
     tpl = tpl.replace(/{{ORIGIN}}/gi, process.env.PRODUCTION_ORIGIN);
+    tpl = tpl.replace(/{{ORG_NAME}}/gi, process.env.ORG_NAME);
     tpl = tpl.replace(/{{TOKEN}}/gi, token);
 
     const mailOptions = {
