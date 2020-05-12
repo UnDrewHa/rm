@@ -24,6 +24,7 @@ export default {
             search: 'Найти',
             reset: 'Сбросить',
             show: 'Показать',
+            getQrCode: 'QR-код',
         },
         forms: {
             requiredText: 'Поле обязательно для заполнения',

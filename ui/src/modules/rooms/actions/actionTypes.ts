@@ -5,3 +5,4 @@ export const UPDATE_ROOM = 'UPDATE_ROOM';
 export const DELETE_ROOMS = 'DELETE_ROOMS';
 export const CLEAR_ROOMS_DATA = 'CLEAR_ROOMS_DATA';
 export const CLEAR_ROOMS_DETAILS = 'CLEAR_ROOMS_DETAILS';
+export const GET_QR_CODES = 'GET_QR_CODES';

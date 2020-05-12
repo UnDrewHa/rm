@@ -1,19 +1,21 @@
 import {SearchOutlined} from '@ant-design/icons';
 import {Button, Divider, Tooltip} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {EditButton} from 'core/components/EditButton';
+import {QrButton} from 'core/components/QrButton';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
+import {isEmpty} from 'lodash-es';
 import {BlankList} from 'modules/admin/pages/BlankList';
 import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'modules/buildings/models';
 import {RoomsActions} from 'modules/rooms/actions/RoomsActions';
 import {IRoomModel} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
+import React from 'react';
+import {connect} from 'react-redux';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => [
     {
@@ -49,6 +51,8 @@ const getColumnsConfig = (actions, getColumnSearchProps) => [
                 <EditButton id={record._id} pathname="ROOMS" />
                 <Divider type="vertical" />
                 <DeleteButton ids={[record._id]} actions={actions} />
+                <Divider type="vertical" />
+                <QrButton ids={[record._id]} actions={actions} />
             </React.Fragment>
         ),
     },
@@ -114,6 +118,25 @@ class RoomsList extends React.Component<TProps, IState> {
         </div>
     );
 
+    renderFooter = (actions, selectedRowKeys, handleAfterDelete) => {
+        return isEmpty(selectedRowKeys) ? null : (
+            <div className="admin-table__footer">
+                <DeleteButton
+                    actions={actions}
+                    layout="button"
+                    ids={selectedRowKeys}
+                    placement="right"
+                    afterDelete={handleAfterDelete}
+                />
+                <QrButton
+                    layout="button"
+                    ids={selectedRowKeys}
+                    actions={actions}
+                />
+            </div>
+        );
+    };
+
     render() {
         const {actions, items} = this.props;
 
@@ -124,6 +147,7 @@ class RoomsList extends React.Component<TProps, IState> {
                 items={items.data}
                 isLoading={items.status === EStatusCodes.PENDING}
                 title={this.renderTitle}
+                renderFooter={this.renderFooter}
             />
         );
     }

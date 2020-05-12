@@ -5,4 +5,10 @@
       margin-right: 10px;
     }
   }
+
+  &__footer {
+    button + button {
+      margin-left: 10px;
+    }
+  }
 }

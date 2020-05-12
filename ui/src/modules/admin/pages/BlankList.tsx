@@ -1,11 +1,11 @@
 import {SearchOutlined} from '@ant-design/icons';
 import {Button, Input, Space, Table} from 'antd';
-import i18n from 'i18next';
-import {isEmpty} from 'lodash-es';
-import React from 'react';
-import Highlighter from 'react-highlight-words';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {commonTableProps} from 'core/consts';
+import i18n from 'i18next';
+import {isEmpty, isFunction} from 'lodash-es';
+import React from 'react';
+import Highlighter from 'react-highlight-words';
 
 interface IState {
     selectedRowKeys: string[];
@@ -19,6 +19,7 @@ interface IOwnProps {
     items: any[];
     isLoading: boolean;
     title?: () => any;
+    renderFooter?: (actions, ids, afterDelete) => any;
 }
 
 export class BlankList extends React.Component<IOwnProps, IState> {
@@ -119,6 +120,11 @@ export class BlankList extends React.Component<IOwnProps, IState> {
 
     renderFooter = () => {
         const {selectedRowKeys} = this.state;
+        const {actions, renderFooter} = this.props;
+
+        if (isFunction(renderFooter)) {
+            return renderFooter(actions, selectedRowKeys, this.handleAfterDelete);
+        }
 
         return isEmpty(selectedRowKeys) ? null : (
             <DeleteButton

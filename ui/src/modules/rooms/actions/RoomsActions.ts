@@ -9,11 +9,11 @@ import {
     CREATE_ROOM,
     DELETE_ROOMS,
     FIND_ROOMS,
-    GET_ROOM_BY_ID, UPDATE_ROOM,
+    GET_QR_CODES,
+    GET_ROOM_BY_ID,
+    UPDATE_ROOM,
 } from 'modules/rooms/actions/actionTypes';
-import {
-    IGetAllRoomsData,
-} from 'modules/rooms/models';
+import {IGetAllRoomsData} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
 import {Dispatch} from 'redux';
 
@@ -126,6 +126,22 @@ export class RoomsActions {
                     error?.error?.message || i18n.t('Rooms:delete.deleteError'),
                 );
             });
+    };
+
+    /**
+     * Удалить бронирования переговорных комнат.
+     *
+     * @param {string[]} ids Данные для удаления.
+     */
+    getQrCodes = (ids: string[], onSuccess) => {
+        return dispatchAsync(
+            this.dispatch,
+            GET_QR_CODES,
+            this.service.getQrCodes({data: {ids}}),
+            {
+                onSuccess,
+            },
+        );
     };
 
     /**

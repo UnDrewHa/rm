@@ -73,4 +73,8 @@ export class RoomsService {
     delete(data: IDeleteMultipleItems) {
         return axios.delete(this.baseUrl, {data});
     }
+
+    getQrCodes(data: IDeleteMultipleItems) {
+        return axios.post(this.baseUrl + '/pdf', data);
+    }
 }

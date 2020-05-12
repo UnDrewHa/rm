@@ -7,7 +7,10 @@ const {logger} = require('./Logger');
  */
 exports.createFolders = () => {
     const cwd = process.cwd();
-    const folderNames = [`${cwd}/${process.env.STATIC_PATH}/img`];
+    const folderNames = [
+        `${cwd}/${process.env.STATIC_PATH}/img`,
+        `${cwd}/${process.env.STATIC_PATH}/files`,
+    ];
 
     folderNames.map((folderName) => {
         const normalizedPath = path.normalize(folderName);
@@ -15,7 +18,8 @@ exports.createFolders = () => {
         const result = mkdirp.sync(normalizedPath);
 
         logger.info(
-            'Результат создания папки: ' + (result || 'Ничего не создано'),
+            'Результат создания папки: ' +
+                (result || `${normalizedPath} - Папка не создана`),
         );
     });
 };

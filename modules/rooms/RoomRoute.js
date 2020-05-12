@@ -39,4 +39,10 @@ router.post(
     RoomController.resizeAndSavePhoto,
 );
 
+router.post(
+    '/pdf',
+    AuthController.restrictedTo(['admin']),
+    RoomController.getQrCodesInPdf,
+);
+
 module.exports = router;

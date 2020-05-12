@@ -10,6 +10,7 @@ const RoomSchema = new Schema({
         type: String,
         required: [true, getFieldErrorMessage('название')],
         minlength: 3,
+        maxLength: 25,
     },
     description: String,
     photos: [String],

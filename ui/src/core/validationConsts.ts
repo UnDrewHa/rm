@@ -71,6 +71,7 @@ export const validationConsts = {
                 required: true,
                 whitespace: true,
                 min: 3,
+                max: 25,
             },
         ],
         seats: [

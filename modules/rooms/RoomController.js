@@ -11,7 +11,10 @@ const {
 } = require('../../common/utils/controllersUtils');
 const {AppError} = require('../../common/errors');
 const {logger} = require('../../core/Logger');
+const PDFDocument = require('pdfkit');
+const QRCode = require('qrcode');
 
+const qrToDataURL = util.promisify(QRCode.toDataURL);
 const unlinkFile = util.promisify(fs.unlink);
 
 /**
@@ -212,4 +215,87 @@ exports.resizeAndSavePhoto = catchAsync(async (req, res, next) => {
     );
 
     next();
+});
+
+/**
+ * Получение QR-кодов со ссылками на переговорные комнаты в формате PDF.
+ */
+exports.getQrCodesInPdf = catchAsync(async function (req, res, next) {
+    const {ids, context = '/#/rooms/'} = req.body.data;
+
+    if (!ids) {
+        return next(
+            new AppError(
+                'Необходимо указать идентификаторы переговорных комнат',
+                commonHTTPCodes.BAD_REQUEST,
+            ),
+        );
+    }
+
+    const rooms = await RoomModel.find({_id: {$in: ids}});
+
+    if (rooms.length === 0) {
+        return next(
+            new AppError(commonErrors.NOT_FOUND, commonHTTPCodes.NOT_FOUND),
+        );
+    }
+
+    const fileName = '/files/qr-codes.pdf';
+    const doc = new PDFDocument({
+        size: [595, 842],
+        info: {
+            Title: 'QR-коды переговорных комнат',
+            Author: process.env.ORG_NAME,
+        },
+    });
+    doc.pipe(fs.createWriteStream(process.env.STATIC_PATH + fileName));
+
+    const qrCodes = await Promise.all(
+        rooms.map(({_id}) =>
+            qrToDataURL(process.env.PRODUCTION_ORIGIN + context + _id, {
+                margin: 0,
+                color: {
+                    dark: '1890ffff',
+                },
+            }),
+        ),
+    );
+
+    qrCodes.forEach((code, index) => {
+        if (index !== 0) {
+            doc.addPage();
+        }
+
+        doc.image(process.env.STATIC_PATH + '/img/qr-template.png', 0, 0, {
+            width: 595,
+        });
+
+        doc.image(code, 95, 205, {width: 405});
+
+        doc.font(process.env.STATIC_PATH + '/fonts/Roboto-Bold.ttf')
+            .fontSize(36)
+            .fillColor('white')
+            .text(rooms[index].name, 36, 34, {
+                width: 523,
+                lineBreak: false,
+                ellipsis: true,
+            });
+
+        doc.font(process.env.STATIC_PATH + '/fonts/Roboto-Regular.ttf')
+            .fontSize(28)
+            .fillColor('black')
+            .text('Возникли вопросы?', 36, 680);
+
+        doc.font(process.env.STATIC_PATH + '/fonts/Roboto-Bold.ttf')
+            .fontSize(28)
+            .fillColor('black')
+            .text(process.env.ORG_PHONE, 36, 720);
+    });
+
+    doc.end();
+    doc.on('end', () => {
+        res.status(201).json({
+            data: fileName,
+        });
+    });
 });
