@@ -107,7 +107,7 @@ UserSchema.virtual('fullName').get(function () {
 });
 
 UserSchema.pre(/^find/, function (next) {
-    this.populate('building');
+    this.populate('building', '-floorsData');
 
     next();
 });
