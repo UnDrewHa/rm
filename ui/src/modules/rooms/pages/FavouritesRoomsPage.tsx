@@ -1,18 +1,21 @@
 import {Col, Divider, PageHeader, Row} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
+import {filter, includes} from 'lodash-es';
 import {RoomsActions} from 'modules/rooms/actions/RoomsActions';
 import {RoomsList} from 'modules/rooms/components/RoomsList';
 import {IRoomModel} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
+import {IUserModel} from 'modules/users/models';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 interface IStateProps {
+    profile: IAsyncData<IUserModel>;
     roomsList: IAsyncData<IRoomModel[]>;
     roomsDataIsLoading: boolean;
 }
@@ -31,7 +34,10 @@ class FavouritesRoomsPage extends React.Component<TProps> {
     }
 
     render() {
-        const {roomsDataIsLoading, roomsList} = this.props;
+        const {roomsDataIsLoading, roomsList, profile} = this.props;
+        const rooms = filter(roomsList.data, (item) =>
+            includes(profile.data.favouriteRooms, item._id),
+        );
 
         return (
             <React.Fragment>
@@ -42,7 +48,7 @@ class FavouritesRoomsPage extends React.Component<TProps> {
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
                     <Col span={24}>
                         <RoomsList
-                            rooms={roomsList.data}
+                            rooms={rooms}
                             isLoading={roomsDataIsLoading}
                             renderActions={(item) => (
                                 <React.Fragment>
@@ -79,6 +85,7 @@ const mapStateToProps = (state: TAppStore): IStateProps => {
     return {
         roomsList: state.rooms.list,
         roomsDataIsLoading: state.rooms.list.status === EStatusCodes.PENDING,
+        profile: state.users.profile,
     };
 };
 
