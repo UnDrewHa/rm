@@ -36,7 +36,6 @@ type TProps = IOwnProps & IStateProps & IDispatchProps;
 const getFilter = (id, date) => ({
     room: id,
     date: date.format(DEFAULT_DATE_FORMAT),
-    populateOwner: true,
 });
 
 class RoomSchedulePage extends React.Component<TProps, IState> {

@@ -1,8 +1,8 @@
-import {includes} from 'lodash-es';
 import {SUCCESS} from 'core/actions/actionTypes';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'core/reducer/model';
 import {createAsyncDataReducer} from 'core/reducer/utils';
+import {includes} from 'lodash-es';
 import {DELETE_EVENTS, FIND_EVENTS} from 'modules/events/actions/actionTypes';
 import {IEventModel} from 'modules/events/models';
 

@@ -95,7 +95,6 @@ class EventEditPage extends React.Component<TProps, IState> {
             filter: {
                 room: roomId,
                 date: this.state.date.format(DEFAULT_DATE_FORMAT),
-                populateOwner: true,
             },
         });
     }
@@ -113,7 +112,6 @@ class EventEditPage extends React.Component<TProps, IState> {
                     filter: {
                         room: roomId as string,
                         date: date.format(DEFAULT_DATE_FORMAT),
-                        populateOwner: true,
                     },
                 });
             },

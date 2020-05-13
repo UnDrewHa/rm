@@ -5,9 +5,9 @@ import {
     CREATE_EVENT,
     GET_EVENT_BY_ID,
 } from 'modules/events/actions/actionTypes';
-import {IEventModel} from 'modules/events/models';
+import {IEventFullModel} from 'modules/events/models';
 
-const getInitialState = (): IAsyncData<IEventModel> => ({
+const getInitialState = (): IAsyncData<IEventFullModel> => ({
     status: EStatusCodes.IDLE,
     data: null,
     error: null,
@@ -16,13 +16,13 @@ const getInitialState = (): IAsyncData<IEventModel> => ({
 const asyncActions = [CREATE_EVENT, GET_EVENT_BY_ID];
 
 export const eventDetailsReducer = (
-    state: IAsyncData<IEventModel> = getInitialState(),
-    action: IReduxAction<IEventModel>,
-): IAsyncData<IEventModel> => {
+    state: IAsyncData<IEventFullModel> = getInitialState(),
+    action: IReduxAction<IEventFullModel>,
+): IAsyncData<IEventFullModel> => {
     const {originalType} = action;
 
     if (asyncActions.includes(originalType)) {
-        return createAsyncDataReducer<IEventModel, IEventModel>(
+        return createAsyncDataReducer<IEventFullModel, IEventFullModel>(
             originalType,
             state,
         )(state, action);

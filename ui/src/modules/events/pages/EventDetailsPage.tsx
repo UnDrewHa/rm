@@ -62,7 +62,7 @@ class EventDetailsPage extends React.Component<TProps> {
             details.status !== EStatusCodes.FAIL &&
             !eventData;
         const extra =
-            eventData?.owner?._id === profile?.data?._id &&
+            eventData?.owner === profile?.data?._id &&
             moment(eventData.to) > moment() ? (
                 <ButtonsRow>
                     <EditButton

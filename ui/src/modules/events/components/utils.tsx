@@ -2,38 +2,14 @@ import {Divider} from 'antd';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {EditButton} from 'core/components/EditButton';
 import {ROUTER} from 'core/router/consts';
-import {EEventNames} from 'core/EventEmitter/enums';
-import {EventEmiter} from 'core/EventEmitter/EventEmitter';
 import i18n from 'i18next';
 import {filter, memoize} from 'lodash-es';
 import {EventMembers} from 'modules/events/components/EventMembers';
-import {EventOwner} from 'modules/events/components/EventOwner';
 import {IEventModel} from 'modules/events/models';
 import {calculateTimeString} from 'modules/events/utils';
-import {IUserModel} from 'modules/users/models';
 import moment from 'moment';
 import React from 'react';
 import {Link} from 'react-router-dom';
-
-const getOwnerName = (owner: IUserModel) => {
-    let ownerString = owner.email;
-
-    if (owner.name || owner.surname) {
-        ownerString = `${owner.surname} ${owner.name}`;
-    }
-
-    return ownerString;
-};
-
-const getOwnerClickHandler = memoize((owner: IUserModel) => (e) => {
-    e.preventDefault();
-
-    EventEmiter.emit(EEventNames.SHOW_MODAL, {
-        title: () => i18n.t('Events:ownerModal.title'),
-        renderFooter: () => null,
-        renderBody: () => <EventOwner owner={owner} />,
-    });
-});
 
 export const baseColumnsConfig = [
     {
@@ -65,21 +41,6 @@ export const baseColumnsConfig = [
         render: (_, record: IEventModel) => calculateTimeString(record),
         width: 120,
     },
-    {
-        title: () => i18n.t('Events:table.header.owner'),
-        dataIndex: 'owner',
-        key: 'owner',
-        render: (_, record: IEventModel) => {
-            const owner = record.owner as IUserModel;
-            return (
-                <a href="#modal" onClick={getOwnerClickHandler(owner)}>
-                    {getOwnerName(owner)}
-                </a>
-            );
-        },
-        ellipsis: true,
-        width: 220,
-    },
 ];
 
 export const columnsWithoutDescription = filter(
@@ -88,7 +49,7 @@ export const columnsWithoutDescription = filter(
 );
 
 export const columnsWithoutOwner = [
-    ...filter(baseColumnsConfig, (item) => item.key !== 'owner'),
+    ...baseColumnsConfig,
     {
         title: () => i18n.t('Events:table.header.members'),
         dataIndex: 'members',

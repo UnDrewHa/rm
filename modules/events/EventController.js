@@ -42,9 +42,9 @@ exports.create = catchAsync(async function (req, res, next) {
         );
     }
 
-    const event = await EventModel.create(newEventData);
-    await EventModel.populate(event, 'owner');
-    await EventModel.populate(event, 'room');
+    const event = await EventModel.create(newEventData)
+        .populate('owner')
+        .populate('room');
 
     sendEventMail(event);
 
@@ -83,10 +83,6 @@ exports.getAll = catchAsync(async function (req, res) {
 
     const events = await EventModel.find(filterData);
 
-    if (filter.populateOwner) {
-        await EventModel.populate(events, {path: 'owner'});
-    }
-
     res.status(200).send({
         data: events,
     });
@@ -105,7 +101,7 @@ exports.getDetails = catchAsync(async function (req, res, next) {
         );
     }
 
-    await EventModel.populate(event, [{path: 'owner'}, {path: 'room'}]);
+    await EventModel.populate(event, ['owner', 'room']);
 
     res.status(200).send({
         data: event,

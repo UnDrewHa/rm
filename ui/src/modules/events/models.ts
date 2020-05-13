@@ -1,5 +1,6 @@
 import {IAsyncData} from 'core/reducer/model';
 import {IUserModel} from 'modules/users/models';
+import {IRoomModel} from 'modules/rooms/models';
 
 export interface IGetAllEventsData {
     filter: IUserEventsFilter;
@@ -11,7 +12,6 @@ export interface IUserEventsFilter {
     to?: any;
     date?: string;
     room?: string;
-    populateOwner?: boolean;
     tab?: string;
     now?: string;
 }
@@ -22,11 +22,16 @@ export interface IEventModel {
     date: string;
     from: string;
     to: string;
-    room: string | IUserModel;
-    owner: any;
+    room: string | IRoomModel;
+    owner: string | IUserModel;
     members?: string[];
     description: string;
     canceled?: boolean;
+}
+
+export interface IEventFullModel extends IEventModel {
+    room: IRoomModel;
+    owner: IUserModel;
 }
 
 export interface IEventCreateModel extends Omit<IEventModel, '_id'> {}
@@ -34,6 +39,6 @@ export interface IEventCreateModel extends Omit<IEventModel, '_id'> {}
 export interface IMappedEventsStore {
     events: {
         list: IAsyncData<IEventModel[]>;
-        details: IAsyncData<IEventModel>;
+        details: IAsyncData<IEventFullModel>;
     };
 }
