@@ -76,9 +76,7 @@ exports.updateMe = catchAsync(async function (req, res, next) {
         'email',
         'phone',
         'building',
-        'name',
-        'surname',
-        'patronymic',
+        'fullName',
         'active',
         'newPassword',
         'login',
@@ -87,9 +85,7 @@ exports.updateMe = catchAsync(async function (req, res, next) {
     user.email = userData.email || user.email;
     user.phone = userData.phone || user.phone;
     user.building = userData.building || user.building;
-    user.name = userData.name || user.name;
-    user.surname = userData.surname || user.surname;
-    user.patronymic = userData.patronymic || user.patronymic;
+    user.fullName = userData.fullName || user.fullName;
     user.active = userData.active || user.active;
 
     if (userData.newPassword) {

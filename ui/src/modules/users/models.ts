@@ -24,9 +24,6 @@ export interface IUserModel {
     phone?: string;
     favouriteRooms?: string[];
     photo?: string;
-    name?: string;
-    surname?: string;
-    patronymic?: string;
     fullName?: string;
 }
 
@@ -49,9 +46,6 @@ export interface IUpdateUser extends ICheckPasswordData {
     active?: boolean;
     phone?: string;
     favouriteRooms?: string[];
-    name?: string;
-    surname?: string;
-    patronymic?: string;
     fullName?: string;
 }
 

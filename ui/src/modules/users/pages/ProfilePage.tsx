@@ -55,9 +55,7 @@ const getInitial = (user: IUserModel) => ({
     email: user.email || '',
     building: (user.building as any).address || '',
     phone: user.phone || '',
-    name: user.name || '',
-    surname: user.surname || '',
-    patronymic: user.patronymic || '',
+    fullName: user.fullName || '',
     newPassword: '',
     password: '',
     passwordConfirm: '',
@@ -206,25 +204,9 @@ class ProfilePage extends React.Component<TProps, IState> {
                                     />
                                 </Form.Item>
                                 <Form.Item
-                                    name="name"
+                                    name="fullName"
                                     label={i18n.t(
-                                        'Users:profile.namePlaceholder',
-                                    )}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    name="surname"
-                                    label={i18n.t(
-                                        'Users:profile.surnamePlaceholder',
-                                    )}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    name="patronymic"
-                                    label={i18n.t(
-                                        'Users:profile.patronymicPlaceholder',
+                                        'Users:profile.fullNamePlaceholder',
                                     )}
                                 >
                                     <Input />

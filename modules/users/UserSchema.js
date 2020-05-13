@@ -73,9 +73,7 @@ const UserSchema = new Schema(
             },
         ],
         photo: String,
-        name: String,
-        surname: String,
-        patronymic: String,
+        fullName: String,
         passwordResetToken: String,
         passwordResetExpires: Date,
         active: {
@@ -95,16 +93,6 @@ const UserSchema = new Schema(
         },
     },
 );
-
-UserSchema.virtual('fullName').get(function () {
-    let fullName = `${this.name} ${this.surname}`;
-
-    if (this.patronymic) {
-        fullName += ` ${this.patronymic}`;
-    }
-
-    return fullName.replace(/undefined/gi, '').trim();
-});
 
 UserSchema.pre(/^find/, function (next) {
     this.populate('building', '-floorsData');
