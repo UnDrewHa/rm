@@ -1,7 +1,11 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const util = require('util');
+const moment = require('moment');
+const {AppError} = require('../../common/errors');
+const {commonHTTPCodes} = require('../../common/errors');
 const {catchAsync} = require('../../common/utils/controllersUtils');
+const {replaceInTemplate} = require('./utils');
 
 const readFile = util.promisify(fs.readFile);
 
@@ -41,17 +45,67 @@ exports.sendMailWithResetToken = catchAsync(async (email, token) => {
             'utf8',
         )));
 
-    tpl = tpl.replace(/{{ORIGIN}}/gi, process.env.PRODUCTION_ORIGIN);
-    tpl = tpl.replace(/{{ORG_NAME}}/gi, process.env.ORG_NAME);
-    tpl = tpl.replace(/{{TOKEN}}/gi, token);
+    tpl = replaceInTemplate(tpl, {
+        ORIGIN: process.env.PRODUCTION_ORIGIN,
+        ORG_NAME: process.env.ORG_NAME,
+        TOKEN: token,
+    });
 
     const mailOptions = {
         from: 'support@' + process.env.PRODUCTION_ORIGIN,
         to: email,
-        subject:
-            'Восстановление пароля в системе ' + process.env.PRODUCTION_ORIGIN,
+        subject: 'Восстановление пароля | ' + process.env.ORG_NAME,
         html: tpl,
     };
 
     return sendEmail(mailOptions);
+});
+
+/**
+ * Отправить письмо о создании встречи.
+ *
+ * @param email Эл. почта.
+ * @param event Данные встречи.
+ *
+ * @returns {Promise} Промис отправки сообщения.
+ */
+exports.sendEventMail = catchAsync(async (event) => {
+    let tpl = (templates['eventMail'] =
+        templates['eventMail'] ||
+        (await readFile(
+            `${process.cwd()}/core/emails/templates/eventMail.html`,
+            'utf8',
+        )));
+
+    tpl = replaceInTemplate(tpl, {
+        ORIGIN: process.env.PRODUCTION_ORIGIN,
+        ORG_NAME: process.env.ORG_NAME,
+        SUBJECT: event.title,
+        DESCRIPTION: event.description,
+        DATE: moment(event.date).format('D MMMM'),
+        TIME: moment(event.from).format('HH:mm'),
+        ROOM: event.room.name,
+        BUILDING: event.owner.building.name,
+        FLOOR: event.room.floor + ' Этаж',
+        ADDRESS: event.owner.building.address,
+        OWNER: event.owner.fullName,
+        OWNER_PHONE: event.owner.phone,
+        EVENT_ID: event._id,
+    });
+
+    const mailOptions = {
+        from: 'support@' + process.env.PRODUCTION_ORIGIN,
+        to: event.owner.email,
+        cc: event.members,
+        subject: 'Назначена встреча | ' + process.env.ORG_NAME,
+        html: tpl,
+    };
+
+    return sendEmail(mailOptions).catch(
+        (_) =>
+            new AppError(
+                'Ошибка в отправке письма о создании встречи',
+                commonHTTPCodes.INTERNAL_SERVER_ERROR,
+            ),
+    );
 });

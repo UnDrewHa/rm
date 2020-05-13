@@ -1,10 +1,12 @@
 import {SearchOutlined} from '@ant-design/icons';
 import {Button, Divider, Tooltip} from 'antd';
+import {ButtonsRow} from 'core/components/ButtonsRow';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {EditButton} from 'core/components/EditButton';
 import {QrButton} from 'core/components/QrButton';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import i18n from 'i18next';
 import {isEmpty} from 'lodash-es';
@@ -48,7 +50,12 @@ const getColumnsConfig = (actions, getColumnSearchProps) => [
         key: 'actions',
         render: (_, record) => (
             <React.Fragment>
-                <EditButton id={record._id} pathname="ROOMS" />
+                <EditButton
+                    to={{
+                        pathname: ROUTER.MAIN.ADMIN.ROOMS.EDIT.FULL_PATH,
+                        search: `?id=${record._id}`,
+                    }}
+                />
                 <Divider type="vertical" />
                 <DeleteButton ids={[record._id]} actions={actions} />
                 <Divider type="vertical" />
@@ -120,7 +127,7 @@ class RoomsList extends React.Component<TProps, IState> {
 
     renderFooter = (actions, selectedRowKeys, handleAfterDelete) => {
         return isEmpty(selectedRowKeys) ? null : (
-            <div className="admin-table__footer">
+            <ButtonsRow>
                 <DeleteButton
                     actions={actions}
                     layout="button"
@@ -133,7 +140,7 @@ class RoomsList extends React.Component<TProps, IState> {
                     ids={selectedRowKeys}
                     actions={actions}
                 />
-            </div>
+            </ButtonsRow>
         );
     };
 

@@ -23,7 +23,7 @@ export interface IEventModel {
     from: string;
     to: string;
     room: string | IUserModel;
-    owner: string | IUserModel;
+    owner: any;
     members?: string[];
     description: string;
     canceled?: boolean;

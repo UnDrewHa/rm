@@ -1,18 +1,19 @@
 import {Divider} from 'antd';
-import i18n from 'i18next';
-import {filter, memoize} from 'lodash-es';
-import React from 'react';
-import {Link} from 'react-router-dom';
+import {DeleteButton} from 'core/components/DeleteButton';
+import {EditButton} from 'core/components/EditButton';
 import {ROUTER} from 'core/router/consts';
 import {EEventNames} from 'core/EventEmitter/enums';
 import {EventEmiter} from 'core/EventEmitter/EventEmitter';
-import {EventDeleteButton} from 'modules/events/components/EventDeleteButton';
-import {EventEditButton} from 'modules/events/components/EventEditButton';
+import i18n from 'i18next';
+import {filter, memoize} from 'lodash-es';
 import {EventMembers} from 'modules/events/components/EventMembers';
 import {EventOwner} from 'modules/events/components/EventOwner';
 import {IEventModel} from 'modules/events/models';
 import {calculateTimeString} from 'modules/events/utils';
 import {IUserModel} from 'modules/users/models';
+import moment from 'moment';
+import React from 'react';
+import {Link} from 'react-router-dom';
 
 const getOwnerName = (owner: IUserModel) => {
     let ownerString = owner.email;
@@ -96,7 +97,7 @@ export const columnsWithoutOwner = [
     },
 ];
 
-export const columnsWithActions = [
+export const getColumnsWithActions = memoize((actions) => [
     ...columnsWithoutOwner,
     {
         title: () => i18n.t('Events:table.header.actions'),
@@ -104,10 +105,24 @@ export const columnsWithActions = [
         key: 'actions',
         render: (_, record: IEventModel) => (
             <React.Fragment>
-                <EventEditButton event={record} />
+                <EditButton
+                    to={{
+                        pathname: ROUTER.MAIN.EVENTS.CREATE.FULL_PATH,
+                        state: {
+                            id: record._id,
+                            title: record.title,
+                            date: moment(record.date),
+                            from: moment(record.from),
+                            to: moment(record.to),
+                            description: record.description,
+                            members: record.members,
+                        },
+                        search: `?room=${record.room}`,
+                    }}
+                />
                 <Divider type="vertical" />
-                <EventDeleteButton ids={[record._id]} />
+                <DeleteButton ids={[record._id]} actions={actions} />
             </React.Fragment>
         ),
     },
-];
+]);

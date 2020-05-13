@@ -1,5 +1,6 @@
 const {isEmpty} = require('lodash');
 const EventModel = require('./EventModel');
+const {sendEventMail} = require('../../core/emails/EmailTransport');
 const {commonErrors, commonHTTPCodes} = require('../../common/errors');
 const {
     catchAsync,
@@ -42,7 +43,10 @@ exports.create = catchAsync(async function (req, res, next) {
     }
 
     const event = await EventModel.create(newEventData);
-    await EventModel.populate(event, {path: 'owner'});
+    await EventModel.populate(event, 'owner');
+    await EventModel.populate(event, 'room');
+
+    sendEventMail(event);
 
     res.status(201).send({
         data: event,

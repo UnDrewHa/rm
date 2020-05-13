@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const moment = require('moment');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const helmet = require('helmet');
@@ -12,6 +13,8 @@ const RouterMap = require('./router');
 const {createFolders} = require('./core/createFolders');
 const {getCorsSettings} = require('./core/cors');
 const {errorMiddleware} = require('./common/errors');
+
+moment.locale('ru-ru');
 
 dotenv.config({
     path: './config.env',

@@ -1,16 +1,17 @@
 import {Divider} from 'antd';
-import i18n from 'i18next';
-import React from 'react';
-import {connect} from 'react-redux';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {EditButton} from 'core/components/EditButton';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
+import i18n from 'i18next';
 import {BlankList} from 'modules/admin/pages/BlankList';
 import {BuildingsActions} from 'modules/buildings/actions/BuildingsActions';
 import {IBuildingModel} from 'modules/buildings/models';
 import {BuildingsService} from 'modules/buildings/service/BuildingsService';
+import React from 'react';
+import {connect} from 'react-redux';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => [
     {
@@ -36,7 +37,12 @@ const getColumnsConfig = (actions, getColumnSearchProps) => [
         key: 'actions',
         render: (_, record) => (
             <React.Fragment>
-                <EditButton id={record._id} pathname="BUILDINGS" />
+                <EditButton
+                    to={{
+                        pathname: ROUTER.MAIN.ADMIN.BUILDINGS.EDIT.FULL_PATH,
+                        search: `?id=${record._id}`,
+                    }}
+                />
                 <Divider type="vertical" />
                 <DeleteButton ids={[record._id]} actions={actions} />
             </React.Fragment>

@@ -1,4 +1,5 @@
 import {Col, PageHeader, Row, Table, Tabs} from 'antd';
+import {DeleteButton} from 'core/components/DeleteButton';
 import {commonTableProps} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
@@ -8,9 +9,8 @@ import {isEmpty} from 'lodash-es';
 import {EventsActions} from 'modules/events/actions/EventsActions';
 import {
     columnsWithoutOwner,
-    columnsWithActions,
+    getColumnsWithActions,
 } from 'modules/events/components/utils';
-import {EventDeleteButton} from 'modules/events/components/EventDeleteButton';
 import {IEventModel, IUserEventsFilter} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {IUserModel} from 'modules/users/models';
@@ -100,12 +100,12 @@ class UserEventsPage extends React.Component<TProps, IState> {
     }
 
     render() {
-        const {events} = this.props;
+        const {events, eventsActions} = this.props;
         const {currentTab, selectedRowKeys} = this.state;
         const isLoading = events.status === EStatusCodes.PENDING;
         const columnsConfig =
             currentTab === ETabNames.ACTIVE
-                ? columnsWithActions
+                ? getColumnsWithActions(eventsActions)
                 : columnsWithoutOwner;
         const rowSelection =
             currentTab === ETabNames.ACTIVE
@@ -116,8 +116,9 @@ class UserEventsPage extends React.Component<TProps, IState> {
         const footerIsVisible =
             currentTab === ETabNames.ACTIVE && !isEmpty(selectedRowKeys);
         const footer = footerIsVisible ? (
-            <EventDeleteButton
+            <DeleteButton
                 ids={selectedRowKeys}
+                actions={eventsActions}
                 layout="button"
                 placement="right"
                 afterDelete={this.handleAfterDelete}

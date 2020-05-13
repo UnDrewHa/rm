@@ -1,6 +1,11 @@
 import {Col, PageHeader, Row, Skeleton, Typography} from 'antd';
+import {InterfaceAction} from 'core/actions/InterfaceActions';
+import {ButtonsRow} from 'core/components/ButtonsRow';
+import {DeleteButton} from 'core/components/DeleteButton';
+import {EditButton} from 'core/components/EditButton';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
+import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import i18n from 'i18next';
 import {EventsActions} from 'modules/events/actions/EventsActions';
@@ -10,12 +15,15 @@ import {IEventModel} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {calculateTimeString} from 'modules/events/utils';
 import {RoomTitle} from 'modules/rooms/components/RoomTitle';
+import {IUserModel} from 'modules/users/models';
+import moment from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, RouteChildrenProps} from 'react-router-dom';
 
 interface IStateProps {
     details: IAsyncData<IEventModel>;
+    profile: IAsyncData<IUserModel>;
 }
 
 interface IDispatchProps {
@@ -42,13 +50,46 @@ class EventDetailsPage extends React.Component<TProps> {
         window.history.back();
     };
 
+    handleAfterDelete = () => {
+        InterfaceAction.redirect(ROUTER.MAIN.FULL_PATH);
+    };
+
     render() {
-        const {details} = this.props;
+        const {details, eventsActions, profile} = this.props;
         const eventData = details.data;
         const isLoading =
             details.status !== EStatusCodes.SUCCESS &&
             details.status !== EStatusCodes.FAIL &&
             !eventData;
+        const extra =
+            eventData?.owner?._id === profile?.data?._id &&
+            moment(eventData.to) > moment() ? (
+                <ButtonsRow>
+                    <EditButton
+                        to={{
+                            pathname: ROUTER.MAIN.EVENTS.CREATE.FULL_PATH,
+                            state: {
+                                id: eventData._id,
+                                title: eventData.title,
+                                date: moment(eventData.date),
+                                from: moment(eventData.from),
+                                to: moment(eventData.to),
+                                description: eventData.description,
+                                members: eventData.members,
+                            },
+                            search: `?room=${eventData.room}`,
+                        }}
+                        layout="button"
+                    />
+                    <DeleteButton
+                        ids={[eventData._id]}
+                        actions={eventsActions}
+                        layout="button"
+                        placement="left"
+                        afterDelete={this.handleAfterDelete}
+                    />
+                </ButtonsRow>
+            ) : null;
 
         if (isLoading) {
             return (
@@ -82,6 +123,7 @@ class EventDetailsPage extends React.Component<TProps> {
                     title={i18n.t('Events:details.title', {
                         title: eventData.title,
                     })}
+                    extra={extra}
                     onBack={this.handleBack}
                 />
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
@@ -104,12 +146,16 @@ class EventDetailsPage extends React.Component<TProps> {
                         <Typography.Paragraph>
                             {eventData.description}
                         </Typography.Paragraph>
-                        <Typography.Title level={4}>
-                            {i18n.t('Events:details.members')}
-                        </Typography.Title>
-                        <Typography.Paragraph>
-                            <EventMembers event={eventData} />
-                        </Typography.Paragraph>
+                        {eventData.members.length > 0 && (
+                            <Typography.Title level={4}>
+                                {i18n.t('Events:details.members')}
+                            </Typography.Title>
+                        )}
+                        {eventData.members.length > 0 && (
+                            <Typography.Paragraph>
+                                <EventMembers event={eventData} />
+                            </Typography.Paragraph>
+                        )}
                         <Typography.Title level={4}>
                             {i18n.t('Events:details.room')}
                         </Typography.Title>
@@ -125,6 +171,7 @@ class EventDetailsPage extends React.Component<TProps> {
 
 const mapStateToProps = (state: TAppStore): IStateProps => ({
     details: state.events.details,
+    profile: state.users.profile,
 });
 
 const mapDispatchToProps = (dispatch): IDispatchProps => ({
