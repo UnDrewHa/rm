@@ -42,10 +42,6 @@ route.get(
     AuthController.restrictedTo(['admin']),
     UserController.getById,
 );
-route.post(
-    '/find',
-    AuthController.restrictedTo(['admin']),
-    UserController.find,
-);
+route.post('/find', UserController.find);
 
 module.exports = route;

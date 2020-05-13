@@ -154,6 +154,14 @@ exports.getById = catchAsync(async function (req, res) {
 exports.find = catchAsync(async function (req, res) {
     const filter = get(req.body.data, 'filter', {});
 
+    if (filter.text) {
+        filter['$text'] = {
+            $search: filter.text,
+        };
+
+        delete filter.text;
+    }
+
     const users = await UserModel.find(filter);
 
     res.status(200).send({

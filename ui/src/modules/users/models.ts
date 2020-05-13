@@ -30,10 +30,11 @@ export interface IUserModel {
 export interface IUserFilterModel {
     login?: string;
     email?: string;
-    building: string;
+    building?: string;
     role?: ERoles;
     active?: boolean;
     phone?: string;
+    text?: string;
 }
 
 export interface IUpdateUser extends ICheckPasswordData {
