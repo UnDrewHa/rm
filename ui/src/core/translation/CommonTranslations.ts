@@ -57,6 +57,7 @@ export default {
                 description: 'Описание',
                 seats: 'Количество сидячих мест',
                 floor: 'Этаж',
+                needApprove: 'Необходимо подтверждение',
             },
         },
     },

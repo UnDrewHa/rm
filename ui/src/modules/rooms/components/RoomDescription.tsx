@@ -3,7 +3,7 @@ import {
     MinusSquareOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import {Typography} from 'antd';
+import {Tag, Typography} from 'antd';
 import i18n from 'i18next';
 import {IRoomProp} from 'modules/rooms/models';
 import React from 'react';
@@ -11,9 +11,15 @@ import React from 'react';
 export const RoomDescription = ({item}: IRoomProp) => {
     return (
         <React.Fragment>
+            {item.needApprove && (
+                <Typography.Paragraph className="room-options">
+                    <Tag color="warning">
+                        {i18n.t('Rooms:common.needApprove')}
+                    </Tag>
+                </Typography.Paragraph>
+            )}
             <Typography.Paragraph className="room-options">
-                {item.building.address}
-                {' - '}
+                {item.building.address && item.building.address + ' - '}
                 {i18n.t('Buildings:floor', {n: item.floor})}
             </Typography.Paragraph>
             <Typography.Paragraph className="room-description">

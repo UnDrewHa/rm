@@ -1,5 +1,5 @@
 import {SearchOutlined} from '@ant-design/icons';
-import {Button, Divider, Tooltip} from 'antd';
+import {Button, Checkbox, Divider, Tooltip} from 'antd';
 import {ButtonsRow} from 'core/components/ButtonsRow';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {EditButton} from 'core/components/EditButton';
@@ -43,6 +43,25 @@ const getColumnsConfig = (actions, getColumnSearchProps) => [
         dataIndex: 'floor',
         key: 'floor',
         ...getColumnSearchProps('floor'),
+    },
+    {
+        title: () => i18n.t('table.header.needApprove'),
+        dataIndex: 'needApprove',
+        key: 'needApprove',
+        render: (_, record) => <Checkbox checked={record.needApprove} />,
+        filters: [
+            {
+                text: i18n.t('words.yes'),
+                value: true,
+            },
+            {
+                text: i18n.t('words.no'),
+                value: false,
+            },
+        ],
+        onFilter: (value, record) => {
+            return value === record.active;
+        },
     },
     {
         title: () => i18n.t('table.header.actions'),

@@ -5,6 +5,11 @@ export default {
             time: 'Время проведения',
             name: 'Название',
         },
+        status: {
+            APPROVED: 'Согласовано',
+            REFUSED: 'Отказано',
+            NEED_APPROVE: 'На подтверждении',
+        },
         userEvents: {
             title: 'Мои бронирования',
             ACTIVE: 'Активные',
@@ -39,6 +44,7 @@ export default {
                 owner: 'Владелец',
                 description: 'Описание',
                 members: 'Участники встречи',
+                approveStatus: 'Статус согласования',
             },
         },
         ownerModal: {
@@ -62,6 +68,7 @@ export default {
             description: 'Описание',
             members: 'Участники встречи',
             room: 'Место проведения',
+            approveStatus: 'Статус согласования',
         },
     },
 };

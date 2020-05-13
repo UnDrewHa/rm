@@ -41,6 +41,11 @@ const EventSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    approveStatus: {
+        type: String,
+        enum: ['NEED_APPROVE', 'APPROVED', 'REFUSED'],
+        default: 'APPROVED',
+    },
 });
 
 EventSchema.pre(/^find/, function () {

@@ -32,6 +32,7 @@ exports.create = catchAsync(async function (req, res) {
         'whiteboard',
         'flipchart',
         'building',
+        'needApprove',
     ]);
 
     if (files && files.length > 0) {
@@ -143,6 +144,7 @@ exports.update = catchAsync(async function (req, res) {
             'projector',
             'whiteboard',
             'flipchart',
+            'needApprove',
             'building',
         ]),
         photos: [

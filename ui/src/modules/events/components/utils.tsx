@@ -5,6 +5,7 @@ import {ROUTER} from 'core/router/consts';
 import i18n from 'i18next';
 import {filter, memoize} from 'lodash-es';
 import {EventMembers} from 'modules/events/components/EventMembers';
+import {EventStatus} from 'modules/events/components/EventStatus';
 import {IEventModel} from 'modules/events/models';
 import {calculateTimeString} from 'modules/events/utils';
 import moment from 'moment';
@@ -40,6 +41,15 @@ export const baseColumnsConfig = [
         key: 'from',
         render: (_, record: IEventModel) => calculateTimeString(record),
         width: 120,
+    },
+    {
+        title: () => i18n.t('Events:table.header.approveStatus'),
+        dataIndex: 'approveStatus',
+        key: 'approveStatus',
+        render: (_, record: IEventModel) => (
+            <EventStatus status={record.approveStatus} />
+        ),
+        width: 150,
     },
 ];
 

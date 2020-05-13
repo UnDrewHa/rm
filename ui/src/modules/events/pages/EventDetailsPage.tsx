@@ -11,6 +11,7 @@ import i18n from 'i18next';
 import {EventsActions} from 'modules/events/actions/EventsActions';
 import {EventMembers} from 'modules/events/components/EventMembers';
 import {EventOwner} from 'modules/events/components/EventOwner';
+import {EventStatus} from 'modules/events/components/EventStatus';
 import {IEventModel} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {calculateTimeString} from 'modules/events/utils';
@@ -133,6 +134,12 @@ class EventDetailsPage extends React.Component<TProps> {
                         </Typography.Title>
                         <Typography.Paragraph>
                             <EventOwner owner={eventData.owner as any} />
+                        </Typography.Paragraph>
+                        <Typography.Title level={4}>
+                            {i18n.t('Events:details.approveStatus')}
+                        </Typography.Title>
+                        <Typography.Paragraph>
+                            <EventStatus status={eventData.approveStatus} />
                         </Typography.Paragraph>
                         <Typography.Title level={4}>
                             {i18n.t('Events:details.date')}

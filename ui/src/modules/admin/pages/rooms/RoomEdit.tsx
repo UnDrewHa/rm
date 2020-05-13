@@ -118,6 +118,7 @@ class RoomEdit extends React.Component<TProps, IState> {
             projector: data?.projector || false,
             whiteboard: data?.whiteboard || false,
             flipchart: data?.flipchart || false,
+            needApprove: data?.needApprove || false,
         };
     };
 
@@ -278,6 +279,11 @@ class RoomEdit extends React.Component<TProps, IState> {
                             rules={validationConsts.room.floor}
                         >
                             <InputNumber />
+                        </Form.Item>
+                        <Form.Item name="needApprove" valuePropName="checked">
+                            <Checkbox>
+                                {i18n.t('Rooms:common.needApprove')}
+                            </Checkbox>
                         </Form.Item>
                         <Form.Item name="tv" valuePropName="checked">
                             <Checkbox>{i18n.t('Rooms:common.tv')}</Checkbox>

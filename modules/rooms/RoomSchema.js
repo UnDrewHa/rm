@@ -37,6 +37,10 @@ const RoomSchema = new Schema({
         ref: 'Building',
         required: [true, getFieldErrorMessage('здание')],
     },
+    needApprove: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 RoomSchema.statics.getRoomsFilter = (filter) => {
@@ -46,6 +50,7 @@ RoomSchema.statics.getRoomsFilter = (filter) => {
             'projector',
             'whiteboard',
             'flipchart',
+            'needApprove',
             'building',
         ]),
         seats: {$gte: filter.seats || 1},

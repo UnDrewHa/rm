@@ -1,6 +1,7 @@
 import {IAsyncData} from 'core/reducer/model';
-import {IUserModel} from 'modules/users/models';
+import {EApproveStatuses} from 'modules/events/enums';
 import {IRoomModel} from 'modules/rooms/models';
+import {IUserModel} from 'modules/users/models';
 
 export interface IGetAllEventsData {
     filter: IUserEventsFilter;
@@ -27,6 +28,7 @@ export interface IEventModel {
     members?: string[];
     description: string;
     canceled?: boolean;
+    approveStatus?: EApproveStatuses;
 }
 
 export interface IEventFullModel extends IEventModel {

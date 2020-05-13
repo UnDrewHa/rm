@@ -28,6 +28,7 @@ export interface IRoomModel {
     flipchart: boolean;
     building: string;
     photos?: string[];
+    needApprove: boolean;
 }
 
 export interface IRoomFullModel extends Omit<IRoomModel, 'building'> {
