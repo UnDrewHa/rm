@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const {difference, isEmpty} = require('lodash');
 const fs = require('fs');
 const util = require('util');
+const moment = require('moment');
 const sharp = require('sharp');
 const RoomModel = require('./RoomModel');
 const EventModel = require('../events/EventModel');
@@ -13,6 +15,8 @@ const {AppError} = require('../../common/errors');
 const {logger} = require('../../core/Logger');
 const PDFDocument = require('pdfkit');
 const QRCode = require('qrcode');
+const {sendEventRefused} = require('../../core/emails/EmailTransport');
+const {approveStatuses} = require('../events/consts');
 
 const qrToDataURL = util.promisify(QRCode.toDataURL);
 const unlinkFile = util.promisify(fs.unlink);
@@ -152,15 +156,91 @@ exports.update = catchAsync(async function (req, res) {
             ...(Array.isArray(uploadedFiles) ? uploadedFiles : [uploadedFiles]),
         ].filter((item) => !!item),
     };
+    const needApprove = data.needApprove === 'true';
     const room = await RoomModel.findById(_id);
     const NEED_TO_DELETE_PHOTOS =
         Array.isArray(room.photos) &&
         !isEmpty(room.photos) &&
         Array.isArray(data.photos);
 
-    const updated = await RoomModel.findOneAndUpdate({_id: _id}, data, {
+    /**
+     * Обновляем отдельным потоком в транзакции.
+     */
+    if (needApprove) {
+        data.needApprove = false;
+    }
+
+    let updated = await RoomModel.findOneAndUpdate({_id: _id}, data, {
         new: true,
     });
+
+    if (needApprove) {
+        let session = null;
+        let events = null;
+
+        await mongoose
+            .startSession()
+            .then((_session) => {
+                session = _session;
+
+                session.startTransaction();
+
+                return RoomModel.findOneAndUpdate(
+                    {_id: _id},
+                    {needApprove: true},
+                    {
+                        new: true,
+                    },
+                );
+            })
+            .then((updatedRoom) => {
+                updated = updatedRoom;
+
+                return EventModel.find({
+                    room: updatedRoom._id,
+                    date: moment().format('YYYY-MM-DD'),
+                    to: {$gt: moment().utc().format()},
+                }).populate('owner');
+            })
+            .then((_events) => {
+                events = _events;
+
+                if (events.length === 0) {
+                    return null;
+                }
+
+                return EventModel.updateMany(
+                    {
+                        _id: {$in: _events.map((item) => item._id)},
+                    },
+                    {approveStatus: approveStatuses.REFUSED, canceled: true},
+                );
+            })
+            .then((result) => {
+                logger.info(
+                    'Данные встреч и переговорки успешно обновлены после изменения необходимости согласования для переговорки',
+                    result,
+                );
+
+                session.commitTransaction();
+                session.endSession();
+
+                if (events.length > 0) {
+                    sendEventRefused({
+                        roomId: updated._id,
+                        owners: events.map((item) => item.owner.email),
+                    });
+                }
+            })
+            .catch((err) => {
+                logger.error(
+                    'Ошибка обновления данных встреч после изменения необходимости согласования для переговорки',
+                    err,
+                );
+                session.abortTransaction();
+                session.endSession();
+            });
+    }
 
     if (NEED_TO_DELETE_PHOTOS) {
         Promise.all(

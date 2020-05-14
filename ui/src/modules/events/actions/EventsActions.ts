@@ -1,10 +1,10 @@
 import {message} from 'antd';
-import i18n from 'i18next';
-import {Dispatch} from 'redux';
 import {dispatchAsync} from 'core/actions/utils';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {ROUTER} from 'core/router/consts';
+import i18n from 'i18next';
 import {
+    CLEAR_EVENT_DATA,
     CREATE_EVENT,
     DELETE_EVENTS,
     FIND_EVENTS,
@@ -17,6 +17,7 @@ import {
     IGetAllEventsData,
 } from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
+import {Dispatch} from 'redux';
 
 /**
  * Сервис модуля Events.
@@ -127,5 +128,11 @@ export class EventsActions {
                         i18n.t('Events:cancel.cancelError'),
                 );
             });
+    };
+
+    clear = () => {
+        this.dispatch({
+            type: CLEAR_EVENT_DATA,
+        });
     };
 }

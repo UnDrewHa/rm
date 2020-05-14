@@ -1,5 +1,7 @@
 const {isEmpty} = require('lodash');
 const EventModel = require('./EventModel');
+const RoomModel = require('../rooms/RoomModel');
+const {approveStatuses} = require('./consts');
 const {sendEventMail} = require('../../core/emails/EmailTransport');
 const {commonErrors, commonHTTPCodes} = require('../../common/errors');
 const {
@@ -42,9 +44,14 @@ exports.create = catchAsync(async function (req, res, next) {
         );
     }
 
-    const event = await EventModel.create(newEventData)
-        .populate('owner')
-        .populate('room');
+    const room = await RoomModel.findById(newEventData.room);
+
+    if (room.needApprove) {
+        newEventData.approveStatus = approveStatuses.NEED_APPROVE;
+    }
+
+    const event = await EventModel.create(newEventData);
+    await EventModel.populate(event, ['owner', 'room']);
 
     sendEventMail(event);
 

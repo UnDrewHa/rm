@@ -44,6 +44,7 @@ class EventDetailsPage extends React.Component<TProps> {
             eventsActions,
         } = props;
 
+        eventsActions.clear();
         eventsActions.getById(params.id);
     }
 

@@ -1,9 +1,9 @@
-import {isEmpty} from 'lodash-es';
-import queryString from 'query-string';
-import React from 'react';
-import {useHistory} from 'react-router';
 import {EEventNames} from 'core/EventEmitter/enums';
 import {EventEmiter} from 'core/EventEmitter/EventEmitter';
+import {isEmpty} from 'lodash-es';
+import queryString from 'query-string';
+import React, {useEffect} from 'react';
+import {useHistory} from 'react-router';
 
 export interface IRedirectOptions {
     to: string;
@@ -36,7 +36,9 @@ export const RedirectListener = () => {
         }
     };
 
-    EventEmiter.subscribe(EEventNames.REDIRECT, handleRedirect);
+    useEffect(() => {
+        return EventEmiter.subscribe(EEventNames.REDIRECT, handleRedirect);
+    }, []);
 
     return <div />;
 };

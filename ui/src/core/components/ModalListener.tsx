@@ -18,12 +18,21 @@ export class ModalListener extends React.Component<{}, IState> {
     constructor(props) {
         super(props);
 
-        EventEmiter.subscribe(EEventNames.SHOW_MODAL, this.handleShowModal);
+        this.unsubscribeFromShowModal = EventEmiter.subscribe(
+            EEventNames.SHOW_MODAL,
+            this.handleShowModal,
+        );
 
         this.state = {
             opened: false,
             data: null,
         };
+    }
+
+    unsubscribeFromShowModal = null;
+
+    componentWillUnmount() {
+        this.unsubscribeFromShowModal && this.unsubscribeFromShowModal();
     }
 
     handleShowModal = (data: IModalProps) => {

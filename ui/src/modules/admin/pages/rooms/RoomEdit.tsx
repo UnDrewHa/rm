@@ -94,6 +94,9 @@ class RoomEdit extends React.Component<TProps, IState> {
     formRef = React.createRef<FormInstance>();
 
     resetForm = () => {
+        if (this.state.pageMode === EPageMode.EDIT) {
+            return;
+        }
         this.setState({
             uploadingStatus: EUploadingStatus.NONE,
             fileList: [],

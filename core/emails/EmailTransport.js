@@ -109,3 +109,33 @@ exports.sendEventMail = catchAsync(async (event) => {
             ),
     );
 });
+
+exports.sendEventRefused = catchAsync(async ({roomId, owners}) => {
+    let tpl = (templates['eventRefused'] =
+        templates['eventRefused'] ||
+        (await readFile(
+            `${process.cwd()}/core/emails/templates/eventRefused.html`,
+            'utf8',
+        )));
+
+    tpl = replaceInTemplate(tpl, {
+        ORIGIN: process.env.PRODUCTION_ORIGIN,
+        ORG_NAME: process.env.ORG_NAME,
+        ROOM_ID: roomId,
+    });
+
+    const mailOptions = {
+        from: 'support@' + process.env.PRODUCTION_ORIGIN,
+        to: owners,
+        subject: 'Ваши встречи отменены | ' + process.env.ORG_NAME,
+        html: tpl,
+    };
+
+    return sendEmail(mailOptions).catch(
+        (_) =>
+            new AppError(
+                'Ошибка отправки сообщения о отмене бронирования',
+                commonHTTPCodes.INTERNAL_SERVER_ERROR,
+            ),
+    );
+});

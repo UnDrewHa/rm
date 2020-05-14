@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {approveStatuses} = require('./consts');
 const {getFieldErrorMessage} = require('../../common/errors');
 
 const {Schema} = mongoose;
@@ -43,8 +44,8 @@ const EventSchema = new Schema({
     },
     approveStatus: {
         type: String,
-        enum: ['NEED_APPROVE', 'APPROVED', 'REFUSED'],
-        default: 'APPROVED',
+        enum: Object.keys(approveStatuses),
+        default: approveStatuses.APPROVED,
     },
 });
 
@@ -66,6 +67,10 @@ EventSchema.pre(/^find/, function () {
 EventSchema.statics.getReservedEventsFilter = (filter) => {
     const {ids, date, from, to} = filter;
 
+    /**
+     * Не учитываем отмененные, т.к. освобождается временное окно.
+     * Учитываем только "Согласованные", т.к. это означает забронированное время.
+     */
     return {
         room: {$in: ids},
         date: date,
@@ -74,6 +79,7 @@ EventSchema.statics.getReservedEventsFilter = (filter) => {
             {from: {$lt: from}, to: {$gt: from}},
         ],
         canceled: {$ne: true},
+        approveStatus: approveStatuses.APPROVED,
     };
 };
 

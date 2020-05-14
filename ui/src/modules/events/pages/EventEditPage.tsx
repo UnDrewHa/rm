@@ -159,10 +159,10 @@ class EventEditPage extends React.Component<TProps, IState> {
                     onBack={this.handleBack}
                 />
                 <Row gutter={{xs: 8, sm: 16, md: 24}}>
-                    <Col span={4} className="border-right">
+                    <Col span={5} className="border-right">
                         <RoomCard id={room} />
                     </Col>
-                    <Col span={9} className="border-right">
+                    <Col span={8} className="border-right">
                         <Form
                             validateMessages={defaultValidateMessages}
                             className="event-form"
