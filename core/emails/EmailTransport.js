@@ -139,3 +139,36 @@ exports.sendEventRefused = catchAsync(async ({roomId, owners}) => {
             ),
     );
 });
+
+exports.sendSingleEventRefuse = catchAsync(
+    async ({eventId, eventName, owner}) => {
+        let tpl = (templates['singleEventRefused'] =
+            templates['singleEventRefused'] ||
+            (await readFile(
+                `${process.cwd()}/core/emails/templates/singleEventRefused.html`,
+                'utf8',
+            )));
+
+        tpl = replaceInTemplate(tpl, {
+            ORIGIN: process.env.PRODUCTION_ORIGIN,
+            ORG_NAME: process.env.ORG_NAME,
+            EVENT_ID: eventId,
+            EVENT_NAME: eventName,
+        });
+
+        const mailOptions = {
+            from: 'support@' + process.env.PRODUCTION_ORIGIN,
+            to: owner,
+            subject: 'Ваша встреча отменена | ' + process.env.ORG_NAME,
+            html: tpl,
+        };
+
+        return sendEmail(mailOptions).catch(
+            (_) =>
+                new AppError(
+                    'Ошибка отправки сообщения о несогласовании',
+                    commonHTTPCodes.INTERNAL_SERVER_ERROR,
+                ),
+        );
+    },
+);

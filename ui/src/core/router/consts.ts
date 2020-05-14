@@ -41,6 +41,10 @@ export const ROUTER = {
         ADMIN: {
             FULL_PATH: '/admin',
             PATH: '/admin',
+            EVENTS: {
+                FULL_PATH: '/admin/events',
+                PATH: '/admin/events',
+            },
             USERS: {
                 FULL_PATH: '/admin/users',
                 PATH: '/admin/users',

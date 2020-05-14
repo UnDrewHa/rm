@@ -29,6 +29,26 @@ export class EventsService {
     }
 
     /**
+     * Найти бронирования переговорных комнат.
+     *
+     * @param {} data Данные для поиска.
+     */
+    getForApproving(data) {
+        return axios.post<IDataResponse<IEventModel[]>>(
+            this.baseUrl + '/approving',
+            {data},
+        );
+    }
+
+    approve(data: IDeleteMultipleItems) {
+        return axios.post(this.baseUrl + '/approve', data);
+    }
+
+    refuse(data: IDeleteMultipleItems) {
+        return axios.post(this.baseUrl + '/refuse', data);
+    }
+
+    /**
      * Получить детальную информацию.
      *
      * @param {string} id Идентификатор.

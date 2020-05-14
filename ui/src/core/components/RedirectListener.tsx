@@ -38,7 +38,7 @@ export const RedirectListener = () => {
 
     useEffect(() => {
         return EventEmiter.subscribe(EEventNames.REDIRECT, handleRedirect);
-    }, []);
+    });
 
     return <div />;
 };

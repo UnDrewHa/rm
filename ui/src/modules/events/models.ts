@@ -7,6 +7,11 @@ export interface IGetAllEventsData {
     filter: IUserEventsFilter;
 }
 
+export interface IApprovingFilter {
+    date: string;
+    building: string;
+}
+
 export interface IUserEventsFilter {
     owner?: string;
     canceled?: any;
@@ -15,6 +20,8 @@ export interface IUserEventsFilter {
     room?: string;
     tab?: string;
     now?: string;
+    building?: string;
+    approveStatus?: EApproveStatuses;
 }
 
 export interface IEventModel {

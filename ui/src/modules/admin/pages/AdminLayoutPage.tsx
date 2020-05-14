@@ -1,4 +1,9 @@
-import {AppstoreOutlined, HomeOutlined, UserOutlined} from '@ant-design/icons';
+import {
+    AppstoreOutlined,
+    CalendarOutlined,
+    HomeOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
 import {Col, Menu, PageHeader, Row} from 'antd';
 import {RouteWrap} from 'core/components/RouteWrap';
 import {getErrorPage} from 'core/pages/404';
@@ -7,6 +12,7 @@ import i18n from 'i18next';
 import {BuildingsList} from 'modules/admin/pages/buildings/BuildingsList';
 import {BuildingEdit} from 'modules/admin/pages/buildings/BuildingEdit';
 import {BuildingFloorEdit} from 'modules/admin/pages/buildings/BuildingFloorEdit';
+import {EventsList} from 'modules/admin/pages/events/EventsList';
 import {RoomsList} from 'modules/admin/pages/rooms/RoomsList';
 import {RoomEdit} from 'modules/admin/pages/rooms/RoomEdit';
 import {UsersList} from 'modules/admin/pages/users/UsersList';
@@ -23,7 +29,7 @@ import {
 } from 'react-router-dom';
 import '../styles/adminTable.scss';
 
-const {FULL_PATH, BUILDINGS, USERS, ROOMS} = ROUTER.MAIN.ADMIN;
+const {FULL_PATH, BUILDINGS, USERS, ROOMS, EVENTS} = ROUTER.MAIN.ADMIN;
 
 const menuConfig = [
     {
@@ -87,6 +93,14 @@ const menuConfig = [
                 label: () => i18n.t('Admin:menu.common.create'),
             },
         ],
+    },
+    {
+        key: EVENTS.FULL_PATH,
+        label: () => (
+            <div>
+                <CalendarOutlined /> {i18n.t('Admin:menu.events.title')}
+            </div>
+        ),
     },
 ];
 
@@ -198,6 +212,13 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                                 path={BUILDINGS.FULL_PATH}
                             >
                                 <BuildingsList />
+                            </RouteWrap>
+
+                            <RouteWrap
+                                role={ERoles.ADMIN}
+                                path={EVENTS.FULL_PATH}
+                            >
+                                <EventsList />
                             </RouteWrap>
 
                             <RouteWrap

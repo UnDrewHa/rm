@@ -1,17 +1,20 @@
 import {message} from 'antd';
 import {dispatchAsync} from 'core/actions/utils';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
+import {axios} from 'core/axios';
+import {IDeleteMultipleItems} from 'core/models';
 import {ROUTER} from 'core/router/consts';
 import i18n from 'i18next';
 import {
+    APPROVE_EVENT,
     CLEAR_EVENT_DATA,
     CREATE_EVENT,
     DELETE_EVENTS,
     FIND_EVENTS,
-    GET_EVENT_BY_ID,
-    UPDATE_EVENT,
+    GET_EVENT_BY_ID, REFUSE_EVENT, UPDATE_EVENT,
 } from 'modules/events/actions/actionTypes';
 import {
+    IApprovingFilter,
     IEventCreateModel,
     IEventModel,
     IGetAllEventsData,
@@ -40,6 +43,30 @@ export class EventsActions {
             this.service.find(data),
         );
     };
+
+    getForApproving = (data: IApprovingFilter) => {
+        return dispatchAsync(
+            this.dispatch,
+            FIND_EVENTS,
+            this.service.getForApproving({filter: data}),
+        );
+    };
+
+    approve(ids: string[]) {
+        return dispatchAsync(
+            this.dispatch,
+            APPROVE_EVENT,
+            this.service.approve({data: {ids}}),
+        );
+    }
+
+    refuse(ids: string[]) {
+        return dispatchAsync(
+            this.dispatch,
+            REFUSE_EVENT,
+            this.service.refuse({data: {ids}}),
+        );
+    }
 
     /**
      * Получить детальную информацию.

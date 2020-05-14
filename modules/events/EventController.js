@@ -1,6 +1,7 @@
 const {isEmpty} = require('lodash');
 const EventModel = require('./EventModel');
 const RoomModel = require('../rooms/RoomModel');
+const {sendSingleEventRefuse} = require('../../core/emails/EmailTransport');
 const {approveStatuses} = require('./consts');
 const {sendEventMail} = require('../../core/emails/EmailTransport');
 const {commonErrors, commonHTTPCodes} = require('../../common/errors');
@@ -175,5 +176,77 @@ exports.cancel = catchAsync(async function (req, res) {
 
     res.status(200).send({
         data: ids,
+    });
+});
+
+/**
+ * Контроллер получения списка документов "Встреча".
+ */
+exports.getForApproving = catchAsync(async function (req, res) {
+    const {filter} = req.body.data;
+    let events = [];
+
+    const roomsForApproving = await RoomModel.find({
+        building: filter.building,
+        needApprove: true,
+    });
+
+    if (roomsForApproving.length > 0) {
+        events = await EventModel.find({
+            room: {$in: roomsForApproving.map((item) => item._id)},
+            date: filter.date,
+            canceled: {$ne: true},
+            approveStatus: approveStatuses.NEED_APPROVE,
+        });
+    }
+
+    res.status(200).send({
+        data: events,
+    });
+});
+
+exports.approve = catchAsync(async function (req, res) {
+    const {ids} = req.body.data;
+    const events = await EventModel.find({_id: {$in: ids}});
+
+    await EventModel.updateMany(
+        {
+            _id: {$in: ids},
+        },
+        {
+            approveStatus: approveStatuses.APPROVED,
+        },
+    );
+
+    res.status(200).send({
+        data: events,
+    });
+});
+
+exports.refuse = catchAsync(async function (req, res) {
+    const {ids} = req.body.data;
+    const events = await EventModel.find({_id: {$in: ids}});
+    await EventModel.populate(events, ['owner']);
+
+    await EventModel.updateMany(
+        {
+            _id: {$in: ids},
+        },
+        {
+            approveStatus: approveStatuses.REFUSED,
+            canceled: true,
+        },
+    );
+
+    events.forEach((item) => {
+        sendSingleEventRefuse({
+            eventId: item._id,
+            eventName: item.title,
+            owner: item.owner.email,
+        });
+    });
+
+    res.status(200).send({
+        data: events,
     });
 });

@@ -12,17 +12,13 @@ import {
     Slider,
     TimePicker,
 } from 'antd';
-import i18n from 'i18next';
-import moment, {Moment} from 'moment';
-import React from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 import {DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
 import {TAppStore} from 'core/store/model';
 import {defaultValidateMessages, validationConsts} from 'core/validationConsts';
+import i18n from 'i18next';
 import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'modules/buildings/models';
 import {disabledDate} from 'modules/events/utils';
@@ -31,6 +27,10 @@ import {RoomsList} from 'modules/rooms/components/RoomsList';
 import {IRoomModel} from 'modules/rooms/models';
 import {RoomsService} from 'modules/rooms/service/RoomsService';
 import {changeOnlyDate, formatTime} from 'modules/rooms/utils';
+import moment, {Moment} from 'moment';
+import React from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 interface IState {
     building: IBuildingModel;

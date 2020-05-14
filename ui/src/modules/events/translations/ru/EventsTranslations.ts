@@ -45,6 +45,7 @@ export default {
                 description: 'Описание',
                 members: 'Участники встречи',
                 approveStatus: 'Статус согласования',
+                room: 'Переговорная',
             },
         },
         ownerModal: {
