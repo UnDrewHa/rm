@@ -1,4 +1,5 @@
 import {Col, Divider, PageHeader, Row} from 'antd';
+import {rowGutters} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
@@ -45,7 +46,7 @@ class FavouritesRoomsPage extends React.Component<TProps> {
                     className="main-header"
                     title={i18n.t('Rooms:favourites.title')}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                <Row gutter={rowGutters}>
                     <Col span={24}>
                         <RoomsList
                             rooms={rooms}

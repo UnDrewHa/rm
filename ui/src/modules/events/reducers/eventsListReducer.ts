@@ -3,7 +3,13 @@ import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData, IReduxAction} from 'core/reducer/model';
 import {createAsyncDataReducer} from 'core/reducer/utils';
 import {includes} from 'lodash-es';
-import {DELETE_EVENTS, FIND_EVENTS} from 'modules/events/actions/actionTypes';
+import {
+    APPROVE_EVENT,
+    CLEAR_EVENT_DATA,
+    DELETE_EVENTS,
+    FIND_EVENTS,
+    REFUSE_EVENT,
+} from 'modules/events/actions/actionTypes';
 import {IEventModel} from 'modules/events/models';
 
 const getInitialState = (): IAsyncData<IEventModel[]> => ({
@@ -11,6 +17,12 @@ const getInitialState = (): IAsyncData<IEventModel[]> => ({
     data: [],
     error: null,
 });
+
+const removeItemsActions = [
+    DELETE_EVENTS + SUCCESS,
+    APPROVE_EVENT + SUCCESS,
+    REFUSE_EVENT + SUCCESS,
+];
 
 export const eventsListReducer = (
     state: IAsyncData<IEventModel[]> = getInitialState(),
@@ -25,7 +37,7 @@ export const eventsListReducer = (
         )(state, action as IReduxAction<IEventModel[]>);
     }
 
-    if (type === DELETE_EVENTS + SUCCESS) {
+    if (removeItemsActions.includes(type)) {
         const newData = state.data.filter(
             (item) => !includes(payload.data, item._id),
         );
@@ -33,6 +45,10 @@ export const eventsListReducer = (
             ...state,
             data: newData,
         };
+    }
+
+    if (type === CLEAR_EVENT_DATA) {
+        return getInitialState();
     }
 
     return state;

@@ -1,9 +1,6 @@
 import {SearchOutlined} from '@ant-design/icons';
-import {Button, Checkbox, DatePicker, Divider, Tooltip} from 'antd';
+import {Button, DatePicker, Divider, Tooltip} from 'antd';
 import {ButtonsRow} from 'core/components/ButtonsRow';
-import {DeleteButton} from 'core/components/DeleteButton';
-import {EditButton} from 'core/components/EditButton';
-import {QrButton} from 'core/components/QrButton';
 import {DEFAULT_DATE_FORMAT} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
@@ -15,14 +12,13 @@ import {BlankList} from 'modules/admin/pages/BlankList';
 import {BuildingsAutocomplete} from 'modules/buildings/components/BuildingsAutocomplete';
 import {IBuildingModel} from 'modules/buildings/models';
 import {EventsActions} from 'modules/events/actions/EventsActions';
-import {EventStatus} from 'modules/events/components/EventStatus';
-import {EApproveStatuses} from 'modules/events/enums';
-import {IEventModel} from 'modules/events/models';
+import {IEventFullModel, IEventModel} from 'modules/events/models';
 import {EventsService} from 'modules/events/service/EventsService';
 import {calculateTimeString, disabledDate} from 'modules/events/utils';
 import moment, {Moment} from 'moment';
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 const getColumnsConfig = (actions, getColumnSearchProps) => {
     const handleApprove = (ids: string[]) => () => {
@@ -49,24 +45,46 @@ const getColumnsConfig = (actions, getColumnSearchProps) => {
             title: () => i18n.t('Events:table.header.room'),
             dataIndex: 'room',
             key: 'room',
+            render: (_, record: IEventFullModel) => (
+                <React.Fragment>
+                    <Link to={ROUTER.MAIN.ROOMS.DETAILS.PATH + record.room._id}>
+                        {record.room.name}
+                    </Link>
+                    <br />
+                    {i18n.t('Buildings:floor', {n: record.room.floor})}
+                </React.Fragment>
+            ),
         },
         {
             title: () => i18n.t('Events:table.header.owner'),
             dataIndex: 'owner',
             key: 'owner',
+            render: (_, record: IEventFullModel) => (
+                <React.Fragment>
+                    {record.owner.fullName}
+                    <br />
+                    <a href={`mailto:${record.owner.email}`}>
+                        {record.owner.email}
+                    </a>
+                    <br />
+                    <a href={`tel:${record.owner.phone}`}>
+                        {record.owner.phone}
+                    </a>
+                </React.Fragment>
+            ),
         },
         {
-            title: () => i18n.t('Events:table.header.date'),
+            title: () => i18n.t('Events:table.header.dateTime'),
             dataIndex: 'date',
             key: 'date',
             width: 120,
-        },
-        {
-            title: () => i18n.t('Events:table.header.time'),
-            dataIndex: 'from',
-            key: 'from',
-            render: (_, record: IEventModel) => calculateTimeString(record),
-            width: 120,
+            render: (_, record: IEventModel) => (
+                <React.Fragment>
+                    {record.date}
+                    <br />
+                    {calculateTimeString(record)}
+                </React.Fragment>
+            ),
         },
         {
             title: () => i18n.t('table.header.actions'),
@@ -75,7 +93,7 @@ const getColumnsConfig = (actions, getColumnSearchProps) => {
             render: (_, record) => (
                 <React.Fragment>
                     <Button onClick={handleApprove([record._id])} type="link">
-                        APPROVE
+                        {i18n.t('Events:approve.title')}
                     </Button>
                     <Divider type="vertical" />
                     <Button
@@ -83,7 +101,7 @@ const getColumnsConfig = (actions, getColumnSearchProps) => {
                         type="link"
                         danger
                     >
-                        REFUSE
+                        {i18n.t('Events:refuse.title')}
                     </Button>
                 </React.Fragment>
             ),
@@ -173,10 +191,10 @@ class EventsList extends React.Component<TProps, IState> {
         return isEmpty(selectedRowKeys) ? null : (
             <ButtonsRow>
                 <Button onClick={() => actions.refuse(selectedRowKeys)}>
-                    REFUSE
+                    {i18n.t('Events:approve.title')}
                 </Button>
                 <Button onClick={() => actions.approve(selectedRowKeys)}>
-                    APPROVE
+                    {i18n.t('Events:refuse.title')}
                 </Button>
             </ButtonsRow>
         );

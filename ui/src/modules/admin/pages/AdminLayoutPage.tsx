@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import {Col, Menu, PageHeader, Row} from 'antd';
 import {RouteWrap} from 'core/components/RouteWrap';
+import {rowGutters} from 'core/consts';
 import {getErrorPage} from 'core/pages/404';
 import {ROUTER} from 'core/router/consts';
 import i18n from 'i18next';
@@ -154,7 +155,7 @@ class AdminLayoutPage extends React.Component<IProps, IState> {
                     className="main-header"
                     title={i18n.t('Admin:main.title')}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                <Row gutter={rowGutters}>
                     <Col span={4}>
                         <Menu
                             selectedKeys={[this.props.location.pathname]}

@@ -1,8 +1,6 @@
 import {message} from 'antd';
 import {dispatchAsync} from 'core/actions/utils';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
-import {axios} from 'core/axios';
-import {IDeleteMultipleItems} from 'core/models';
 import {ROUTER} from 'core/router/consts';
 import i18n from 'i18next';
 import {
@@ -11,7 +9,9 @@ import {
     CREATE_EVENT,
     DELETE_EVENTS,
     FIND_EVENTS,
-    GET_EVENT_BY_ID, REFUSE_EVENT, UPDATE_EVENT,
+    GET_EVENT_BY_ID,
+    REFUSE_EVENT,
+    UPDATE_EVENT,
 } from 'modules/events/actions/actionTypes';
 import {
     IApprovingFilter,
@@ -57,7 +57,15 @@ export class EventsActions {
             this.dispatch,
             APPROVE_EVENT,
             this.service.approve({data: {ids}}),
-        );
+        )
+            .then((res) => {
+                message.success(i18n.t('Events:approve.success'));
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Events:approve.error'),
+                );
+            });
     }
 
     refuse(ids: string[]) {
@@ -65,7 +73,15 @@ export class EventsActions {
             this.dispatch,
             REFUSE_EVENT,
             this.service.refuse({data: {ids}}),
-        );
+        )
+            .then((res) => {
+                message.success(i18n.t('Events:refuse.success'));
+            })
+            .catch((error) => {
+                message.error(
+                    error?.error?.message || i18n.t('Events:refuse.error'),
+                );
+            });
     }
 
     /**

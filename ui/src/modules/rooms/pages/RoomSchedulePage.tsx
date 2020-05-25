@@ -1,6 +1,6 @@
 import {Button, Calendar, Col, PageHeader, Row, Table} from 'antd';
 import {InterfaceAction} from 'core/actions/InterfaceActions';
-import {commonTableProps, DEFAULT_DATE_FORMAT} from 'core/consts';
+import {commonTableProps, rowGutters, DEFAULT_DATE_FORMAT} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
@@ -107,8 +107,15 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                     }
                     onBack={this.handleBack}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
-                    <Col span={5} className="border-right">
+                <Row gutter={rowGutters}>
+                    <Col
+                        xs={24}
+                        sm={24}
+                        md={10}
+                        lg={8}
+                        xl={6}
+                        className="border-right"
+                    >
                         <Calendar
                             fullscreen={false}
                             onSelect={this.handleDateChange}
@@ -117,7 +124,7 @@ class RoomSchedulePage extends React.Component<TProps, IState> {
                         />
                         <RoomCard id={id} />
                     </Col>
-                    <Col span={19}>
+                    <Col xs={24} sm={24} md={14} lg={16} xl={18}>
                         <Table
                             {...commonTableProps}
                             columns={baseColumnsConfig}

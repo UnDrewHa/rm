@@ -12,8 +12,8 @@ import {
 } from 'antd';
 import {
     commonTableProps,
-    DEFAULT_DATE_FORMAT,
-    DEFAULT_TIME_FORMAT,
+    rowGutters,
+    DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT,
 } from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
@@ -158,7 +158,7 @@ class EventEditPage extends React.Component<TProps, IState> {
                     }
                     onBack={this.handleBack}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                <Row gutter={rowGutters}>
                     <Col span={5} className="border-right">
                         <RoomCard id={room} />
                     </Col>

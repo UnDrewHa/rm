@@ -3,6 +3,7 @@ import {InterfaceAction} from 'core/actions/InterfaceActions';
 import {ButtonsRow} from 'core/components/ButtonsRow';
 import {DeleteButton} from 'core/components/DeleteButton';
 import {EditButton} from 'core/components/EditButton';
+import {rowGutters} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {ROUTER} from 'core/router/consts';
@@ -107,7 +108,7 @@ class EventDetailsPage extends React.Component<TProps> {
                         }
                         onBack={this.handleBack}
                     />
-                    <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                    <Row gutter={rowGutters}>
                         <Col span={24}>
                             <Skeleton active />
                             <Skeleton active />
@@ -128,7 +129,7 @@ class EventDetailsPage extends React.Component<TProps> {
                     extra={extra}
                     onBack={this.handleBack}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                <Row gutter={rowGutters}>
                     <Col span={24}>
                         <Typography.Title level={4}>
                             {i18n.t('Events:details.owner')}

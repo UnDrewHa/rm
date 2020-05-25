@@ -1,7 +1,7 @@
 export default {
     Admin: {
         main: {
-            title: 'Админка',
+            title: 'Управление',
             info: 'Выберите необходимый раздел в меню слева',
         },
         menu: {

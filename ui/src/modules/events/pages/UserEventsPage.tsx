@@ -1,6 +1,6 @@
 import {Col, PageHeader, Row, Table, Tabs} from 'antd';
 import {DeleteButton} from 'core/components/DeleteButton';
-import {commonTableProps} from 'core/consts';
+import {commonTableProps, rowGutters} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
@@ -131,7 +131,7 @@ class UserEventsPage extends React.Component<TProps, IState> {
                     className="main-header"
                     title={i18n.t('Events:userEvents.title')}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                <Row gutter={rowGutters}>
                     <Col span={24}>
                         <Tabs
                             defaultActiveKey={ETabNames.ACTIVE}

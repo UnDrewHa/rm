@@ -1,4 +1,5 @@
 const {isEmpty} = require('lodash');
+const moment = require('moment');
 const EventModel = require('./EventModel');
 const RoomModel = require('../rooms/RoomModel');
 const {sendSingleEventRefuse} = require('../../core/emails/EmailTransport');
@@ -195,9 +196,10 @@ exports.getForApproving = catchAsync(async function (req, res) {
         events = await EventModel.find({
             room: {$in: roomsForApproving.map((item) => item._id)},
             date: filter.date,
+            to: {$gt: moment().utc().format()},
             canceled: {$ne: true},
             approveStatus: approveStatuses.NEED_APPROVE,
-        });
+        }).populate(['owner', 'room']);
     }
 
     res.status(200).send({
@@ -219,7 +221,7 @@ exports.approve = catchAsync(async function (req, res) {
     );
 
     res.status(200).send({
-        data: events,
+        data: events.map((item) => item._id),
     });
 });
 
@@ -247,6 +249,6 @@ exports.refuse = catchAsync(async function (req, res) {
     });
 
     res.status(200).send({
-        data: events,
+        data: events.map((item) => item._id),
     });
 });

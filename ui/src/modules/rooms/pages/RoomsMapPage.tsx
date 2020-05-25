@@ -12,7 +12,11 @@ import {
     Slider,
     TimePicker,
 } from 'antd';
-import {DEFAULT_DATE_FORMAT, DEFAULT_TIME_FORMAT} from 'core/consts';
+import {
+    rowGutters,
+    DEFAULT_DATE_FORMAT,
+    DEFAULT_TIME_FORMAT,
+} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
@@ -163,8 +167,15 @@ class RoomsMapPage extends React.Component<TProps, IState> {
                     className="main-header"
                     title={i18n.t('Rooms:map.title')}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
-                    <Col span={4} className="border-right">
+                <Row gutter={rowGutters}>
+                    <Col
+                        xs={24}
+                        sm={24}
+                        md={10}
+                        lg={8}
+                        xl={6}
+                        className="border-right"
+                    >
                         {filterDataIsLoading ? (
                             <Skeleton active />
                         ) : (
@@ -274,7 +285,7 @@ class RoomsMapPage extends React.Component<TProps, IState> {
                             </Form>
                         )}
                     </Col>
-                    <Col span={20}>
+                    <Col xs={24} sm={24} md={14} lg={16} xl={18}>
                         {!!building &&
                         !!floorData &&
                         roomsList.status === EStatusCodes.SUCCESS ? (

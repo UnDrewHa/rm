@@ -14,6 +14,7 @@ import {
 } from 'antd';
 import {FormInstance} from 'antd/lib/form';
 import {FormSkeleton} from 'core/components/FormSkeleton';
+import {rowGutters} from 'core/consts';
 import {EPageMode, EUploadingStatus} from 'core/enums';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
@@ -230,7 +231,7 @@ class RoomEdit extends React.Component<TProps, IState> {
         }
 
         return (
-            <Row gutter={{xs: 8, sm: 16, md: 24}}>
+            <Row gutter={rowGutters}>
                 <Col span={12}>
                     <Typography.Title level={4}>
                         {i18n.t('Rooms:edit.title')}

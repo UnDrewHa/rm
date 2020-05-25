@@ -18,6 +18,7 @@ import {
     Upload,
 } from 'antd';
 import {FormSkeleton} from 'core/components/FormSkeleton';
+import {rowGutters} from 'core/consts';
 import {EStatusCodes} from 'core/reducer/enums';
 import {IAsyncData} from 'core/reducer/model';
 import {TAppStore} from 'core/store/model';
@@ -136,7 +137,7 @@ class ProfilePage extends React.Component<TProps, IState> {
                     className="main-header"
                     title={i18n.t('Users:profile.title')}
                 />
-                <Row gutter={{xs: 8, sm: 16, md: 24}}>
+                <Row gutter={rowGutters}>
                     <Col span={10} className="border-right">
                         {dataIsLoading ? (
                             <FormSkeleton fields={10} />
